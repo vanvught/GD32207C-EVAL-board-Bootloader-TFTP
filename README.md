@@ -3,6 +3,14 @@
 This bootloader will install your application by means of the TFTP protocol. There is no need to change your application code. 
 Per default DHCP is used for obtaining the ip-address.
 
+The bootloader is active when the `User key` is pressed during reset of the board. In the file main.cpp, there is  `if (gpio_input_bit_get(GPIOB, GPIO_PIN_14))` which is the  `User key`.
+
+Otherwise the bootloader will directly jump to you application. See [here](https://github.com/vanvught/GD32F20x-Bootloader-TFTP/blob/V1.0/bootloader-tftp/firmware/main.cpp#L71). With the snippet: 
+
+	    	// 8. Call the reset handler
+	    	const uint32_t* reset_p = (uint32_t *)(FLASH_BASE + OFFSET_UIMAGE + 4);
+	    	asm volatile ("bx %0;" : : "r"(*reset_p));
+
 The bootloader can be installed with the tools supplied by GigaDevice -> [http://www.gd32mcu.com/en/download/7?kw=GD32F2](http://www.gd32mcu.com/en/download/7?kw=GD32F2)
 
 The limitation for the firmware file to be uploaded is given by the RAM available. For example, the MCU on GD32207C-EVAL is the [GD32F207VCT6](https://www.gigadevice.com/microcontroller/gd32f207vct6/). With the 128K RAM we have the firmware file size limit of 104K.
