@@ -1,0 +1,13 @@
+DEFINES=NDEBUG
+DEFINES+=DISABLE_BIN
+DEFINES+=DISABLE_JSON
+#DEFINES+=ENABLE_SSD1311
+DEFINES+=DISABLE_RTC
+DEFINES+=DISABLE_FS
+
+SRCDIR=firmware lib
+LIBS=display spiflashstore spiflash remoteconfig spiflashinstall
+
+include ../firmware-template-gd32/Rules.mk
+
+prerequisites:

@@ -1,0 +1,5 @@
+DEFINES=DISABLE_FS NDEBUG
+EXTRA_INCLUDES=src/gd32 ../lib-properties/include
+
+include Rules.mk
+include ../firmware-template-gd32/lib/Rules.mk
