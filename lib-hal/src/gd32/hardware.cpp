@@ -2,7 +2,7 @@
  * @file hardware.cpp
  *
  */
-/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.nl
+/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,9 +32,9 @@
 
 #include "uart0_debug.h"
 
-#include "gd32_board.h"
-
+#include "gd32.h"
 #include "gd32_i2c.h"
+#include "gd32_board.h"
 
 #ifndef NDEBUG
 # include "../debug/i2cdetect.h"
@@ -44,13 +44,9 @@
 
 extern "C" {
 void systick_config(void);
-#include "gd32f20x_rcu.h"
-#include "gd32f20x_gpio.h"
-#include "gd32f20x_timer.h"
+void udelay_init(void);
+void micros_init(void);
 }
-#define LED_PIN                         GPIO_PIN_0
-#define LED_GPIO_PORT                   GPIOC
-#define LED_GPIO_CLK                    RCU_GPIOC
 
 Hardware *Hardware::s_pThis = nullptr;
 
@@ -58,19 +54,21 @@ Hardware::Hardware() {
 	assert(s_pThis == nullptr);
 	s_pThis = this;
 
-    rcu_periph_clock_enable(LED_GPIO_CLK);
-    gpio_init(GPIOC, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, LED_PIN);
-    GPIO_BC(LED_GPIO_PORT) = LED_PIN;
+    rcu_periph_clock_enable(LED_BLINK_GPIO_CLK);
+    gpio_init(LED_BLINK_GPIO_PORT, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, LED_BLINK_PIN);
+    GPIO_BC(LED_BLINK_GPIO_PORT) = LED_BLINK_PIN;
 
 	uart0_init();
 
     systick_config();
+    udelay_init();
+    micros_init();
 
 	rcu_periph_clock_enable(RCU_TIMER5);
 
 	timer_deinit(TIMER5);
 	timer_parameter_struct timer_initpara;
-	timer_initpara.prescaler = 119;	///< TIMER1CLK = SystemCoreClock / 120 = 1MHz => us ticker
+	timer_initpara.prescaler = TIMER_PSC_1MHZ;
 	timer_initpara.period = static_cast<uint32_t>(~0);
 	timer_init(TIMER5, &timer_initpara);
 	timer_enable(TIMER5);
@@ -111,15 +109,16 @@ typedef union pcast32 {
 void Hardware::GetUuid(uuid_t out) {
 	_pcast32 cast;
 
-	cast.u32[0] = *(volatile uint32_t*)(0x1FFFF7E8);
-	cast.u32[1] = *(volatile uint32_t*)(0x1FFFF7EC);
-	cast.u32[2] = *(volatile uint32_t*)(0x1FFFF7F0);
+	cast.u32[0] = *(volatile uint32_t*) (0x1FFFF7E8);
+	cast.u32[1] = *(volatile uint32_t*) (0x1FFFF7EC);
+	cast.u32[2] = *(volatile uint32_t*) (0x1FFFF7F0);
 	cast.u32[3] = cast.u32[0] + cast.u32[1] + cast.u32[2];
 
 	memcpy(out, cast.uuid, sizeof(uuid_t));
 }
 
 bool Hardware::SetTime(__attribute__((unused)) const struct tm *pTime) {
+	DEBUG_ENTRY
 #if !defined(DISABLE_RTC)
 	rtc_time rtc_time;
 
@@ -132,17 +131,27 @@ bool Hardware::SetTime(__attribute__((unused)) const struct tm *pTime) {
 
 	m_HwClock.Set(&rtc_time);
 
+	DEBUG_EXIT
 	return true;
 #else
+	DEBUG_EXIT
 	return false;
 #endif
 }
 
+void Hardware::GetTime(struct tm *pTime) {
+	auto ltime = time(nullptr);
+	const auto *local_time = localtime(&ltime);
+
+	pTime->tm_year = local_time->tm_year;
+	pTime->tm_mon = local_time->tm_mon;
+	pTime->tm_mday = local_time->tm_mday;
+	pTime->tm_hour = local_time->tm_hour;
+	pTime->tm_min = local_time->tm_min;
+	pTime->tm_sec = local_time->tm_sec;
+}
+
 bool Hardware::Reboot() {
-	DEBUG_PUTS("Hardware::Reboot()");
-
-	LedBlink::Get()->SetFrequency(8);
-
 	if (m_pRebootHandler != 0) {
 		WatchdogStop();
 		m_pRebootHandler->Run();
@@ -150,7 +159,7 @@ bool Hardware::Reboot() {
 
 	WatchdogInit();
 
-	DEBUG_PRINTF("m_bIsWatchdog=%d", m_bIsWatchdog);
+	LedBlink::Get()->SetFrequency(8);
 
 	for (;;) {
 		LedBlink::Get()->Run();

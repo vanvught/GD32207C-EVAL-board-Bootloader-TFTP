@@ -1,4 +1,6 @@
-DEFINES=DISABLE_FS NDEBUG
+DEFINES =DISABLE_FS 
+DEFINES+=NDEBUG
+
 EXTRA_INCLUDES=src/gd32 ../lib-properties/include
 
 include Rules.mk

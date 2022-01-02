@@ -1,5 +1,5 @@
 /**
- * @file gd32_i2c.h
+ * @file gd32_uart.h
  *
  */
 /* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.org
@@ -23,37 +23,46 @@
  * THE SOFTWARE.
  */
 
-#ifndef GD32_I2C_H_
-#define GD32_I2C_H_
+#ifndef GD32_UART_H_
+#define GD32_UART_H_
+
+typedef enum GD32_UART_BITS {
+	GD32_UART_BITS_8 = 8,
+	GD32_UART_BITS_9 = 9
+} gd32_uart_bits_t;
+
+typedef enum GD32_UART_PARITY {
+	GD32_UART_PARITY_NONE = 0,
+	GD32_UART_PARITY_ODD = 1,
+	GD32_UART_PARITY_EVEN = 2
+} gd32_uart_parity_t;
+
+typedef enum GD32_UART_STOPBITS {
+	GD32_UART_STOP_1BIT = 1,
+	GD32_UART_STOP_2BITS = 2
+} gd32_uart_stopbits_t;
 
 #include <stdint.h>
-
-typedef enum GD32_I2C_BAUDRATE {
-	GD32_I2C_NORMAL_SPEED = 100000,
-	GD32_I2C_FULL_SPEED = 400000
-} gd32_i2c_baudrate_t;
-
-typedef enum GD32_I2C_RC {
-	GD32_I2C_OK = 0,
-	GD32_I2C_NOK = 1,
-	GD32_I2C_NACK = 2,
-	GD32_I2C_NOK_LA = 3,
-	GD32_I2C_NOK_TOUT = 4
-} gd32_i2c_rc_t;
+#include "gd32.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-extern void gd32_i2c_begin(void);
-extern void gd32_i2c_end(void);
-extern uint8_t gd32_i2c_write(const char *, uint32_t);
-extern uint8_t gd32_i2c_read(char *, uint32_t);
-extern void gd32_i2c_set_baudrate(uint32_t);
-extern void gd32_i2c_set_address(uint8_t);
+extern void gd32_uart_begin(const uint32_t usart_periph, uint32_t baudrate, uint32_t bits, uint32_t parity, uint32_t stop_bits);
+extern void gd32_uart_set_baudrate(const uint32_t usart_periph, uint32_t baudrate);
+extern void gd32_uart_transmit(const uint32_t usart_periph, const uint8_t *data, uint32_t length);
+extern void gd32_uart_transmit_string(const uint32_t uart_base, const char *data);
+
+static inline uint32_t gd32_uart_get_rx_fifo_level(const uint32_t usart_periph) {
+	return 1;
+}
+
+static inline uint8_t gd32_uart_get_rx_data(const uint32_t uart_base) {
+	return (uint8_t)(GET_BITS(USART_DATA(uart_base), 0U, 8U));
+}
 
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* GD32_I2C_H_ */
+#endif /* GD32_UART_H_ */

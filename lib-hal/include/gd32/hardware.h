@@ -32,7 +32,7 @@
 
 #include "hwclock.h"
 
-#include "gd32f20x_fwdgt.h"
+#include "gd32.h"
 
 class Hardware {
 public:
@@ -52,9 +52,9 @@ public:
 	bool SetTime(const struct tm *pTime);
 	void GetTime(struct tm *pTime);
 
-	const char *GetBoardName(uint8_t &nLenght) {
-		nLenght = 14;
-		return "GD32F207C_EVAL";
+	const char *GetBoardName(uint8_t &nLength) {
+		nLength = sizeof(GD32_BOARD_NAME) - 1U;
+		return GD32_BOARD_NAME;
 	}
 
 	const char *GetSysName(uint8_t &nLenght) {
@@ -101,8 +101,12 @@ public:
 		return 0;
 	}
 
-	int16_t GetCoreTemperatureMax() {
-		return 0;
+	float GetCoreTemperatureMin() {
+		return -40.0f;
+	}
+
+	float GetCoreTemperatureMax() {
+		return 85.0f;
 	}
 
 	static Hardware *Get() {

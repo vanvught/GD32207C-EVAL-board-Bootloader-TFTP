@@ -44,13 +44,7 @@
 #include "spiflashinstall.h"
 #include "spiflashstore.h"
 
-#include "../lib-spiflashinstall/include/spiflashinstall.h"
-
-extern "C" {
-#include "core_cm3.h"
-#include "gd32f20x_rcu.h"
-#include "gd32f20x_gpio.h"
-}
+#include "gd32.h"
 
 #include "debug.h"
 
@@ -62,12 +56,12 @@ extern "C" {
 
 int main(void) {
     /* enable the key clock */
-    rcu_periph_clock_enable(RCU_GPIOB);
+    rcu_periph_clock_enable(KEY_BOOTLOADER_TFTP_RCU_GPIOx);
     rcu_periph_clock_enable(RCU_AF);
     /* configure button pin as input */
-    gpio_init(GPIOB, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_14);
-
-    if (gpio_input_bit_get(GPIOB, GPIO_PIN_14)) {
+    gpio_init(KEY_BOOTLOADER_TFTP_GPIOx, GPIO_MODE_IPU, GPIO_OSPEED_50MHZ, KEY_BOOTLOADER_TFTP_GPIO_PINx);
+//      V <----
+    if (gpio_input_bit_get(KEY_BOOTLOADER_TFTP_GPIOx, KEY_BOOTLOADER_TFTP_GPIO_PINx)) {
     	// https://developer.arm.com/documentation/ka001423/1-0
     	//1. Disable interrupt response.
     	__disable_irq();
@@ -122,10 +116,9 @@ int main(void) {
 
 	if (remoteConfigParams.Load()) {
 		remoteConfigParams.Set(&remoteConfig);
-#ifndef NDEBUG
-		remoteConfigParams.Dump();
-#endif
 	}
+
+	remoteConfig.SetEnableReboot(true);
 
 	lb.SetMode(ledblink::Mode::FAST);
 

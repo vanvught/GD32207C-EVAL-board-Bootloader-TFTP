@@ -1,8 +1,8 @@
 /**
- * @file gd32_uart0_printf.c
+ * @file bitbanging595.cpp
  *
  */
-/* Copyright (C) 2021 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,22 +23,8 @@
  * THE SOFTWARE.
  */
 
-#include <stdarg.h>
-#include <stdio.h>
+#include "gd32/bitbanging595.h"
 
-extern void uart0_puts(const char *);
-
-static char s[128];
-
-int uart0_printf(const char* fmt, ...) {
-	va_list arp;
-
-	va_start(arp, fmt);
-
-	int i = vsnprintf(s, sizeof(s) -1, fmt, arp);
-	va_end(arp);
-
-	uart0_puts(s);
-
-	return i;
-}
+BitBanging595 *BitBanging595::s_pThis;
+uint32_t BitBanging595::s_nData;
+uint32_t BitBanging595::s_nDataPrevious;

@@ -1,8 +1,8 @@
 /**
- * @file storerdmsensors.h
+ * @file gd32_uart0.c
  *
  */
-/* Copyright (C) 2020 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,31 +23,60 @@
  * THE SOFTWARE.
  */
 
-#ifndef STORERDMSENSORS_H_
-#define STORERDMSENSORS_H_
+#include <stdint.h>
+#include <stdarg.h>
+#include <stdio.h>
 
-#include "rdmsensorsparams.h"
+#include "gd32.h"
+#include "gd32_uart.h"
 
-#include "spiflashstore.h"
+void uart0_init(void) {
+	gd32_uart_begin(USART0, 115200U, GD32_UART_BITS_8, GD32_UART_PARITY_NONE, GD32_UART_STOP_1BIT);
+}
 
-class StoreRDMSensors final: public RDMSensorsParamsStore {
-public:
-	StoreRDMSensors();
-
-	void Update(const struct TRDMSensorsParams *pRDMSensorsParams) override {
-		SpiFlashStore::Get()->Update(spiflashstore::Store::RDMSENSORS, pRDMSensorsParams, sizeof(struct TRDMSensorsParams));
+void uart0_putc(int c) {
+	if (c == '\n') {
+		while (RESET == usart_flag_get(USART0, USART_FLAG_TBE))
+			;
+		USART_DATA(USART0) = ((uint16_t) USART_DATA_DATA & (uint8_t) '\r');
 	}
 
-	void Copy(struct TRDMSensorsParams *pRDMSensorsParams) override {
-		SpiFlashStore::Get()->Copy(spiflashstore::Store::RDMSENSORS, pRDMSensorsParams, sizeof(struct TRDMSensorsParams));
+	while (RESET == usart_flag_get(USART0, USART_FLAG_TBE))
+		;
+
+	USART_DATA(USART0) = ((uint16_t) USART_DATA_DATA & (uint8_t) c);
+}
+
+void uart0_puts(const char *s) {
+	while (*s != '\0') {
+		if (*s == '\n') {
+			uart0_putc('\r');
+		}
+		uart0_putc(*s++);
 	}
 
-	static StoreRDMSensors *Get() {
-		return s_pThis;
+//	uart0_putc('\n'); //TODO Add '\n'
+}
+
+static char s_buffer[128];
+
+int uart0_printf(const char *fmt, ...) {
+	va_list arp;
+
+	va_start(arp, fmt);
+
+	int i = vsnprintf(s_buffer, sizeof(s_buffer) - 1, fmt, arp);
+
+	va_end(arp);
+
+	char *s = s_buffer;
+
+	while (*s != '\0') {
+		if (*s == '\n') {
+			uart0_putc('\r');
+		}
+		uart0_putc(*s++);
 	}
 
-private:
-	static StoreRDMSensors *s_pThis;
-};
-
-#endif /* STORERDMSENSORS_H_ */
+	return i;
+}

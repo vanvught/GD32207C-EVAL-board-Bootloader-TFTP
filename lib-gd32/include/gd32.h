@@ -1,8 +1,8 @@
 /**
- * @file storeltc.h
+ * @file gd32.h
  *
  */
-/* Copyright (C) 2019-2020 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,35 +23,53 @@
  * THE SOFTWARE.
  */
 
-#ifndef STORELTC_H_
-#define STORELTC_H_
+#ifndef GD32_H_
+#define GD32_H_
 
-#include "ltcparams.h"
+#include <stdint.h>
 
-#include "spiflashstore.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-class StoreLtc final: public LtcParamsStore {
-public:
-	StoreLtc();
+void udelay(uint32_t);
 
-	void Update(const struct TLtcParams *pLtcParams) override {
-		SpiFlashStore::Get()->Update(spiflashstore::Store::LTC, pLtcParams, sizeof(struct TLtcParams));
-	}
+#if defined (GD32F20X_CL)
+# include "gd32f20x.h"
+# include "gd32f20x_adc.h"
+# include "gd32f20x_bkp.h"
+# include "gd32f20x_dma.h"
+# include "gd32f20x_fmc.h"
+# include "gd32f20x_fwdgt.h"
+# include "gd32f20x_gpio.h"
+# include "gd32f20x_misc.h"
+# include "gd32f20x_pmu.h"
+# include "gd32f20x_rcu.h"
+# include "gd32f20x_rtc.h"
+# include "gd32f20x_timer.h"
+# include "gd32f20x_usart.h"
+#elif defined  (GD32F10X_HD) || defined (GD32F10X_CL)
+# include "gd32f10x.h"
+# include "gd32f10x_adc.h"
+# include "gd32f10x_bkp.h"
+# include "gd32f10x_dma.h"
+# include "gd32f10x_fmc.h"
+# include "gd32f10x_fwdgt.h"
+# include "gd32f10x_gpio.h"
+# include "gd32f10x_misc.h"
+# include "gd32f10x_pmu.h"
+# include "gd32f10x_rcu.h"
+# include "gd32f10x_rtc.h"
+# include "gd32f10x_timer.h"
+# include "gd32f10x_usart.h"
+#else
+# error
+#endif
 
-	void Copy(struct TLtcParams *pLtcParams) override {
-		SpiFlashStore::Get()->Copy(spiflashstore::Store::LTC, pLtcParams, sizeof(struct TLtcParams));
-	}
+#ifdef __cplusplus
+}
+#endif
 
-	void SaveSource(uint8_t nSource) override {
-		SpiFlashStore::Get()->Update(spiflashstore::Store::LTC, __builtin_offsetof(struct TLtcParams, tSource), &nSource, sizeof(uint8_t), LtcParamsMask::SOURCE);
-	}
+#include "gd32_board.h"
 
-	static StoreLtc *Get() {
-		return s_pThis;
-	}
-
-private:
-	static StoreLtc *s_pThis;
-};
-
-#endif /* STORELTC_H_ */
+#endif /* GD32_H_ */

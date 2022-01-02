@@ -2,7 +2,7 @@
  * @file gd32_i2c.h
  *
  */
-/* Copyright (C) 2021 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,9 +26,7 @@
 #include <stdint.h>
 
 #include "gd32_i2c.h"
-
-#include "gd32f20x.h"
-#include "gd32f20x_i2c.h"
+#include "gd32.h"
 
 #define TIMEOUT			0xfff
 
@@ -38,7 +36,7 @@ static int32_t _sendstart(void) {
 	int32_t timeout = TIMEOUT;
 
 	/* wait until I2C bus is idle */
-	while (i2c_flag_get(I2C0, I2C_FLAG_I2CBSY)) {
+	while (i2c_flag_get(I2C_PERIPH, I2C_FLAG_I2CBSY)) {
 		if (--timeout <= 0) {
 			return -GD32_I2C_NOK_TOUT;
 		}
@@ -47,10 +45,10 @@ static int32_t _sendstart(void) {
 	timeout = TIMEOUT;
 
 	/* send a start condition to I2C bus */
-	i2c_start_on_bus(I2C0);
+	i2c_start_on_bus(I2C_PERIPH);
 
 	/* wait until SBSEND bit is set */
-	while (!i2c_flag_get(I2C0, I2C_FLAG_SBSEND)) {
+	while (!i2c_flag_get(I2C_PERIPH, I2C_FLAG_SBSEND)) {
 		if (--timeout <= 0) {
 			return -GD32_I2C_NOK_TOUT;
 		}
@@ -63,22 +61,22 @@ static int32_t _sendslaveaddr(void) {
 	int32_t timeout = TIMEOUT;
 
 	/* send slave address to I2C bus */
-	i2c_master_addressing(I2C0, s_address, I2C_TRANSMITTER);
+	i2c_master_addressing(I2C_PERIPH, s_address, I2C_TRANSMITTER);
 
 	/* wait until ADDSEND bit is set */
-	while (!i2c_flag_get(I2C0, I2C_FLAG_ADDSEND)) {
+	while (!i2c_flag_get(I2C_PERIPH, I2C_FLAG_ADDSEND)) {
 		if (--timeout <= 0) {
 			return -GD32_I2C_NOK_TOUT;
 		}
 	}
 
 	/* clear the ADDSEND bit */
-	i2c_flag_clear(I2C0, I2C_FLAG_ADDSEND);
+	i2c_flag_clear(I2C_PERIPH, I2C_FLAG_ADDSEND);
 
 	timeout = TIMEOUT;
 
 	/* wait until the transmit data buffer is empty */
-	while (SET != i2c_flag_get(I2C0, I2C_FLAG_TBE)) {
+	while (SET != i2c_flag_get(I2C_PERIPH, I2C_FLAG_TBE)) {
 		if (--timeout <= 0) {
 			return -GD32_I2C_NOK_TOUT;
 		}
@@ -91,10 +89,10 @@ int32_t _stop(void) {
 	int32_t timeout = TIMEOUT;
 
     /* send a stop condition to I2C bus */
-    i2c_stop_on_bus(I2C0);
+    i2c_stop_on_bus(I2C_PERIPH);
 
     /* wait until the stop condition is finished */
-    while(I2C_CTL0(I2C0)&0x0200) {
+    while(I2C_CTL0(I2C_PERIPH)&0x0200) {
 		if (--timeout <= 0) {
 			return -GD32_I2C_NOK_TOUT;
 		}
@@ -108,7 +106,7 @@ static int32_t _senddata(uint8_t *data_addr, uint32_t data_count) {
 	uint32_t i;
 
 	for (i = 0; i < data_count; i++) {
-		i2c_data_transmit(I2C0, *data_addr);
+		i2c_data_transmit(I2C_PERIPH, *data_addr);
 
 		/* point to the next byte to be written */
 		data_addr++;
@@ -116,7 +114,7 @@ static int32_t _senddata(uint8_t *data_addr, uint32_t data_count) {
 		timeout = TIMEOUT;
 
 		/* wait until BTC bit is set */
-		while (!i2c_flag_get(I2C0, I2C_FLAG_BTC)) {
+		while (!i2c_flag_get(I2C_PERIPH, I2C_FLAG_BTC)) {
 			if (--timeout <= 0) {
 				return -GD32_I2C_NOK_TOUT;
 			}
@@ -159,23 +157,18 @@ i2c_write_err_occur: _stop();
  */
 
 void gd32_i2c_begin(void) {
-	/* enable GPIOB clock */
-	rcu_periph_clock_enable(RCU_GPIOB);
-	/* enable I2C0 clock */
-	rcu_periph_clock_enable(RCU_I2C0);
-	/* connect PB6 to I2C0_SCL */
-	/* connect PB7 to I2C0_SDA */
-	gpio_init(GPIOB, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_6 | GPIO_PIN_7);
-	/* configure I2C clock */
-	i2c_clock_config(I2C0, GD32_I2C_FULL_SPEED, I2C_DTCY_2);
-	/* enable I2C0 */
-	i2c_enable(I2C0);
-	/* enable acknowledge */
-	i2c_ack_config(I2C0, I2C_ACK_ENABLE);
+	rcu_periph_clock_enable(I2C_RCU_CLK);
+	rcu_periph_clock_enable(I2C_GPIO_SCL_CLK);
+	rcu_periph_clock_enable(I2C_GPIO_SDA_CLK);
+	gpio_init(I2C_GPIO_SCL_PORT, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, I2C_SCL_PIN);
+	gpio_init(I2C_GPIO_SDA_PORT, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, I2C_SDA_PIN);
+	i2c_clock_config(I2C_PERIPH, GD32_I2C_FULL_SPEED, I2C_DTCY_2);
+	i2c_enable(I2C_PERIPH);
+	i2c_ack_config(I2C_PERIPH, I2C_ACK_ENABLE);
 }
 
 void gd32_i2c_set_baudrate(uint32_t baudrate) {
-	i2c_clock_config(I2C0, baudrate, I2C_DTCY_2);
+	i2c_clock_config(I2C_PERIPH, baudrate, I2C_DTCY_2);
 }
 
 void gd32_i2c_set_address(uint8_t address) {
@@ -192,51 +185,51 @@ uint8_t gd32_i2c_read(char *buffer, uint32_t data_length) {
 	int32_t timeout = TIMEOUT;
 
 	/* wait until I2C bus is idle */
-	while (i2c_flag_get(I2C0, I2C_FLAG_I2CBSY)) {
+	while (i2c_flag_get(I2C_PERIPH, I2C_FLAG_I2CBSY)) {
 		if (--timeout <= 0) {
 			goto i2c_read_err_occur;
 		}
 	}
 
 	if (2 == data_length) {
-		i2c_ackpos_config(I2C0, I2C_ACKPOS_NEXT);
+		i2c_ackpos_config(I2C_PERIPH, I2C_ACKPOS_NEXT);
 	}
 
 	/* send a start condition to I2C bus */
-	i2c_start_on_bus(I2C0);
+	i2c_start_on_bus(I2C_PERIPH);
 
 	timeout = TIMEOUT;
 
 	/* wait until SBSEND bit is set */
-	while (!i2c_flag_get(I2C0, I2C_FLAG_SBSEND)) {
+	while (!i2c_flag_get(I2C_PERIPH, I2C_FLAG_SBSEND)) {
 		if (--timeout <= 0) {
 			goto i2c_read_err_occur;
 		}
 	}
 
 	/* send slave address to I2C bus */
-	i2c_master_addressing(I2C0, s_address, I2C_RECEIVER);
+	i2c_master_addressing(I2C_PERIPH, s_address, I2C_RECEIVER);
 
 	if (data_length < 3) {
 		/* disable acknowledge */
-		i2c_ack_config(I2C0, I2C_ACK_DISABLE);
+		i2c_ack_config(I2C_PERIPH, I2C_ACK_DISABLE);
 	}
 
 	timeout = TIMEOUT;
 
 	/* wait until ADDSEND bit is set */
-	while (!i2c_flag_get(I2C0, I2C_FLAG_ADDSEND)) {
+	while (!i2c_flag_get(I2C_PERIPH, I2C_FLAG_ADDSEND)) {
 		if (--timeout <= 0) {
 			goto i2c_read_err_occur;
 		}
 	}
 
 	/* clear the ADDSEND bit */
-	i2c_flag_clear(I2C0, I2C_FLAG_ADDSEND);
+	i2c_flag_clear(I2C_PERIPH, I2C_FLAG_ADDSEND);
 
 	if (1 == data_length) {
 		/* send a stop condition to I2C bus */
-		i2c_stop_on_bus(I2C0);
+		i2c_stop_on_bus(I2C_PERIPH);
 	}
 
 	int32_t timeout_loop = TIMEOUT;
@@ -246,33 +239,33 @@ uint8_t gd32_i2c_read(char *buffer, uint32_t data_length) {
 		if (3 == data_length) {
 			timeout = TIMEOUT;
 			/* wait until BTC bit is set */
-			while (!i2c_flag_get(I2C0, I2C_FLAG_BTC)) {
+			while (!i2c_flag_get(I2C_PERIPH, I2C_FLAG_BTC)) {
 				if (--timeout <= 0) {
 					goto i2c_read_err_occur;
 				}
 			}
 
 			/* disable acknowledge */
-			i2c_ack_config(I2C0, I2C_ACK_DISABLE);
+			i2c_ack_config(I2C_PERIPH, I2C_ACK_DISABLE);
 		}
 
 		if (2 == data_length) {
 			timeout = TIMEOUT;
 
 			/* wait until BTC bit is set */
-			while (!i2c_flag_get(I2C0, I2C_FLAG_BTC)) {
+			while (!i2c_flag_get(I2C_PERIPH, I2C_FLAG_BTC)) {
 				if (--timeout <= 0) {
 					goto i2c_read_err_occur;
 				}
 			}
 
 			/* send a stop condition to I2C bus */
-			i2c_stop_on_bus(I2C0);
+			i2c_stop_on_bus(I2C_PERIPH);
 		}
 
 		/* wait until the RBNE bit is set and clear it */
-		if (i2c_flag_get(I2C0, I2C_FLAG_RBNE)) {
-			*buffer = i2c_data_receive(I2C0);
+		if (i2c_flag_get(I2C_PERIPH, I2C_FLAG_RBNE)) {
+			*buffer = i2c_data_receive(I2C_PERIPH);
 			buffer++;
 			data_length--;
 			timeout_loop = TIMEOUT;
@@ -286,16 +279,16 @@ uint8_t gd32_i2c_read(char *buffer, uint32_t data_length) {
 	timeout = TIMEOUT;
 
 	/* wait until the stop condition is finished */
-	while (I2C_CTL0(I2C0) & 0x0200) {
+	while (I2C_CTL0(I2C_PERIPH) & 0x0200) {
 		if (--timeout <= 0) {
 			return GD32_I2C_NOK_TOUT;
 		}
 	}
 
 	/* enable acknowledge */
-	i2c_ack_config(I2C0, I2C_ACK_ENABLE);
+	i2c_ack_config(I2C_PERIPH, I2C_ACK_ENABLE);
 
-	i2c_ackpos_config(I2C0, I2C_ACKPOS_CURRENT);
+	i2c_ackpos_config(I2C_PERIPH, I2C_ACKPOS_CURRENT);
 
 	return GD32_I2C_OK;
 

@@ -2,7 +2,7 @@
  * @file gd32_board.h
  *
  */
-/* Copyright (C) 2021 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,12 @@
 #ifndef GD32_BOARD_H_
 #define GD32_BOARD_H_
 
-#if defined (BOARD_GD32207C_EVAL)
+#if defined (BOARD_GD32F207C_EVAL)
 # include "board/gd32f207c_eval.h"
+#elif defined (BOARD_GD32F207R_ETH)
+# include "board/gd32f207r_eth.h"
+#elif defined (BOARD_GD32F103R)
+# include "board/gd32f103r.h"
 #else
 # error Board is unknown / not defined
 #endif

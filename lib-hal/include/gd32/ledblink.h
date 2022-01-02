@@ -28,12 +28,11 @@
 
 #include <cstdint>
 
-#include "gd32_board.h"
-#include "gd32f20x_gpio.h"
+#include "gd32.h"
 
-#define LED_PIN                         GPIO_PIN_0
-#define LED_GPIO_PORT                   GPIOC
-#define LED_GPIO_CLK                    RCU_GPIOC
+#if defined (USE_LEDBLINK_BITBANGING595)
+# include "bitbanging595.h"
+#endif
 
 extern volatile uint32_t s_nSysTickMillis;
 
@@ -41,13 +40,17 @@ class LedBlink {
 public:
 	LedBlink();
 
-	void SetFrequency(uint32_t nFreqHz) {
+	void SetFrequency(const uint32_t nFreqHz) {
 		m_nFreqHz = nFreqHz;
 
 		switch (nFreqHz) {
 		case 0:
 			m_nTicksPerSecond = 0;
-			GPIO_BC(LED_GPIO_PORT) = LED_PIN;
+#if defined (USE_LEDBLINK_BITBANGING595)
+			bitBanging595.SetOff(static_cast<uint32_t>(~0));	//TODO Specify correct led
+#else
+			GPIO_BC(LED_BLINK_GPIO_PORT) = LED_BLINK_PIN;
+#endif
 			break;
 		case 1:
 			m_nTicksPerSecond = (1000 / 1);
@@ -60,7 +63,11 @@ public:
 			break;
 		case 255:
 			m_nTicksPerSecond = 0;
-			GPIO_BOP(LED_GPIO_PORT) = LED_PIN;
+#if defined (USE_LEDBLINK_BITBANGING595)
+			bitBanging595.SetOn(static_cast<uint32_t>(~0));		//TODO Specify correct led
+#else
+			GPIO_BOP(LED_BLINK_GPIO_PORT) = LED_BLINK_PIN;
+#endif
 			break;
 		default:
 			m_nTicksPerSecond = (1000 / nFreqHz);
@@ -79,23 +86,31 @@ public:
 	}
 
 	void Run() {
-		if (__builtin_expect (m_nTicksPerSecond == 0, 0)) {
-			return;
+		if (__builtin_expect (m_nTicksPerSecond != 0, 1)) {
+			if (__builtin_expect (!(s_nSysTickMillis - m_nMillisPrevious < m_nTicksPerSecond), 1)) {
+				m_nMillisPrevious = s_nSysTickMillis;
+
+				m_nToggleLed ^= 0x1;
+
+				if (m_nToggleLed != 0) {
+#if defined (USE_LEDBLINK_BITBANGING595)
+					bitBanging595.SetOn(static_cast<uint32_t>(~0));		//TODO Specify correct led
+#else
+					GPIO_BOP(LED_BLINK_GPIO_PORT) = LED_BLINK_PIN;
+#endif
+				} else {
+#if defined (USE_LEDBLINK_BITBANGING595)
+					bitBanging595.SetOff(static_cast<uint32_t>(~0));	//TODO Specify correct led
+#else
+					GPIO_BC(LED_BLINK_GPIO_PORT) = LED_BLINK_PIN;
+#endif
+				}
+			}
 		}
 
-
-		if (__builtin_expect ((s_nSysTickMillis - m_nMicrosPrevious < m_nTicksPerSecond), 0)) {
-			return;
-		}
-
-		m_nMicrosPrevious = s_nSysTickMillis;
-
-		m_nToggleLed ^= 0x1;
-		if (m_nToggleLed != 0) {
-			GPIO_BOP(LED_GPIO_PORT) = LED_PIN;
-		} else {
-			GPIO_BC(LED_GPIO_PORT) = LED_PIN;
-		}
+#if defined (USE_LEDBLINK_BITBANGING595)
+		bitBanging595.Run();
+#endif
 	}
 
 	void SetLedBlinkDisplay(LedBlinkDisplay *pLedBlinkDisplay) {
@@ -107,13 +122,16 @@ public:
 	}
 
 private:
+#if defined (USE_LEDBLINK_BITBANGING595)
+	BitBanging595 bitBanging595;
+#endif
 	uint32_t m_nFreqHz { 0 };
 	ledblink::Mode m_tMode { ledblink::Mode::UNKNOWN };
 	LedBlinkDisplay *m_pLedBlinkDisplay { nullptr };
 	//
 	uint32_t m_nTicksPerSecond { 1000 / 2 };
 	int32_t m_nToggleLed { 0 };
-	uint32_t m_nMicrosPrevious { 0 };
+	uint32_t m_nMillisPrevious { 0 };
 
 	static LedBlink *s_pThis;
 };

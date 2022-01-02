@@ -1,8 +1,8 @@
 /**
- * @file storedmxsend.h
+ * @file gd32_micros.h
  *
  */
-/* Copyright (C) 2018-2020 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,31 +23,26 @@
  * THE SOFTWARE.
  */
 
-#ifndef STOREDMXSEND_H_
-#define STOREDMXSEND_H_
+#ifndef GD32_MICROS_H_
+#define GD32_MICROS_H_
 
-#include "dmxparams.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#include "spiflashstore.h"
+#include "gd32.h"
 
-class StoreDmxSend final: public DmxParamsStore {
-public:
-	StoreDmxSend();
+static inline uint32_t micros(void) {
+	uint32_t msw, lsw;
+	do {
+		msw = TIMER_CNT(TIMER9);
+		lsw = TIMER_CNT(TIMER8);
+	} while (msw != TIMER_CNT(TIMER9));
+	return (msw << 16) | lsw;
+}
 
-	void Update(const struct TDmxParams *pDmxParams) override {
-		SpiFlashStore::Get()->Update(spiflashstore::Store::DMXSEND, pDmxParams, sizeof(struct TDmxParams));
-	}
+#ifdef __cplusplus
+}
+#endif
 
-	void Copy(struct TDmxParams *pDmxParams) override {
-		SpiFlashStore::Get()->Copy(spiflashstore::Store::DMXSEND, pDmxParams, sizeof(struct TDmxParams));
-	}
-
-	static StoreDmxSend *Get() {
-		return s_pThis;
-	}
-
-private:
-	static StoreDmxSend *s_pThis;
-};
-
-#endif /* STOREDMXSEND_H_ */
+#endif /* INCLUDE_GD32_MICROS_H_ */
