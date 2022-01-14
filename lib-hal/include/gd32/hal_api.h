@@ -2,7 +2,7 @@
  * @file hal_api.h
  *
  */
-/* Copyright (C) 2021 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,12 +30,16 @@
 
 #define FUNC_PREFIX(x) gd32_##x
 
+#if defined  __cplusplus
+# if !defined(GD32_UDELAY)
+#  define GD32_UDELAY
+ void udelay(uint32_t us, uint32_t offset = 0);
+# endif
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-extern void udelay(uint32_t);
-extern uint32_t micros();
 
 #ifdef __cplusplus
 }

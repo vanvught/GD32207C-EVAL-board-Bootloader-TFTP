@@ -28,17 +28,25 @@
 
 #include <stdint.h>
 
+#if !defined  __cplusplus
+ void udelay(uint32_t us);
+#else
+# if !defined(GD32_UDELAY)
+#  define GD32_UDELAY
+ void udelay(uint32_t us, uint32_t offset = 0);
+# endif
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-void udelay(uint32_t);
 
 #if defined (GD32F20X_CL)
 # include "gd32f20x.h"
 # include "gd32f20x_adc.h"
 # include "gd32f20x_bkp.h"
 # include "gd32f20x_dma.h"
+# include "gd32f20x_enet.h"
 # include "gd32f20x_fmc.h"
 # include "gd32f20x_fwdgt.h"
 # include "gd32f20x_gpio.h"
@@ -53,6 +61,9 @@ void udelay(uint32_t);
 # include "gd32f10x_adc.h"
 # include "gd32f10x_bkp.h"
 # include "gd32f10x_dma.h"
+# if defined (GD32F10X_CL)
+#  include "gd32f10x_enet.h"
+# endif
 # include "gd32f10x_fmc.h"
 # include "gd32f10x_fwdgt.h"
 # include "gd32f10x_gpio.h"

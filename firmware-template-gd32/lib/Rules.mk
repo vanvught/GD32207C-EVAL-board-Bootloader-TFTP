@@ -8,7 +8,7 @@ AR	= $(PREFIX)ar
 
 FAMILY?=gd32f20x
 BOARD?=BOARD_GD32F207C_EVAL
-#BOARD?=BOARD_GD32F207R_ETH
+#BOARD?=BOARD_GD32F207R
 
 FAMILY:=$(shell echo $(FAMILY) | tr A-Z a-z)
 FAMILY_UC=$(shell echo $(FAMILY) | tr a-w A-W)

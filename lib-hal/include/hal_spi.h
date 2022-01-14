@@ -2,7 +2,7 @@
  * @file hal_spi.h
  *
  */
-/* Copyright (C) 2019-2020 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2019-2021 by Arjan van Vught mailto:info@orangepi-dmx.nl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +34,9 @@
 #elif defined(H3)
 # include "h3/hal_api.h"
 # include "h3/hal_spi.h"
+#elif defined(GD32)
+# include "gd32/hal_api.h"
+# include "gd32/hal_spi.h"
 #else
 # include "rpi/hal_api.h"
 # include "rpi/hal_spi.h"
@@ -48,6 +51,7 @@ class HAL_SPI {
 public:
 	HAL_SPI(uint8_t nChipSelect, uint32_t nSpeedHz, uint8_t nMode = 0) :
 		m_nSpeedHz(nSpeedHz), m_nChipSelect(nChipSelect), m_nMode(nMode & 0x3) {
+		FUNC_PREFIX(spi_begin());
 	}
 
 	void Write(const char *pData, uint32_t nLength, const bool bDoSetup = true) {

@@ -2,7 +2,7 @@
  * @file gd32_micros.h
  *
  */
-/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2021-2022 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,13 +26,10 @@
 #ifndef GD32_MICROS_H_
 #define GD32_MICROS_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "gd32.h"
 
-static inline uint32_t micros(void) {
+#if defined (GD32F20X_CL)
+static inline uint32_t micros() {
 	uint32_t msw, lsw;
 	do {
 		msw = TIMER_CNT(TIMER9);
@@ -40,9 +37,10 @@ static inline uint32_t micros(void) {
 	} while (msw != TIMER_CNT(TIMER9));
 	return (msw << 16) | lsw;
 }
-
-#ifdef __cplusplus
+#else
+static inline uint32_t micros() {
+	return DWT->CYCCNT / (MCU_CLOCK_FREQ / 1000000U);
 }
 #endif
 
-#endif /* INCLUDE_GD32_MICROS_H_ */
+#endif /* GD32_MICROS_H_ */

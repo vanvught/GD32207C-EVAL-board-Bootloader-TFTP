@@ -2,7 +2,7 @@
  * @file hardware.h
  *
  */
-/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.nl
+/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,16 +33,39 @@
 #include "hwclock.h"
 
 #include "gd32.h"
+#include "gd32_adc.h"
+#include "gd32_micros.h"
 
 class Hardware {
 public:
 	Hardware();
+
+	void SetLed(hardware::LedStatus tLedStatus) {
+		switch (tLedStatus) {
+			case hardware::LedStatus::OFF:
+				GPIO_BC(LED_BLINK_GPIO_PORT) = LED_BLINK_PIN;
+				break;
+			case hardware::LedStatus::ON:
+				GPIO_BOP(LED_BLINK_GPIO_PORT) = LED_BLINK_PIN;
+				break;
+			default:
+				break;
+		}
+	}
+
+	uint32_t GetReleaseId() const {
+		return 0;	// FIXME GetReleaseId
+	}
 
 	void GetUuid(uuid_t out);
 
 	uint32_t Millis() {
 		extern volatile uint32_t s_nSysTickMillis;
 		return s_nSysTickMillis;
+	}
+
+	uint32_t Micros() {
+		return micros();
 	}
 
 	uint32_t GetUpTime() {
@@ -57,9 +80,19 @@ public:
 		return GD32_BOARD_NAME;
 	}
 
-	const char *GetSysName(uint8_t &nLenght) {
-		nLenght = 8;
+	const char *GetSysName(uint8_t &nLength) {
+		nLength = 8;
 		return "Embedded";
+	}
+
+	const char *GetSocName(uint8_t &nLength) {
+		nLength = 5;
+		return "GD32F";
+	}
+
+	const char *GetCpuName(uint8_t &nLength) {
+		nLength = sizeof(GD32_MCU_NAME) - 1U;
+		return GD32_MCU_NAME;
 	}
 
 	uint32_t GetBoardId() {
@@ -97,8 +130,8 @@ public:
 		m_pRebootHandler = pRebootHandler;
 	}
 
-	int16_t GetCoreTemperature() {
-		return 0;
+	float GetCoreTemperature() {
+		return gd32_adc_gettemp();
 	}
 
 	float GetCoreTemperatureMin() {

@@ -2,7 +2,7 @@
  * @file hardware.cpp
  *
  */
-/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2021-2022 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +34,7 @@
 
 #include "gd32.h"
 #include "gd32_i2c.h"
+#include "gd32_adc.h"
 #include "gd32_board.h"
 
 #ifndef NDEBUG
@@ -43,10 +44,13 @@
 #include "debug.h"
 
 extern "C" {
+void console_init(void);
 void systick_config(void);
-void udelay_init(void);
-void micros_init(void);
 }
+
+void micros_init();
+void udelay_init();
+void gd32_adc_init();
 
 Hardware *Hardware::s_pThis = nullptr;
 
@@ -58,8 +62,7 @@ Hardware::Hardware() {
     gpio_init(LED_BLINK_GPIO_PORT, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, LED_BLINK_PIN);
     GPIO_BC(LED_BLINK_GPIO_PORT) = LED_BLINK_PIN;
 
-	uart0_init();
-
+	console_init();
     systick_config();
     udelay_init();
     micros_init();
@@ -72,6 +75,8 @@ Hardware::Hardware() {
 	timer_initpara.period = static_cast<uint32_t>(~0);
 	timer_init(TIMER5, &timer_initpara);
 	timer_enable(TIMER5);
+
+	gd32_adc_init();
 
 	struct tm tmbuf;
 

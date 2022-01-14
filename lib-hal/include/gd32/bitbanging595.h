@@ -49,20 +49,6 @@ static constexpr uint32_t MASK_HIGH = (1U << 31);
 #endif
 }  // namespace bitbanging595
 
-// TODO Change LEDx with functional names
-namespace bitbang595 {
-enum class Led : uint32_t {
-	LED1 = (1U << 0),
-	LED2 = (1U << 1),
-	LED3 = (1U << 2),
-	LED4 = (1U << 3),
-	LED5 = (1U << 4),
-	LED6 = (1U << 5),
-	LED7 = (1U << 6),
-	LED8 = (1U << 7)
-};
-}  // namespace bitbang595
-
 class BitBanging595 {
 public:
 	BitBanging595(void) {

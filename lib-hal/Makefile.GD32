@@ -1,4 +1,4 @@
-DEFINES=NDEBUG
-EXTRA_SRCDIR=console/uart0 debug
+#DEFINES=NDEBUG
 
+include Rules.mk
 include ../firmware-template-gd32/lib/Rules.mk
