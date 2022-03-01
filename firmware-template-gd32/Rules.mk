@@ -23,11 +23,19 @@ MAP=$(FAMILY).map
 BUILD=build_gd32/
 
 # Input
-SOURCE = ./
-FIRMWARE_DIR = ./../firmware-template-gd32/
-LINKER = $(FIRMWARE_DIR)$(FAMILY)_flash.ld
+SOURCE=./
+FIRMWARE_DIR=./../firmware-template-gd32/
+ifeq ($(strip $(BOARD)),BOARD_GD32F207C_EVAL)
+	LINKER=$(FIRMWARE_DIR)gd32f207vc_flash.ld
+else
+	LINKER=$(FIRMWARE_DIR)gd32f207rg_flash.ld
+endif
 
-LIBS+=network properties hal debug c++ c gd32
+include ../firmware-template/libs.mk
+
+LIBS+=c++ c gd32
+
+$(info [${LIBS}])
 	
 DEFINES:=$(addprefix -D,$(DEFINES))
 
@@ -113,7 +121,7 @@ clean: $(LIBDEP)
 lisdep: $(LIBDEP)
 
 $(LIBDEP):
-	$(MAKE) -f Makefile.GD32 $(MAKECMDGOALS) 'MAKE_FLAGS=$(DEFINES)' -C $@ 
+	$(MAKE) -f Makefile.GD32 $(MAKECMDGOALS) 'FAMILY=${FAMILY}' 'BOARD=${BOARD}' 'MAKE_FLAGS=$(DEFINES)' -C $@ 
 
 # Build uImage
 

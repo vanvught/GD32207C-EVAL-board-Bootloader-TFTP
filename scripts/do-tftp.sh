@@ -2,7 +2,7 @@
 export PATH=./:../../scripts:$PATH
 
 if [ -f "gd32f20x.bin" ]; then
-cp gd32f20x.bin gd32.bin
+cp gd32f20x.bin gd32f207.bin
 else
 exit
 fi
@@ -12,11 +12,11 @@ echo '?tftp#' | udp_send $1
 
 tftp $1 << -EOF
 binary
-put gd32.bin
+put gd32f207.bin
 quit
 -EOF
 
-rm gd32.bin
+rm gd32f207.bin
 
 echo '!tftp#0' |udp_send $1 
 echo '?tftp#' | udp_send $1 

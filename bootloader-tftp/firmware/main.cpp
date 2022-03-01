@@ -2,7 +2,7 @@
  * @file main.cpp
  *
  */
-/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.nl
+/* Copyright (C) 2021-2022 by Arjan van Vught mailto:info@gd32-dmx.nl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -55,13 +55,15 @@ extern "C" {
 #endif
 
 int main(void) {
-    /* enable the key clock */
     rcu_periph_clock_enable(KEY_BOOTLOADER_TFTP_RCU_GPIOx);
+#if !defined (GD32F4XX)
     rcu_periph_clock_enable(RCU_AF);
-    /* configure button pin as input */
     gpio_init(KEY_BOOTLOADER_TFTP_GPIOx, GPIO_MODE_IPU, GPIO_OSPEED_50MHZ, KEY_BOOTLOADER_TFTP_GPIO_PINx);
-//      V <----
-    if (gpio_input_bit_get(KEY_BOOTLOADER_TFTP_GPIOx, KEY_BOOTLOADER_TFTP_GPIO_PINx)) {
+#else
+    gpio_mode_set(KEY_BOOTLOADER_TFTP_GPIOx, GPIO_MODE_INPUT, GPIO_PUPD_PULLUP, KEY_BOOTLOADER_TFTP_GPIO_PINx);
+#endif
+//												 V <----
+    if ((bkp_data_read(BKP_DATA_1) != 0xA5A5) && (gpio_input_bit_get(KEY_BOOTLOADER_TFTP_GPIOx, KEY_BOOTLOADER_TFTP_GPIO_PINx))) {
     	// https://developer.arm.com/documentation/ka001423/1-0
     	//1. Disable interrupt response.
     	__disable_irq();

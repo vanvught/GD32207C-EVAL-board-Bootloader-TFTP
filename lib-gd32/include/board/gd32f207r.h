@@ -94,7 +94,7 @@
  * I2C
  */
 
-// #define I2C0_REMAP
+#define I2C0_REMAP
 #if defined (I2C0_REMAP)
 # define I2C_REMAP			GPIO_I2C0_REMAP
 #endif
@@ -132,7 +132,7 @@
  * U(S)ART
  */
 
-// #define USART0_REMAP
+#define USART0_REMAP
 // #define USART1_REMAP
 // #define USART2_FULL_REMAP
 #define USART2_PARTIAL_REMAP

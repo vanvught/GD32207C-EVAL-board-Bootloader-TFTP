@@ -1,5 +1,5 @@
 /**
- * @file mac_address.c
+ * @file bitbanging595.cpp
  *
  */
 /* Copyright (C) 2021-2022 by Arjan van Vught mailto:info@gd32-dmx.org
@@ -23,30 +23,8 @@
  * THE SOFTWARE.
  */
 
-#include <stdint.h>
-#ifndef NDEBUG
-# include <stdio.h>
-#endif
+#include "gd32/bitbanging595.h"
 
-#include "gd32.h"
-
-void mac_address_get(uint8_t paddr[]) {
-#if !defined (GD32F4XX)
-	const uint32_t mac_hi = *(volatile uint32_t *) (0x1FFFF7E8);
-	const uint32_t mac_lo = *(volatile uint32_t *) (0x1FFFF7EC);
-#else
-	const uint32_t mac_hi = *(volatile uint32_t *) (0x1FFF7A10);
-	const uint32_t mac_lo = *(volatile uint32_t *) (0x1FFF7A14);
-#endif
-
-	paddr[0] = 2;
-	paddr[1] = (mac_lo >> 0) & 0xff;
-	paddr[2] = (mac_hi >> 24) & 0xff;
-	paddr[3] = (mac_hi >> 16) & 0xff;
-	paddr[4] = (mac_hi >> 8) & 0xff;
-	paddr[5] = (mac_hi >> 0) & 0xff;
-
-#ifndef NDEBUG
-	printf("%02x:%02x:%02x:%02x:%02x:%02x\n", paddr[0], paddr[1], paddr[2], paddr[3], paddr[4], paddr[5]);
-#endif
-}
+BitBanging595 *BitBanging595::s_pThis;
+uint32_t BitBanging595::s_nData;
+uint32_t BitBanging595::s_nDataPrevious;

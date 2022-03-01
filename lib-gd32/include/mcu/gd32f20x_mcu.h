@@ -2,7 +2,7 @@
  * @file gd32f20x_mcu.h
  *
  */
-/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2021-2022 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -161,13 +161,28 @@
 
 #define I2C1_PERIPH			I2C1
 #define I2C1_RCU_CLK		RCU_I2C1
-#define I2C1_SCL_GPIOx		GPIOB
-#define I2C1_SCL_RCU_GPIOx	RCU_GPIOB
-#define I2C1_SDA_GPIOx		GPIOB
-#define I2C1_SDA_RCU_GPIOx	RCU_GPIOB
-#define I2C1_SCL_GPIO_PINx	GPIO_PIN_10
-#define I2C1_SDA_GPIO_PINx	GPIO_PIN_11
-//TODO I2C1 REMAP
+#if defined (I2C1_REMAP10)
+# define I2C1_SCL_GPIOx		GPIOH
+# define I2C1_SCL_RCU_GPIOx	RCU_GPIOH
+# define I2C1_SDA_GPIOx		GPIOH
+# define I2C1_SDA_RCU_GPIOx	RCU_GPIOH
+# define I2C1_SCL_GPIO_PINx	GPIO_PIN_4
+# define I2C1_SDA_GPIO_PINx	GPIO_PIN_5
+#elif defined (I2C1_REMAP11)
+# define I2C1_SCL_GPIOx		GPIOF
+# define I2C1_SCL_RCU_GPIOx	RCU_GPIOF
+# define I2C1_SDA_GPIOx		GPIOF
+# define I2C1_SDA_RCU_GPIOx	RCU_GPIOF
+# define I2C1_SCL_GPIO_PINx	GPIO_PIN_0
+# define I2C1_SDA_GPIO_PINx	GPIO_PIN_1
+#else
+# define I2C1_SCL_GPIOx		GPIOB
+# define I2C1_SCL_RCU_GPIOx	RCU_GPIOB
+# define I2C1_SDA_GPIOx		GPIOB
+# define I2C1_SDA_RCU_GPIOx	RCU_GPIOB
+# define I2C1_SCL_GPIO_PINx	GPIO_PIN_10
+# define I2C1_SDA_GPIO_PINx	GPIO_PIN_11
+#endif
 
 #define I2C2_PERIPH			I2C2
 #define I2C2_RCU_CLK		RCU_I2C2
@@ -216,15 +231,27 @@
 
 #define SPI1_PERIPH				SPI1
 #define SPI1_RCU_CLK			RCU_SPI1
-#define SPI1_NSS_GPIOx			GPIOB
-#define SPI1_NSS_RCU_GPIOx		RCU_GPIOB
-#define SPI1_NSS_GPIO_PINx		GPIO_PIN_12
-#define SPI1_GPIOx				GPIOB
-#define SPI1_RCU_GPIOx			RCU_GPIOB
-#define SPI1_SCK_GPIO_PINx		GPIO_PIN_13
-#define SPI1_MISO_GPIO_PINx		GPIO_PIN_14
-#define SPI1_MOSI_GPIO_PINx		GPIO_PIN_15
-//TODO SPI1 REMAP
+#if defined (SPI1_REMAP10)
+# define SPI1_NSS_GPIOx			GPIOI
+# define SPI1_NSS_RCU_GPIOx		RCU_GPIOI
+# define SPI1_NSS_GPIO_PINx		GPIO_PIN_0
+# define SPI1_GPIOx				GPIOI
+# define SPI1_RCU_GPIOx			RCU_GPIOI
+# define SPI1_SCK_GPIO_PINx		GPIO_PIN_1
+# define SPI1_MISO_GPIO_PINx	GPIO_PIN_2
+# define SPI1_MOSI_GPIO_PINx	GPIO_PIN_3
+#elif defined (SPI1_REMAP11)
+# error SPI1_REMAP11 is not defined
+#else
+# define SPI1_NSS_GPIOx			GPIOB
+# define SPI1_NSS_RCU_GPIOx		RCU_GPIOB
+# define SPI1_NSS_GPIO_PINx		GPIO_PIN_12
+# define SPI1_GPIOx				GPIOB
+# define SPI1_RCU_GPIOx			RCU_GPIOB
+# define SPI1_SCK_GPIO_PINx		GPIO_PIN_13
+# define SPI1_MISO_GPIO_PINx	GPIO_PIN_14
+# define SPI1_MOSI_GPIO_PINx	GPIO_PIN_15
+#endif
 
 #define SPI2_PERIPH				SPI2
 #define SPI2_RCU_CLK			RCU_SPI2
@@ -252,6 +279,21 @@
 /**
  * DMA
  */
+
+#define SPI0_DMAx			DMA0
+#define SPI0_TX_DMA_CHx		DMA_CH2
+
+#define SPI1_DMAx			DMA0
+#define SPI1_TX_DMA_CHx		DMA_CH4
+
+#define SPI2_DMAx			DMA1
+#define SPI2_TX_DMA_CHx		DMA_CH1
+
+#define TIMER7_RCU_DMAx		RCU_DMA1
+#define TIMER7_DMAx			DMA1
+#define TIMER7_CH0_DMA_CHx	DMA_CH2
+#define TIMER7_CH1_DMA_CHx	DMA_CH4
+#define TIMER7_CH2_DMA_CHx	DMA_CH0
 
 #define USART0_DMA			DMA0
 #define USART0_TX_DMA_CH	DMA_CH3
@@ -284,14 +326,5 @@
 #define UART7_DMA			DMA1
 #define UART7_TX_DMA_CH		DMA_CH3
 #define UART7_RX_DMA_CH		DMA_CH1
-
-#define SPI0_DMAx			DMA0
-#define SPI0_TX_DMA_CHx		DMA_CH2
-
-#define SPI1_DMAx			DMA0
-#define SPI1_TX_DMA_CHx		DMA_CH4
-
-#define SPI2_DMAx			DMA1
-#define SPI2_TX_DMA_CHx		DMA_CH1
 
 #endif /* MCU_GD32F20X_H_ */

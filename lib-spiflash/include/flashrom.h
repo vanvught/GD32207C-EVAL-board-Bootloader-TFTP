@@ -1,8 +1,8 @@
 /**
- * @file mac_address.c
+ * @file flashrom.h
  *
  */
-/* Copyright (C) 2021-2022 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2021-2022 by Arjan van Vught mailto:info@orangepi-dmx.nl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,30 +23,40 @@
  * THE SOFTWARE.
  */
 
-#include <stdint.h>
-#ifndef NDEBUG
-# include <stdio.h>
-#endif
+#ifndef FLASHROM_H_
+#define FLASHROM_H_
 
-#include "gd32.h"
+#include <cstdint>
 
-void mac_address_get(uint8_t paddr[]) {
-#if !defined (GD32F4XX)
-	const uint32_t mac_hi = *(volatile uint32_t *) (0x1FFFF7E8);
-	const uint32_t mac_lo = *(volatile uint32_t *) (0x1FFFF7EC);
-#else
-	const uint32_t mac_hi = *(volatile uint32_t *) (0x1FFF7A10);
-	const uint32_t mac_lo = *(volatile uint32_t *) (0x1FFF7A14);
-#endif
+namespace flashrom {
+enum class result {
+	OK, ERROR
+};
+}  // namespace flashrom
 
-	paddr[0] = 2;
-	paddr[1] = (mac_lo >> 0) & 0xff;
-	paddr[2] = (mac_hi >> 24) & 0xff;
-	paddr[3] = (mac_hi >> 16) & 0xff;
-	paddr[4] = (mac_hi >> 8) & 0xff;
-	paddr[5] = (mac_hi >> 0) & 0xff;
+class FlashRom {
+public:
+	FlashRom();
 
-#ifndef NDEBUG
-	printf("%02x:%02x:%02x:%02x:%02x:%02x\n", paddr[0], paddr[1], paddr[2], paddr[3], paddr[4], paddr[5]);
-#endif
-}
+	bool IsDetected() const {
+		return m_IsDetected;
+	}
+
+	const char* GetName() const;
+	uint32_t GetSize() const;
+	uint32_t GetSectorSize() const;
+
+	bool Read(uint32_t nOffset, uint32_t nLength, uint8_t *pBuffer, flashrom::result& nResult);
+	bool Erase(uint32_t nOffset, uint32_t nLength, flashrom::result& nResult);
+	bool Write(uint32_t nOffset, uint32_t nLength, const uint8_t *pBuffer, flashrom::result& nResult);
+
+	static FlashRom *Get() {
+		return s_pThis;
+	}
+
+private:
+	bool m_IsDetected { false };
+	static FlashRom *s_pThis;
+};
+
+#endif /* INCLUDE_FLASHROM_H_ */

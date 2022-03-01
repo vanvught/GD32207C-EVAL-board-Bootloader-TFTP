@@ -27,8 +27,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "gd32f20x.h"
-#include "gd32f20x_fmc.h"
+#include "gd32.h"
 
 #include "debug.h"
 
@@ -37,11 +36,11 @@
 #define FLASH_PAGE	(2 * 1024)
 
 const char *spi_flash_get_name(void) {
-	return "GD32";
+	return GD32_MCU_NAME;
 }
 
 uint32_t spi_flash_get_size(void) {
-	return *(volatile uint16_t*)(0x1FFFF7E0) * 1024;
+	return FMC_SIZE * 1024;
 }
 
 uint32_t spi_flash_get_sector_size(void) {

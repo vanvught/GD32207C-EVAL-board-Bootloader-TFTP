@@ -1,8 +1,8 @@
 /**
- * @file bitbanging595.cpp
+ * @file bkp.cpp
  *
  */
-/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2022 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,8 +23,18 @@
  * THE SOFTWARE.
  */
 
-#include "gd32/bitbanging595.h"
+#include "gd32.h"
 
-BitBanging595 *BitBanging595::s_pThis;
-uint32_t BitBanging595::s_nData;
-uint32_t BitBanging595::s_nDataPrevious;
+#if defined (GD32F4XX)
+void bkp_data_write(bkp_data_register_enum register_number, uint16_t data) {
+	if ((register_number >= BKP_DATA_0) && (register_number <= BKP_DATA_1)) {
+		 REG16((BKPSRAM_BASE) + 16 + (register_number) * 2) = data;
+	}
+}
+uint16_t bkp_data_read(bkp_data_register_enum register_number) {
+	if ((register_number >= BKP_DATA_0) && (register_number <= BKP_DATA_1)) {
+		 return REG16((BKPSRAM_BASE) + 16 + (register_number) * 2);
+	}
+	return 0;
+}
+#endif

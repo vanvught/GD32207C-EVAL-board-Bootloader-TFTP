@@ -2,7 +2,7 @@
  * @file gd32f207c_eval.h
  *
  */
-/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2021-2022 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -105,9 +105,15 @@
 #define KEY3_GPIOx			GPIOB
 #define KEY3_RCU_GPIOx		RCU_GPIOB
 
-#define KEY_BOOTLOADER_TFTP_GPIO_PINx  KEY3_PINx
-#define KEY_BOOTLOADER_TFTP_GPIOx      KEY3_GPIOx
-#define KEY_BOOTLOADER_TFTP_RCU_GPIOx  KEY3_RCU_GPIOx
+#if 1
+# define KEY_BOOTLOADER_TFTP_GPIO_PINx  KEY3_PINx
+# define KEY_BOOTLOADER_TFTP_GPIOx      KEY3_GPIOx
+# define KEY_BOOTLOADER_TFTP_RCU_GPIOx  KEY3_RCU_GPIOx
+#else
+# define KEY_BOOTLOADER_TFTP_GPIO_PINx  GPIO_PIN_3
+# define KEY_BOOTLOADER_TFTP_RCU_GPIOx  RCU_GPIOD
+# define KEY_BOOTLOADER_TFTP_GPIOx      GPIOD
+#endif
 
 /**
  * I2C

@@ -2,7 +2,7 @@
  * @file spiflashinstall.h
  *
  */
-/* Copyright (C) 2018-2021 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2021-2022 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,19 +27,30 @@
 #define SPIFLASHINSTALL_H_
 
 #include <cstdint>
-#include <stdio.h>
+#include <cstdio>
 
 #if defined (H3)
 // nuc-i5:~/uboot-spi/u-boot$ grep CONFIG_BOOTCOMMAND include/configs/sunxi-common.h
 // #define CONFIG_BOOTCOMMAND "sf probe; sf read 48000000 180000 22000; bootm 48000000"
-# define FIRMWARE_MAX_SIZE	0x22000		// 136K
+# define FIRMWARE_MAX_SIZE	0x22000			// 136K
 # define OFFSET_UBOOT_SPI	0x000000
 # define OFFSET_UIMAGE		0x180000
 #elif defined (GD32)
-# define FIRMWARE_MAX_SIZE 	0x1A000		// 104K
-# define OFFSET_UIMAGE		0x007000	// 28K
+# if defined (BOARD_GD32F107R)
+#  define OFFSET_UIMAGE		0x007000		// 28K
+#  define FIRMWARE_MAX_SIZE (74 * 1024)		// 74K
+# elif defined (BOARD_GD32F207R)
+#  define OFFSET_UIMAGE		0x007000		// 28K
+#  define FIRMWARE_MAX_SIZE (234 * 1024)	// 234K
+# elif defined (BOARD_GD32F207C_EVAL)
+#  define OFFSET_UIMAGE		0x007000		// 28K
+#  define FIRMWARE_MAX_SIZE (106 * 1024)	// 106K
+# elif defined (BOARD_GD32F407R)
+#  define OFFSET_UIMAGE		0x008000		// 32K
+#  define FIRMWARE_MAX_SIZE (106 * 1024)	// 106K
+# endif
 #else
-# error
+# define OFFSET_UIMAGE		0x0
 #endif
 
 #ifdef __cplusplus

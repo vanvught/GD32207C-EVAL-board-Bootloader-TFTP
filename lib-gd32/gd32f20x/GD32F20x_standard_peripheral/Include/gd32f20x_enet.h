@@ -112,9 +112,9 @@ OF SUCH DAMAGE.
 #define PHY_SPEED_STATUS                 ((uint16_t)0x0002)                     /*!< configured information of speed: 10Mbit/s */
 #define PHY_DUPLEX_STATUS                ((uint16_t)0x0004)                     /*!< configured information of duplex: full-duplex */
 #elif(PHY_TYPE == RTL8201F)	/** AvV **/
-#define PHY_SR                           0U                                     /*!< tranceiver status register */
-#define PHY_SPEED_STATUS                 ((uint16_t)0x0000)                     /*!< configured information of speed: 10Mbit/s */
-#define PHY_DUPLEX_STATUS                ((uint16_t)0x0100)                     /*!< configured information of duplex: full-duplex */
+# define PHY_SR                          0U                                     /*!< tranceiver status register */
+# define PHY_SPEED_STATUS                ((uint16_t)0x0000)                     /*!< configured information of speed: 10Mbit/s */
+# define PHY_DUPLEX_STATUS               ((uint16_t)0x0100)                     /*!< configured information of duplex: full-duplex */
 #endif /* PHY_TYPE */
 
 #endif /* _PHY_H_ */
