@@ -62,19 +62,7 @@
  * LEDs bit-banging 595
  */
 
-#if 1
-#define LED595_DATA_GPIO_PINx	GPIO_PIN_2
-#define LED595_DATA_RCU_GPIOx	RCU_GPIOE
-#define LED595_DATA_GPIOx		GPIOE
-
-#define LED595_CLK_GPIO_PINx	GPIO_PIN_3
-#define LED595_CLK_RCU_GPIOx	RCU_GPIOE
-#define LED595_CLK_GPIOx		GPIOE
-
-#define LED595_LOAD_GPIO_PINx	GPIO_PIN_4
-#define LED595_LOAD_RCU_GPIOx	RCU_GPIOE
-#define LED595_LOAD_GPIOx		GPIOE
-#else
+#if !defined (CUSTOM_BOARD)
 // Using SPI2 pin's: MOSI, SCK and NSS
 #define LED595_DATA_GPIO_PINx	GPIO_PIN_5
 #define LED595_DATA_RCU_GPIOx	RCU_GPIOB
@@ -87,6 +75,31 @@
 #define LED595_LOAD_GPIO_PINx	GPIO_PIN_15
 #define LED595_LOAD_RCU_GPIOx	RCU_GPIOA
 #define LED595_LOAD_GPIOx		GPIOA
+#else
+#define LED595_DATA_GPIO_PINx	GPIO_PIN_2
+#define LED595_DATA_RCU_GPIOx	RCU_GPIOE
+#define LED595_DATA_GPIOx		GPIOE
+
+#define LED595_CLK_GPIO_PINx	GPIO_PIN_3
+#define LED595_CLK_RCU_GPIOx	RCU_GPIOE
+#define LED595_CLK_GPIOx		GPIOE
+
+#define LED595_LOAD_GPIO_PINx	GPIO_PIN_4
+#define LED595_LOAD_RCU_GPIOx	RCU_GPIOE
+#define LED595_LOAD_GPIOx		GPIOE
+
+#ifdef __cplusplus
+namespace hal {
+namespace panelled {
+static constexpr uint32_t ACTIVITY = 0x00380000;
+// DMX
+static constexpr uint32_t PORT_A_RX = 0x1;
+static constexpr uint32_t PORT_A_TX = 0x2;
+//
+static constexpr uint32_t INVERTED = ACTIVITY;
+}  // namespace panelled
+}  // namespace hal
+#endif
 #endif
 
 /**
@@ -105,7 +118,7 @@
 #define KEY3_GPIOx			GPIOB
 #define KEY3_RCU_GPIOx		RCU_GPIOB
 
-#if 1
+#if !defined (CUSTOM_BOARD)
 # define KEY_BOOTLOADER_TFTP_GPIO_PINx  KEY3_PINx
 # define KEY_BOOTLOADER_TFTP_GPIOx      KEY3_GPIOx
 # define KEY_BOOTLOADER_TFTP_RCU_GPIOx  KEY3_RCU_GPIOx

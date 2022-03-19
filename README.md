@@ -1,15 +1,16 @@
-# GD32F207x Bootloader TFTP
+[PayPal.Me Donate](https://paypal.me/AvanVught?locale.x=nl_NL)
+# GD32F207VC Bootloader TFTP
 
 This bootloader will install your application by means of the TFTP protocol. There is no need to change your application code. 
 Per default DHCP is used for obtaining the ip-address.
 
 The bootloader is active during reset of the board:
 
-* Or when the `KEY_BOOTLOADER_TFTP_GPIO_PINx` is pressed. Which is defined in file `lib-gd32/include/board/gd32f207c_eval.h` or file `lib-gd32/include/board/gd32f207r.h`. 
+* Or when the `User Key` is pressed. Which is defined in file `lib-gd32/include/board/gd32f207c_eval.h`. 
 	
-		#define KEY3_PINx						GPIO_PIN_11
-		#define KEY3_GPIOx						GPIOA
-		#define KEY3_RCU_GPIOx					RCU_GPIOA
+		#define KEY3_PINx			GPIO_PIN_14
+		#define KEY3_GPIOx			GPIOB
+		#define KEY3_RCU_GPIOx		RCU_GPIOB
 		
 		#define KEY_BOOTLOADER_TFTP_GPIO_PINx	KEY3_PINx
 		#define KEY_BOOTLOADER_TFTP_GPIOx		KEY3_GPIOx
@@ -27,12 +28,7 @@ The bootloader can be installed with the tools supplied by GigaDevice -> [http:/
 
 The limitation for the firmware file to be uploaded is given by the RAM available. For example, the MCU on GD32207C-EVAL is the [GD32F207VCT6](https://www.gigadevice.com/microcontroller/gd32f207vct6/). With the 128K RAM we have the firmware file size limit of 106K.
 
-There are 3 places for this configuration:
-
-File: `gd32f207rg_flash.ld`
-
-	  __heap_size = DEFINED(__heap_size) ? __heap_size : 235K;
-	  __stack_size = DEFINED(__stack_size) ? __stack_size : 1K;
+There are 2 places for this configuration:
 
 File: `gd32f207vc_flash.ld`
 
@@ -41,24 +37,13 @@ File: `gd32f207vc_flash.ld`
 
 File: `spiflashinstall.h`
 
-	# elif defined (BOARD_GD32F207R)
-	#  define OFFSET_UIMAGE		0x007000		// 28K
-	#  define FIRMWARE_MAX_SIZE (234 * 1024)	// 234K
-	# elif defined (BOARD_GD32F207C_EVAL)
-	#  define OFFSET_UIMAGE		0x007000		// 28K
-	#  define FIRMWARE_MAX_SIZE (106 * 1024)	// 106K
+		# elif defined (BOARD_GD32F207C_EVAL)
+		#  define OFFSET_UIMAGE		0x007000		// 28K
+		#  define FIRMWARE_MAX_SIZE (106 * 1024)	// 106K
 
 The 1K difference is needed for other `new` (`malloc`) within the bootloader.
 
-The change to be made in your application is in the file `gd32f207rg_flash.ld`. 
-	
-	MEMORY
-	{
-	  FLASH (rx)      : ORIGIN = 0x08007000, LENGTH = 234K
-	  RAM (xrw)       : ORIGIN = 0x20000000, LENGTH = 256K
-	}
-	
-or in the file `gd32f207vc_flash.ld`. 
+The change to be made in your application is in the file `gd32f207vc_flash.ld`. 
 
 	MEMORY
 	{

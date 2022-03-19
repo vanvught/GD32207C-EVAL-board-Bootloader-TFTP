@@ -2,7 +2,7 @@
  * @file spiflashinstall.cpp
  *
  */
-/* Copyright (C) 2021 by Arjan van Vught mailto:info@gd32-dmx.nl
+/* Copyright (C) 2021-2022 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,7 @@ SpiFlashInstall::SpiFlashInstall() {
 
 	m_nFlashSize = spi_flash_get_size();
 
-	printf("%s, sector size %d, %d bytes\n", spi_flash_get_name(), spi_flash_get_sector_size(), m_nFlashSize);
+	printf("%s, sector size %d, %d bytes [%d kB]\n", spi_flash_get_name(), spi_flash_get_sector_size(), m_nFlashSize, m_nFlashSize / 1024U);
 	Display::Get()->Write(1, spi_flash_get_name());
 
 	DEBUG_EXIT
