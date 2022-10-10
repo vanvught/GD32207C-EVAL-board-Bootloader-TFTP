@@ -2,7 +2,7 @@
  * @file main.cpp
  *
  */
-/* Copyright (C) 2022 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2022 by Arjan van Vught mailto:info@gd32-dmx.nl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,6 @@
 
 #include <cstdio>
 #include <cstdint>
-#include <cassert>
 
 #include "hardware.h"
 #include "network.h"
@@ -46,23 +45,25 @@
 
 #include "gd32.h"
 
-#include "debug.h"
+void Hardware::RebootHandler() {
 
-#ifndef NDEBUG
-extern "C" {
-	void mem_info(void);
 }
-#endif
 
 int main(void) {
     rcu_periph_clock_enable(KEY_BOOTLOADER_TFTP_RCU_GPIOx);
 #if !defined (GD32F4XX)
     rcu_periph_clock_enable(RCU_AF);
+    rcu_periph_clock_enable(KEY_BOOTLOADER_TFTP_RCU_GPIOx);
     gpio_init(KEY_BOOTLOADER_TFTP_GPIOx, GPIO_MODE_IPU, GPIO_OSPEED_50MHZ, KEY_BOOTLOADER_TFTP_GPIO_PINx);
 #else
+	rcu_periph_clock_enable(RCU_PMU);
+	pmu_backup_ldo_config(PMU_BLDOON_ON);
+	rcu_periph_clock_enable(RCU_BKPSRAM);
+	pmu_backup_write_enable();
+	gpio_af_set(KEY_BOOTLOADER_TFTP_GPIOx, GPIO_AF_0, KEY_BOOTLOADER_TFTP_GPIO_PINx);
     gpio_mode_set(KEY_BOOTLOADER_TFTP_GPIOx, GPIO_MODE_INPUT, GPIO_PUPD_PULLUP, KEY_BOOTLOADER_TFTP_GPIO_PINx);
 #endif
-//												 V <----
+
     if ((bkp_data_read(BKP_DATA_1) != 0xA5A5) && (gpio_input_bit_get(KEY_BOOTLOADER_TFTP_GPIOx, KEY_BOOTLOADER_TFTP_GPIO_PINx))) {
     	// https://developer.arm.com/documentation/ka001423/1-0
     	//1. Disable interrupt response.
@@ -95,7 +96,7 @@ int main(void) {
 
 	Hardware hw;
 	Network nw;
-	Display display;
+	Display display(4);
 	LedBlink lb;
 	FirmwareVersion fw(SOFTWARE_VERSION, __DATE__, __TIME__);
 
@@ -124,11 +125,12 @@ int main(void) {
 
 	lb.SetMode(ledblink::Mode::FAST);
 
-#ifndef NDEBUG
-	mem_info();
-#endif
+	display.Printf(3, "Bootloader TFTP Srvr");
+
+	hw.WatchdogInit();
 
 	while (1) {
+		hw.WatchdogFeed();
 		nw.Run();
 		remoteConfig.Run();
 		lb.Run();

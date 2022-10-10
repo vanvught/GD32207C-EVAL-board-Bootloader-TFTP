@@ -2,7 +2,7 @@
  * @file mdns.cpp
  *
  */
-/* Copyright (C) 2019-2021 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2019-2022 by Arjan van Vught mailto:info@orangepi-dmx.nl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -97,6 +97,26 @@ MDNS::MDNS() {
 	struct in_addr group_ip;
 	static_cast<void>(inet_aton(MDNS_MULTICAST_ADDRESS, &group_ip));
 	s_nMulticastIp = group_ip.s_addr;
+}
+
+MDNS::~MDNS() {
+	if (s_pName != nullptr) {
+		delete[] s_pName;
+	}
+
+	for (uint32_t i = 0; i < SERVICE_RECORDS_MAX; i++) {
+		if (s_ServiceRecords[i].pName != nullptr) {
+			delete[] s_ServiceRecords[i].pName;
+		}
+
+		if (s_ServiceRecords[i].pServName != nullptr) {
+			delete[] s_ServiceRecords[i].pServName;
+		}
+
+		if (s_ServiceRecords[i].pTextContent != nullptr) {
+			delete[] s_ServiceRecords[i].pTextContent;
+		}
+	}
 }
 
 void MDNS::Start() {
@@ -232,7 +252,7 @@ bool MDNS::AddServiceRecord(const char *pName, const char *pServName, uint16_t n
 			s_ServiceRecords[i].nProtocol = nProtocol;
 
 			if (pName == nullptr) {
-				s_ServiceRecords[i].pName = new char[1 + strlen(Network::Get()->GetHostName() + strlen(pServName))];
+				s_ServiceRecords[i].pName = new char[1 + strlen(Network::Get()->GetHostName()) + strlen(pServName)];
 				assert(s_ServiceRecords[i].pName != nullptr);
 
 				strcpy(s_ServiceRecords[i].pName, Network::Get()->GetHostName());

@@ -1,15 +1,14 @@
-DEFINES=DISABLE_BIN
-DEFINES+=DISABLE_JSON
+DEFINES =DISABLE_JSON
+DEFINES+=DISABLE_BIN
 DEFINES+=DISABLE_RTC
 DEFINES+=DISABLE_FS
-#DEFINES+=USE_LEDBLINK_BITBANGING595 BITBANGING595_COUNT=3
+DEFINES+=DISABLE_PRINTF_FLOAT
 DEFINES+=UDP_MAX_PORTS_ALLOWED=2
-#DEFINES+=PHY_TYPE=RTL8201F
 DEFINES+=NDEBUG
 
 SRCDIR=firmware lib
 
-LIBS=display spiflashstore spiflash remoteconfig spiflashinstall
+LIBS=display spiflashstore remoteconfig spiflashinstall spiflash
 
 include ../firmware-template-gd32/Rules.mk
 

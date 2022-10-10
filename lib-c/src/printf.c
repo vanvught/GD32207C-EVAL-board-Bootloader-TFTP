@@ -2,7 +2,7 @@
  * @file printf.c
  *
  */
-/* Copyright (C) 2016-2021 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2016-2022 by Arjan van Vught mailto:info@orangepi-dmx.nl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -66,8 +66,116 @@ inline static void _xputch(struct context *ctx, int c) {
 	console_putc(c);
 }
 
-static void _format_hex(struct context *ctx, unsigned int arg) {
+#if !defined (DISABLE_PRINTF_FLOAT)
+static int _pow10(int n) {
+	int r = 10;
+	n--;
+
+	while (n-- > 0) {
+		r *= 10;
+	}
+
+	return r;
+}
+
+static int _itostr(int x, /*@out@*/char *s, int d) {
 	char buffer[64];
+	char *p = buffer + (sizeof(buffer) / sizeof(buffer[0])) - 1;
+	char *o = p;
+	char *t = (char *) s;
+	int i;
+
+	const bool is_neg = x < 0 ? true : false;
+
+	if (is_neg) {
+		x = -x;
+	}
+
+	if (x == 0) {
+		*p = '0';
+		p--;
+	} else {
+		do {
+			*p = (char)((x % 10) + '0');
+			p--;
+			x = x / 10;
+		} while ((x != 0) && (p > buffer));
+	}
+
+	if (d != 0) {
+		while (((o - p) < d) && (p > buffer)) {
+			*p-- = '0';
+		}
+	}
+
+	if (is_neg) {
+		*p-- = '-';
+	}
+
+	p++;
+
+	i = (int) (o - p);
+
+	while (p < buffer + (sizeof(buffer) / sizeof(buffer[0]))) {
+		*t++ = *p++;
+	}
+
+	return i + 1;
+}
+
+static void _round_float(/*@out@*/char *dest, int *size) {
+	int i = *size - 1;
+	char *q = (char *) dest + i;
+	bool round_int = false;
+
+	if (*q >= '5') {
+
+		char *w = q - 1;
+
+		if (*w != '.') {
+			while (*w == '9') {
+				*w-- = '0';
+			}
+			if (*w != '.') {
+				*w = (char)(*w + 1);
+			} else {
+				round_int = true;
+			}
+		} else {
+			round_int = true;
+		}
+
+		if (round_int) {
+			w--;
+
+			while (*w == '9' && w >= dest && *w != '-') {
+				*w-- = '0';
+			}
+
+			if (w >= dest && *w != '-') {
+				*w = (char)(*w + 1);
+			} else {
+				w++;
+				q++;
+				memmove(w + 1, w, (size_t) (q - w));
+				*w = '1';
+				i++;
+			}
+		}
+	}
+
+	if (dest[i - 1] == '.') {
+		i--;
+	}
+
+	*size = i;
+
+	return;
+}
+#endif
+
+static void _format_hex(struct context *ctx, unsigned int arg) {
+	char buffer[64] __attribute__((aligned(4)));
 	char *p = buffer + (sizeof(buffer) / sizeof(buffer[0])) - 1;
 	char *o = p;
 	char alpha;
@@ -171,6 +279,52 @@ static void _format_int(struct context *ctx, uint64_t arg) {
 	}
 }
 
+#if !defined (DISABLE_PRINTF_FLOAT)
+static void _format_float(struct context *ctx, float f) {
+	char buffer[64] __attribute__((aligned(4)));
+	char *dest = (char *) buffer;
+	int ipart;
+	int precision;
+	int size;
+	int i;
+
+	if ((ctx->flag & FLAG_PRECISION) != 0) {
+		precision = ctx->prec;
+	} else {
+		precision = 6;
+	}
+
+	if (f < 0) {
+		*dest++ = '-';
+		f = -f;
+	}
+
+	ipart = (int) f;
+
+	dest += _itostr(ipart, dest, 0);
+
+	f -= (float)ipart;
+
+	precision++;
+	*dest++ = '.';
+	dest += _itostr((int)(f * (float)_pow10(precision)), dest, precision);
+	size = dest - buffer;
+	_round_float(buffer, &size);
+
+	i = 0;
+	while (((size + i) < ctx->width)) {
+		_xputch(ctx, (int) ' ');
+		i++;
+	}
+
+	dest = buffer;
+	while (size-- > 0) {
+		_xputch(ctx, (int) *dest++);
+	}
+
+}
+#endif
+
 static void _format_string(struct context *ctx, const char *s) {
 	int j;
 
@@ -209,7 +363,9 @@ static void _format_pointer(struct context *ctx, unsigned int arg) {
 
 static int _vprintf(const int size, const char *fmt, va_list va) {
 	struct context ctx;
+#if !defined (DISABLE_PRINTF_FLOAT)
 	float f;
+#endif
 	int64_t l;
 	uint64_t lu;
 	const char *s;
@@ -284,6 +440,12 @@ static int _vprintf(const int size, const char *fmt, va_list va) {
 			}
 			_format_int(&ctx, (uint64_t) l);
 			break;
+#if !defined (DISABLE_PRINTF_FLOAT)
+		case 'f':
+			f = (float) va_arg(va, double);
+			_format_float(&ctx, f);
+			break;
+#endif
 		case 'p':
 			_format_pointer(&ctx, va_arg(va, uint32_t));
 			break;

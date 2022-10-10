@@ -1,4 +1,12 @@
+![GitHub](https://img.shields.io/github/license/vanvught/GD32207C-EVAL-board-Bootloader-TFTP)
+[![C++ Standard](https://img.shields.io/badge/C%2B%2B-11-blue.svg)](https://img.shields.io/badge/C%2B%2B-11%-blue.svg)
+![GitHub issues](https://img.shields.io/github/issues-raw/vanvught/GD32207C-EVAL-board-Bootloader-TFTP)
+![GitHub contributors](https://img.shields.io/github/contributors/vanvught/GD32207C-EVAL-board-Bootloader-TFTP)
+![GitHub Sponsors](https://img.shields.io/github/sponsors/vanvught)
+![Main](https://github.com/vanvught/GD32207C-EVAL-board-Bootloader-TFTP/actions/workflows/c-cpp.yml/badge.svg?branch=main)
+
 [PayPal.Me Donate](https://paypal.me/AvanVught?locale.x=nl_NL)
+
 # GD32F207VC Bootloader TFTP
 
 This bootloader will install your application by means of the TFTP protocol. There is no need to change your application code. 

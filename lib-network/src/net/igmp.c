@@ -2,7 +2,7 @@
  * @file igmp.c
  *
  */
-/* Copyright (C) 2018-2021 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2018-2022 by Arjan van Vught mailto:info@orangepi-dmx.nl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,10 @@
 
 #include "net.h"
 #include "net_packets.h"
+#include "net_platform.h"
 #include "net_debug.h"
+
+#include "../../config/net_config.h"
 
 #ifndef ALIGNED
 # define ALIGNED __attribute__ ((aligned (4)))
@@ -37,8 +40,6 @@
 
 extern uint16_t net_chksum(void *, uint32_t);
 extern void emac_eth_send(void *, int);
-
-#define MAX_JOINS_ALLOWED	(4 + (8 * 4)) /* 8 outputs x 4 Universes */
 
 typedef enum s_state {
 	NON_MEMBER = 0,
@@ -57,12 +58,12 @@ typedef union pcast32 {
 	uint8_t u8[4];
 } _pcast32;
 
-static struct t_igmp s_report ALIGNED;
-static struct t_igmp s_leave ALIGNED;
-static uint8_t s_multicast_mac[ETH_ADDR_LEN] ALIGNED;
-static struct t_group_info s_groups[MAX_JOINS_ALLOWED] ALIGNED;
-static uint32_t s_joins_allowed_index;
-static uint16_t s_id ALIGNED;
+static struct t_igmp s_report SECTION_NETWORK ALIGNED;
+static struct t_igmp s_leave SECTION_NETWORK ALIGNED;
+static uint8_t s_multicast_mac[ETH_ADDR_LEN] SECTION_NETWORK ALIGNED;
+static struct t_group_info s_groups[IGMP_MAX_JOINS_ALLOWED] SECTION_NETWORK ALIGNED;
+static uint32_t s_joins_allowed_index SECTION_NETWORK;
+static uint16_t s_id SECTION_NETWORK ALIGNED;
 
 void igmp_set_ip(const struct ip_info  *p_ip_info) {
 	_pcast32 src;
@@ -76,7 +77,7 @@ void igmp_set_ip(const struct ip_info  *p_ip_info) {
 void __attribute__((cold)) igmp_init(uint8_t *mac_address, const struct ip_info  *p_ip_info) {
 	uint32_t i;
 
-	for (i = 0; i < MAX_JOINS_ALLOWED ; i++) {
+	for (i = 0; i < IGMP_MAX_JOINS_ALLOWED ; i++) {
 		memset(&s_groups[i], 0, sizeof(struct t_group_info));
 	}
 
@@ -137,7 +138,7 @@ void __attribute__((cold)) igmp_shutdown(void) {
 
 	uint32_t i;
 
-	for (i = 0; i < MAX_JOINS_ALLOWED; i++) {
+	for (i = 0; i < IGMP_MAX_JOINS_ALLOWED; i++) {
 		if (s_groups[i].group_address != 0) {
 			DEBUG_PRINTF(IPSTR, IP2STR(s_groups[i].group_address));
 
@@ -249,7 +250,7 @@ __attribute__((hot)) void igmp_handle(struct t_igmp *p_igmp) {
 void igmp_timer(void) {
 	uint32_t i;
 
-	for (i = 0; i < MAX_JOINS_ALLOWED ; i++) {
+	for (i = 0; i < IGMP_MAX_JOINS_ALLOWED ; i++) {
 
 		if ((s_groups[i].state == DELAYING_MEMBER) && (s_groups[i].timer > 0)) {
 			s_groups[i].timer--;
@@ -271,7 +272,7 @@ int igmp_join(uint32_t group_address) {
 		return -1;
 	}
 
-	if (s_joins_allowed_index == MAX_JOINS_ALLOWED) {
+	if (s_joins_allowed_index == IGMP_MAX_JOINS_ALLOWED) {
 		return -2;
 	}
 
@@ -297,13 +298,13 @@ int igmp_join(uint32_t group_address) {
 int igmp_leave(uint32_t group_address) {
 	uint32_t i;
 
-	for (i = 0; i < MAX_JOINS_ALLOWED; i++) {
+	for (i = 0; i < IGMP_MAX_JOINS_ALLOWED; i++) {
 		if (s_groups[i].group_address == group_address) {
 			break;
 		}
 	}
 
-	if (i == MAX_JOINS_ALLOWED) {
+	if (i == IGMP_MAX_JOINS_ALLOWED) {
 		return -1;
 	}
 

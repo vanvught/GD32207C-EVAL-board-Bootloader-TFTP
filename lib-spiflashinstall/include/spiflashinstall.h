@@ -48,6 +48,12 @@
 # elif defined (BOARD_GD32F407R)
 #  define OFFSET_UIMAGE		0x008000		// 32K
 #  define FIRMWARE_MAX_SIZE (106 * 1024)	// 106K
+# elif defined (BOARD_GD32F450VE)
+#  define OFFSET_UIMAGE		0x008000		// 32K
+#  define FIRMWARE_MAX_SIZE (168 * 1024)	// 168K
+# elif defined (BOARD_GD32F450VI)
+#  define OFFSET_UIMAGE		0x008000		// 32K
+#  define FIRMWARE_MAX_SIZE (224 * 1024)	// 224K
 # endif
 #else
 # define OFFSET_UIMAGE		0x0

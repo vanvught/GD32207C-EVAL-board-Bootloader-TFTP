@@ -23,14 +23,14 @@
  * THE SOFTWARE.
  */
 
-#ifndef BOARD_GD32F207C_EVAL_H
-#define BOARD_GD32F207C_EVAL_H
+#ifndef BOARD_GD32F207C_EVAL_H_
+#define BOARD_GD32F207C_EVAL_H_
 
 #if !defined(BOARD_GD32F207C_EVAL)
 # error This file should not be included
 #endif
 
-#if defined (MCU_GD32F20X_H_)
+#if defined (MCU_GD32F20X_MCU_H_)
 # error This file should be included later
 #endif
 
@@ -62,7 +62,6 @@
  * LEDs bit-banging 595
  */
 
-#if !defined (CUSTOM_BOARD)
 // Using SPI2 pin's: MOSI, SCK and NSS
 #define LED595_DATA_GPIO_PINx	GPIO_PIN_5
 #define LED595_DATA_RCU_GPIOx	RCU_GPIOB
@@ -75,32 +74,6 @@
 #define LED595_LOAD_GPIO_PINx	GPIO_PIN_15
 #define LED595_LOAD_RCU_GPIOx	RCU_GPIOA
 #define LED595_LOAD_GPIOx		GPIOA
-#else
-#define LED595_DATA_GPIO_PINx	GPIO_PIN_2
-#define LED595_DATA_RCU_GPIOx	RCU_GPIOE
-#define LED595_DATA_GPIOx		GPIOE
-
-#define LED595_CLK_GPIO_PINx	GPIO_PIN_3
-#define LED595_CLK_RCU_GPIOx	RCU_GPIOE
-#define LED595_CLK_GPIOx		GPIOE
-
-#define LED595_LOAD_GPIO_PINx	GPIO_PIN_4
-#define LED595_LOAD_RCU_GPIOx	RCU_GPIOE
-#define LED595_LOAD_GPIOx		GPIOE
-
-#ifdef __cplusplus
-namespace hal {
-namespace panelled {
-static constexpr uint32_t ACTIVITY = 0x00380000;
-// DMX
-static constexpr uint32_t PORT_A_RX = 0x1;
-static constexpr uint32_t PORT_A_TX = 0x2;
-//
-static constexpr uint32_t INVERTED = ACTIVITY;
-}  // namespace panelled
-}  // namespace hal
-#endif
-#endif
 
 /**
  * KEYs
@@ -118,15 +91,9 @@ static constexpr uint32_t INVERTED = ACTIVITY;
 #define KEY3_GPIOx			GPIOB
 #define KEY3_RCU_GPIOx		RCU_GPIOB
 
-#if !defined (CUSTOM_BOARD)
 # define KEY_BOOTLOADER_TFTP_GPIO_PINx  KEY3_PINx
 # define KEY_BOOTLOADER_TFTP_GPIOx      KEY3_GPIOx
 # define KEY_BOOTLOADER_TFTP_RCU_GPIOx  KEY3_RCU_GPIOx
-#else
-# define KEY_BOOTLOADER_TFTP_GPIO_PINx  GPIO_PIN_3
-# define KEY_BOOTLOADER_TFTP_RCU_GPIOx  RCU_GPIOD
-# define KEY_BOOTLOADER_TFTP_GPIOx      GPIOD
-#endif
 
 /**
  * I2C
@@ -178,6 +145,32 @@ static constexpr uint32_t INVERTED = ACTIVITY;
 // #define USART5_REMAP
 // #define UART6_REMAP
 
+/**
+ * Panel LEDs
+ */
+#ifdef __cplusplus
+namespace hal {
+namespace panelled {
+static constexpr uint32_t ACTIVITY = 0;
+static constexpr uint32_t ARTNET = 0;
+static constexpr uint32_t DDP = 0;
+static constexpr uint32_t SACN = 0;
+static constexpr uint32_t LTC_IN = 0;
+static constexpr uint32_t LTC_OUT = 0;
+static constexpr uint32_t MIDI_IN = 0;
+static constexpr uint32_t MIDI_OUT = 0;
+static constexpr uint32_t OSC_IN = 0;
+static constexpr uint32_t OSC_OUT = 0;
+static constexpr uint32_t TCNET = 0;
+// DMX
+static constexpr uint32_t PORT_A_RX = 0;
+static constexpr uint32_t PORT_A_TX = 0;
+//
+static constexpr uint32_t INVERTED = 0;
+}  // namespace panelled
+}  // namespace hal
+#endif
+
 #include "mcu/gd32f20x_mcu.h"
 #include "gd32_gpio.h"
 
@@ -192,4 +185,4 @@ static constexpr uint32_t INVERTED = ACTIVITY;
 
 #include "gpio_header.h"
 
-#endif /* BOARD_GD32F207C_EVAL_H */
+#endif /* BOARD_GD32F207C_EVAL_H_ */
