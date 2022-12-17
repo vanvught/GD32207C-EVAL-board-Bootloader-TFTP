@@ -151,28 +151,58 @@
 #ifdef __cplusplus
 namespace hal {
 namespace panelled {
-static constexpr uint32_t ACTIVITY = 0x00380000;
-// DMX
-static constexpr uint32_t PORT_A_RX = 0x1;
-static constexpr uint32_t PORT_A_TX = 0x2;
+static constexpr uint32_t ACTIVITY = 0x00FC0000;
+static constexpr uint32_t PORT_A_TX = (1U << 0);
+static constexpr uint32_t PORT_A_RX = (1U << 8);
+static constexpr uint32_t SACN		= (1U << 16);
+static constexpr uint32_t ARTNET	= (1U << 17);
 //
 static constexpr uint32_t INVERTED = ACTIVITY;
 }  // namespace panelled
 }  // namespace hal
 #endif
 
+/**
+ * SPI flash
+ */
+
+#define SPI_FLASH_CS_GPIO_PINx	GPIO_PIN_6
+#define SPI_FLASH_CS_RCU_GPIOx	RCU_GPIOE
+#define SPI_FLASH_CS_GPIOx		GPIOE
+
+/**
+ * EXT PHY
+ */
+
+#define LINK_CHECK_GPIO_CLK				RCU_GPIOB
+#define LINK_CHECK_GPIO_PORT			GPIOB
+#define LINK_CHECK_GPIO_PIN 			GPIO_PIN_0
+#define LINK_CHECK_EXTI_LINE			EXTI_0
+#define LINK_CHECK_EXTI_IRQn			EXTI0_IRQn
+#define LINK_CHECK_IRQ_HANDLE			EXTI0_IRQHandler
+
+#define LINK_CHECK_EXTI_CLK				RCU_AF
+#define LINK_CHECK_EXTI_PORT_SOURCE		GPIO_PORT_SOURCE_GPIOB
+#define LINK_CHECK_EXTI_PIN_SOURCE		GPIO_PIN_SOURCE_0
+#define LINK_CHECK_EXTI_SOURCE_CONFIG	gpio_exti_source_select
+#define LINK_CHECK_GPIO_CONFIG			gpio_init(LINK_CHECK_GPIO_PORT, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, LINK_CHECK_GPIO_PIN);
+
+/**
+ * MCU and BOARD name
+ */
+
+#define GD32_MCU_NAME			"GD32F207VC"
+#define GD32_BOARD_NAME			"GD32F207VC"
+
 #include "mcu/gd32f20x_mcu.h"
 #include "gd32_gpio.h"
 
-#define GD32_MCU_NAME			"GD32F207VC"
+/**
+ * SPI LCD
+ */
 
-#define GD32_BOARD_NAME			"GD32F207VC"
-#define GD32_BOARD_LED1			GD32_PORT_TO_GPIO(GD32_GPIO_PORTC, 0)
-#define GD32_BOARD_LED2			GD32_PORT_TO_GPIO(GD32_GPIO_PORTC, 2)
-#define GD32_BOARD_LED3			GD32_PORT_TO_GPIO(GD32_GPIO_PORTE, 0)
-#define GD32_BOARD_LED4			GD32_PORT_TO_GPIO(GD32_GPIO_PORTE, 1)
-#define GD32_BOARD_STATUS_LED	GD32_BOARD_LED1
-
-#include "gpio_header.h"
+#define SPI_LCD_DC_PIN		GD32_PORT_TO_GPIO(GD32_GPIO_PORTB, 1)
+#define SPI_LCD_BL_PIN		GD32_PORT_TO_GPIO(GD32_GPIO_PORTA, 3)
+#define SPI_LCD_CS_PIN		GD32_PORT_TO_GPIO(GD32_GPIO_PORTE, 5)
 
 #endif /* BOARD_GD32F207V_H_ */

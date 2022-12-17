@@ -1,0 +1,1201 @@
+In archive lib_h3/libflashcodeinstall.a:
+
+flashcodeinstall.o:     file format elf32-littlearm
+
+
+Disassembly of section .text._ZN7Display10TextStatusEPKc22Display7SegmentMessagej:
+
+00000000 <Display::TextStatus(char const*, Display7SegmentMessage, unsigned int)>:
+   0:	e92d4ff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, lr}
+   4:	e24dd014 	sub	sp, sp, #20
+   8:	e5904018 	ldr	r4, [r0, #24]
+   c:	e1a07000 	mov	r7, r0
+  10:	e58d2004 	str	r2, [sp, #4]
+  14:	e1a06001 	mov	r6, r1
+  18:	e3540000 	cmp	r4, #0
+  1c:	e1a09003 	mov	r9, r3
+  20:	0a000033 	beq	f4 <Display::TextStatus(char const*, Display7SegmentMessage, unsigned int)+0xf4>
+  24:	e5d4b005 	ldrb	fp, [r4, #5]
+  28:	e3a01000 	mov	r1, #0
+  2c:	e5943000 	ldr	r3, [r4]
+  30:	e1a00004 	mov	r0, r4
+  34:	e5d45004 	ldrb	r5, [r4, #4]
+  38:	e24ba001 	sub	sl, fp, #1
+  3c:	e5933020 	ldr	r3, [r3, #32]
+  40:	e6efa07a 	uxtb	sl, sl
+  44:	e1a0200a 	mov	r2, sl
+  48:	e12fff33 	blx	r3
+  4c:	e3550001 	cmp	r5, #1
+  50:	12455001 	subne	r5, r5, #1
+  54:	13a08000 	movne	r8, #0
+  58:	0a000007 	beq	7c <Display::TextStatus(char const*, Display7SegmentMessage, unsigned int)+0x7c>
+  5c:	e5942000 	ldr	r2, [r4]
+  60:	e3a01020 	mov	r1, #32
+  64:	e1a00004 	mov	r0, r4
+  68:	e2888001 	add	r8, r8, #1
+  6c:	e5922014 	ldr	r2, [r2, #20]
+  70:	e12fff32 	blx	r2
+  74:	e1550008 	cmp	r5, r8
+  78:	1afffff7 	bne	5c <Display::TextStatus(char const*, Display7SegmentMessage, unsigned int)+0x5c>
+  7c:	e5943000 	ldr	r3, [r4]
+  80:	e1a00004 	mov	r0, r4
+  84:	e1a0200a 	mov	r2, sl
+  88:	e3a01000 	mov	r1, #0
+  8c:	e5933020 	ldr	r3, [r3, #32]
+  90:	e12fff33 	blx	r3
+  94:	e5d63000 	ldrb	r3, [r6]
+  98:	e5d40004 	ldrb	r0, [r4, #4]
+  9c:	e3530000 	cmp	r3, #0
+  a0:	0a00000d 	beq	dc <Display::TextStatus(char const*, Display7SegmentMessage, unsigned int)+0xdc>
+  a4:	e3500000 	cmp	r0, #0
+  a8:	03a03001 	moveq	r3, #1
+  ac:	0a00000a 	beq	dc <Display::TextStatus(char const*, Display7SegmentMessage, unsigned int)+0xdc>
+  b0:	e0860000 	add	r0, r6, r0
+  b4:	e1a02006 	mov	r2, r6
+  b8:	e3a03001 	mov	r3, #1
+  bc:	ea000002 	b	cc <Display::TextStatus(char const*, Display7SegmentMessage, unsigned int)+0xcc>
+  c0:	e1500002 	cmp	r0, r2
+  c4:	e2833001 	add	r3, r3, #1
+  c8:	0a000002 	beq	d8 <Display::TextStatus(char const*, Display7SegmentMessage, unsigned int)+0xd8>
+  cc:	e5f21001 	ldrb	r1, [r2, #1]!
+  d0:	e3510000 	cmp	r1, #0
+  d4:	1afffff9 	bne	c0 <Display::TextStatus(char const*, Display7SegmentMessage, unsigned int)+0xc0>
+  d8:	e6ef3073 	uxtb	r3, r3
+  dc:	e5942000 	ldr	r2, [r4]
+  e0:	e1a0100b 	mov	r1, fp
+  e4:	e1a00004 	mov	r0, r4
+  e8:	e592501c 	ldr	r5, [r2, #28]
+  ec:	e1a02006 	mov	r2, r6
+  f0:	e12fff35 	blx	r5
+  f4:	e5d73011 	ldrb	r3, [r7, #17]
+  f8:	e3530000 	cmp	r3, #0
+  fc:	1a000008 	bne	124 <Display::TextStatus(char const*, Display7SegmentMessage, unsigned int)+0x124>
+ 100:	e3790001 	cmn	r9, #1
+ 104:	0a000004 	beq	11c <Display::TextStatus(char const*, Display7SegmentMessage, unsigned int)+0x11c>
+ 108:	e1a01006 	mov	r1, r6
+ 10c:	e1a00009 	mov	r0, r9
+ 110:	e28dd014 	add	sp, sp, #20
+ 114:	e8bd4ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, lr}
+ 118:	eafffffe 	b	0 <console_status>
+ 11c:	e28dd014 	add	sp, sp, #20
+ 120:	e8bd8ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, pc}
+ 124:	e59d3004 	ldr	r3, [sp, #4]
+ 128:	e5d70008 	ldrb	r0, [r7, #8]
+ 12c:	e1e08003 	mvn	r8, r3
+ 130:	e3a03012 	mov	r3, #18
+ 134:	e5cd300c 	strb	r3, [sp, #12]
+ 138:	e6ff8078 	uxth	r8, r8
+ 13c:	e5cd800e 	strb	r8, [sp, #14]
+ 140:	e1a08428 	lsr	r8, r8, #8
+ 144:	e5cd800d 	strb	r8, [sp, #13]
+ 148:	ebfffffe 	bl	0 <h3_i2c_set_slave_address>
+ 14c:	e597000c 	ldr	r0, [r7, #12]
+ 150:	ebfffffe 	bl	0 <h3_i2c_set_baudrate>
+ 154:	e3a01003 	mov	r1, #3
+ 158:	e28d000c 	add	r0, sp, #12
+ 15c:	ebfffffe 	bl	0 <h3_i2c_write>
+ 160:	eaffffe6 	b	100 <Display::TextStatus(char const*, Display7SegmentMessage, unsigned int)+0x100>
+
+Disassembly of section .text._ZN16FlashCodeInstall13WriteFirmwareEPKhj:
+
+00000000 <FlashCodeInstall::WriteFirmware(unsigned char const*, unsigned int)>:
+   0:	e92d47f0 	push	{r4, r5, r6, r7, r8, r9, sl, lr}
+   4:	e1a05002 	mov	r5, r2
+   8:	e5902008 	ldr	r2, [r0, #8]
+   c:	e2853706 	add	r3, r5, #1572864	; 0x180000
+  10:	e24dd010 	sub	sp, sp, #16
+  14:	e1530002 	cmp	r3, r2
+  18:	8a00003f 	bhi	11c <FlashCodeInstall::WriteFirmware(unsigned char const*, unsigned int)+0x11c>
+  1c:	e3007000 	movw	r7, #0
+  20:	e1a04000 	mov	r4, r0
+  24:	e3407000 	movt	r7, #0
+  28:	e1a06001 	mov	r6, r1
+  2c:	e5973000 	ldr	r3, [r7]
+  30:	e5d3800c 	ldrb	r8, [r3, #12]
+  34:	e3580000 	cmp	r8, #0
+  38:	1a000033 	bne	10c <FlashCodeInstall::WriteFirmware(unsigned char const*, unsigned int)+0x10c>
+  3c:	e3000000 	movw	r0, #0
+  40:	e3009000 	movw	r9, #0
+  44:	e3400000 	movt	r0, #0
+  48:	e245a001 	sub	sl, r5, #1
+  4c:	e3409000 	movt	r9, #0
+  50:	ebfffffe 	bl	0 <puts>
+  54:	e1a00004 	mov	r0, r4
+  58:	ebfffffe 	bl	0 <FlashRom::GetSectorSize() const>
+  5c:	e08aa000 	add	sl, sl, r0
+  60:	e3001000 	movw	r1, #0
+  64:	e3401000 	movt	r1, #0
+  68:	e2600000 	rsb	r0, r0, #0
+  6c:	e00aa000 	and	sl, sl, r0
+  70:	e3a03002 	mov	r3, #2
+  74:	e5990000 	ldr	r0, [r9]
+  78:	e3002639 	movw	r2, #1593	; 0x639
+  7c:	ebfffffe 	bl	0 <FlashCodeInstall::WriteFirmware(unsigned char const*, unsigned int)>
+  80:	e28d300c 	add	r3, sp, #12
+  84:	e1a0200a 	mov	r2, sl
+  88:	e3a01706 	mov	r1, #1572864	; 0x180000
+  8c:	e1a00004 	mov	r0, r4
+  90:	ebfffffe 	bl	0 <FlashRom::Erase(unsigned int, unsigned int, flashrom::result&)>
+  94:	e59d300c 	ldr	r3, [sp, #12]
+  98:	e3530001 	cmp	r3, #1
+  9c:	0a00002a 	beq	14c <FlashCodeInstall::WriteFirmware(unsigned char const*, unsigned int)+0x14c>
+  a0:	e5990000 	ldr	r0, [r9]
+  a4:	e3001000 	movw	r1, #0
+  a8:	e3401000 	movt	r1, #0
+  ac:	e3a03002 	mov	r3, #2
+  b0:	e3052b39 	movw	r2, #23353	; 0x5b39
+  b4:	ebfffffe 	bl	0 <FlashCodeInstall::WriteFirmware(unsigned char const*, unsigned int)>
+  b8:	e28d300c 	add	r3, sp, #12
+  bc:	e1a02005 	mov	r2, r5
+  c0:	e58d3000 	str	r3, [sp]
+  c4:	e1a00004 	mov	r0, r4
+  c8:	e1a03006 	mov	r3, r6
+  cc:	e3a01706 	mov	r1, #1572864	; 0x180000
+  d0:	ebfffffe 	bl	0 <FlashRom::Write(unsigned int, unsigned int, unsigned char const*, flashrom::result&)>
+  d4:	e59d300c 	ldr	r3, [sp, #12]
+  d8:	e3530001 	cmp	r3, #1
+  dc:	0a000020 	beq	164 <FlashCodeInstall::WriteFirmware(unsigned char const*, unsigned int)+0x164>
+  e0:	e3580000 	cmp	r8, #0
+  e4:	1a000013 	bne	138 <FlashCodeInstall::WriteFirmware(unsigned char const*, unsigned int)+0x138>
+  e8:	e5990000 	ldr	r0, [r9]
+  ec:	e3001000 	movw	r1, #0
+  f0:	e3401000 	movt	r1, #0
+  f4:	e3a03002 	mov	r3, #2
+  f8:	e3032939 	movw	r2, #14649	; 0x3939
+  fc:	ebfffffe 	bl	0 <FlashCodeInstall::WriteFirmware(unsigned char const*, unsigned int)>
+ 100:	e3a00001 	mov	r0, #1
+ 104:	e28dd010 	add	sp, sp, #16
+ 108:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+ 10c:	e3a02000 	mov	r2, #0
+ 110:	e5c3200c 	strb	r2, [r3, #12]
+ 114:	ebfffffe 	bl	0 <h3_watchdog_disable>
+ 118:	eaffffc7 	b	3c <FlashCodeInstall::WriteFirmware(unsigned char const*, unsigned int)+0x3c>
+ 11c:	e3000000 	movw	r0, #0
+ 120:	e1a01003 	mov	r1, r3
+ 124:	e3400000 	movt	r0, #0
+ 128:	ebfffffe 	bl	0 <printf>
+ 12c:	e3a00000 	mov	r0, #0
+ 130:	e28dd010 	add	sp, sp, #16
+ 134:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+ 138:	e5973000 	ldr	r3, [r7]
+ 13c:	e3a02001 	mov	r2, #1
+ 140:	e5c3200c 	strb	r2, [r3, #12]
+ 144:	ebfffffe 	bl	0 <h3_watchdog_enable>
+ 148:	eaffffe6 	b	e8 <FlashCodeInstall::WriteFirmware(unsigned char const*, unsigned int)+0xe8>
+ 14c:	e3000000 	movw	r0, #0
+ 150:	e3400000 	movt	r0, #0
+ 154:	ebfffffe 	bl	0 <puts>
+ 158:	e3a00000 	mov	r0, #0
+ 15c:	e28dd010 	add	sp, sp, #16
+ 160:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+ 164:	e3000000 	movw	r0, #0
+ 168:	e3400000 	movt	r0, #0
+ 16c:	ebfffffe 	bl	0 <puts>
+ 170:	e3a00000 	mov	r0, #0
+ 174:	eaffffe2 	b	104 <FlashCodeInstall::WriteFirmware(unsigned char const*, unsigned int)+0x104>
+
+flashcodeinstall.o:     file format elf32-littlearm
+
+
+Disassembly of section .text._ZN7Display6PrintfEhPKcz:
+
+00000000 <Display::Printf(unsigned char, char const*, ...)>:
+   0:	e92d000c 	push	{r2, r3}
+   4:	e92d4070 	push	{r4, r5, r6, lr}
+   8:	e24dd028 	sub	sp, sp, #40	; 0x28
+   c:	e5904018 	ldr	r4, [r0, #24]
+  10:	e3540000 	cmp	r4, #0
+  14:	0a00000f 	beq	58 <Display::Printf(unsigned char, char const*, ...)+0x58>
+  18:	e59d2038 	ldr	r2, [sp, #56]	; 0x38
+  1c:	e1a05000 	mov	r5, r0
+  20:	e28d303c 	add	r3, sp, #60	; 0x3c
+  24:	e1a06001 	mov	r6, r1
+  28:	e58d3004 	str	r3, [sp, #4]
+  2c:	e3a01020 	mov	r1, #32
+  30:	e28d0008 	add	r0, sp, #8
+  34:	ebfffffe 	bl	0 <vsnprintf>
+  38:	e1a04000 	mov	r4, r0
+  3c:	e1a01006 	mov	r1, r6
+  40:	e5950018 	ldr	r0, [r5, #24]
+  44:	e6ff3074 	uxth	r3, r4
+  48:	e5902000 	ldr	r2, [r0]
+  4c:	e592501c 	ldr	r5, [r2, #28]
+  50:	e28d2008 	add	r2, sp, #8
+  54:	e12fff35 	blx	r5
+  58:	e1a00004 	mov	r0, r4
+  5c:	e28dd028 	add	sp, sp, #40	; 0x28
+  60:	e8bd4070 	pop	{r4, r5, r6, lr}
+  64:	e28dd008 	add	sp, sp, #8
+  68:	e12fff1e 	bx	lr
+
+Disassembly of section .text._ZN16FlashCodeInstallD2Ev:
+
+00000000 <FlashCodeInstall::~FlashCodeInstall()>:
+   0:	e92d4010 	push	{r4, lr}
+   4:	e1a04000 	mov	r4, r0
+   8:	e590000c 	ldr	r0, [r0, #12]
+   c:	e3500000 	cmp	r0, #0
+  10:	0a000000 	beq	18 <FlashCodeInstall::~FlashCodeInstall()+0x18>
+  14:	ebfffffe 	bl	0 <operator delete[](void*)>
+  18:	e5940010 	ldr	r0, [r4, #16]
+  1c:	e3500000 	cmp	r0, #0
+  20:	0a000000 	beq	28 <FlashCodeInstall::~FlashCodeInstall()+0x28>
+  24:	ebfffffe 	bl	0 <operator delete[](void*)>
+  28:	e1a00004 	mov	r0, r4
+  2c:	ebfffffe 	bl	0 <FlashRom::~FlashRom()>
+  30:	e1a00004 	mov	r0, r4
+  34:	e8bd8010 	pop	{r4, pc}
+
+Disassembly of section .text._ZN16FlashCodeInstall4OpenEPKc:
+
+00000000 <FlashCodeInstall::Open(char const*)>:
+   0:	e92d4070 	push	{r4, r5, r6, lr}
+   4:	e1a05001 	mov	r5, r1
+   8:	e3001000 	movw	r1, #0
+   c:	e1a06000 	mov	r6, r0
+  10:	e3401000 	movt	r1, #0
+  14:	e1a00005 	mov	r0, r5
+  18:	ebfffffe 	bl	0 <fopen>
+  1c:	e5860014 	str	r0, [r6, #20]
+  20:	e3500000 	cmp	r0, #0
+  24:	0a000028 	beq	cc <FlashCodeInstall::Open(char const*)+0xcc>
+  28:	e3004000 	movw	r4, #0
+  2c:	e3404000 	movt	r4, #0
+  30:	e5943000 	ldr	r3, [r4]
+  34:	e5930018 	ldr	r0, [r3, #24]
+  38:	e3500000 	cmp	r0, #0
+  3c:	0a00001e 	beq	bc <FlashCodeInstall::Open(char const*)+0xbc>
+  40:	e5903000 	ldr	r3, [r0]
+  44:	e3a01002 	mov	r1, #2
+  48:	e5933010 	ldr	r3, [r3, #16]
+  4c:	e12fff33 	blx	r3
+  50:	e5943000 	ldr	r3, [r4]
+  54:	e5930018 	ldr	r0, [r3, #24]
+  58:	e3500000 	cmp	r0, #0
+  5c:	0a000016 	beq	bc <FlashCodeInstall::Open(char const*)+0xbc>
+  60:	e5d53000 	ldrb	r3, [r5]
+  64:	e5d04004 	ldrb	r4, [r0, #4]
+  68:	e3530000 	cmp	r3, #0
+  6c:	0a00000d 	beq	a8 <FlashCodeInstall::Open(char const*)+0xa8>
+  70:	e3540000 	cmp	r4, #0
+  74:	03a03001 	moveq	r3, #1
+  78:	0a00000a 	beq	a8 <FlashCodeInstall::Open(char const*)+0xa8>
+  7c:	e0854004 	add	r4, r5, r4
+  80:	e1a0c005 	mov	ip, r5
+  84:	e3a03001 	mov	r3, #1
+  88:	ea000002 	b	98 <FlashCodeInstall::Open(char const*)+0x98>
+  8c:	e154000c 	cmp	r4, ip
+  90:	e2833001 	add	r3, r3, #1
+  94:	0a000002 	beq	a4 <FlashCodeInstall::Open(char const*)+0xa4>
+  98:	e5fce001 	ldrb	lr, [ip, #1]!
+  9c:	e35e0000 	cmp	lr, #0
+  a0:	1afffff9 	bne	8c <FlashCodeInstall::Open(char const*)+0x8c>
+  a4:	e6ef3073 	uxtb	r3, r3
+  a8:	e5902000 	ldr	r2, [r0]
+  ac:	e3a01002 	mov	r1, #2
+  b0:	e592401c 	ldr	r4, [r2, #28]
+  b4:	e1a02005 	mov	r2, r5
+  b8:	e12fff34 	blx	r4
+  bc:	e1a00005 	mov	r0, r5
+  c0:	ebfffffe 	bl	0 <puts>
+  c4:	e3a00001 	mov	r0, #1
+  c8:	e8bd8070 	pop	{r4, r5, r6, pc}
+  cc:	e1a04000 	mov	r4, r0
+  d0:	e3000000 	movw	r0, #0
+  d4:	e3400000 	movt	r0, #0
+  d8:	e1a01005 	mov	r1, r5
+  dc:	ebfffffe 	bl	0 <printf>
+  e0:	e1a00004 	mov	r0, r4
+  e4:	e8bd8070 	pop	{r4, r5, r6, pc}
+
+Disassembly of section .text._ZN16FlashCodeInstall5CloseEv:
+
+00000000 <FlashCodeInstall::Close()>:
+   0:	e92d43f0 	push	{r4, r5, r6, r7, r8, r9, lr}
+   4:	e1a05000 	mov	r5, r0
+   8:	e5900014 	ldr	r0, [r0, #20]
+   c:	e24dd00c 	sub	sp, sp, #12
+  10:	e3a04000 	mov	r4, #0
+  14:	ebfffffe 	bl	0 <fclose>
+  18:	e5854014 	str	r4, [r5, #20]
+  1c:	e3003000 	movw	r3, #0
+  20:	e3403000 	movt	r3, #0
+  24:	e5936000 	ldr	r6, [r3]
+  28:	e5965018 	ldr	r5, [r6, #24]
+  2c:	e1550004 	cmp	r5, r4
+  30:	0a00002f 	beq	f4 <FlashCodeInstall::Close()+0xf4>
+  34:	e5d57005 	ldrb	r7, [r5, #5]
+  38:	e1a01004 	mov	r1, r4
+  3c:	e5953000 	ldr	r3, [r5]
+  40:	e1a00005 	mov	r0, r5
+  44:	e5d58004 	ldrb	r8, [r5, #4]
+  48:	e2479001 	sub	r9, r7, #1
+  4c:	e5933020 	ldr	r3, [r3, #32]
+  50:	e6ef9079 	uxtb	r9, r9
+  54:	e1a02009 	mov	r2, r9
+  58:	e12fff33 	blx	r3
+  5c:	e3580001 	cmp	r8, #1
+  60:	12488001 	subne	r8, r8, #1
+  64:	0a000007 	beq	88 <FlashCodeInstall::Close()+0x88>
+  68:	e5953000 	ldr	r3, [r5]
+  6c:	e3a01020 	mov	r1, #32
+  70:	e1a00005 	mov	r0, r5
+  74:	e2844001 	add	r4, r4, #1
+  78:	e5933014 	ldr	r3, [r3, #20]
+  7c:	e12fff33 	blx	r3
+  80:	e1580004 	cmp	r8, r4
+  84:	1afffff7 	bne	68 <FlashCodeInstall::Close()+0x68>
+  88:	e5953000 	ldr	r3, [r5]
+  8c:	e1a02009 	mov	r2, r9
+  90:	e3a01000 	mov	r1, #0
+  94:	e1a00005 	mov	r0, r5
+  98:	e5933020 	ldr	r3, [r3, #32]
+  9c:	e12fff33 	blx	r3
+  a0:	e5d53004 	ldrb	r3, [r5, #4]
+  a4:	e3530000 	cmp	r3, #0
+  a8:	03a03001 	moveq	r3, #1
+  ac:	0a000009 	beq	d8 <FlashCodeInstall::Close()+0xd8>
+  b0:	e59f2098 	ldr	r2, [pc, #152]	; 150 <FlashCodeInstall::Close()+0x150>
+  b4:	e2830001 	add	r0, r3, #1
+  b8:	e3a03001 	mov	r3, #1
+  bc:	e2833001 	add	r3, r3, #1
+  c0:	e1500003 	cmp	r0, r3
+  c4:	0a00001f 	beq	148 <FlashCodeInstall::Close()+0x148>
+  c8:	e5f21001 	ldrb	r1, [r2, #1]!
+  cc:	e3510000 	cmp	r1, #0
+  d0:	1afffff9 	bne	bc <FlashCodeInstall::Close()+0xbc>
+  d4:	e6ef3073 	uxtb	r3, r3
+  d8:	e5952000 	ldr	r2, [r5]
+  dc:	e1a01007 	mov	r1, r7
+  e0:	e1a00005 	mov	r0, r5
+  e4:	e592401c 	ldr	r4, [r2, #28]
+  e8:	e3002000 	movw	r2, #0
+  ec:	e3402000 	movt	r2, #0
+  f0:	e12fff34 	blx	r4
+  f4:	e5d63011 	ldrb	r3, [r6, #17]
+  f8:	e3530000 	cmp	r3, #0
+  fc:	1a000004 	bne	114 <FlashCodeInstall::Close()+0x114>
+ 100:	e3000000 	movw	r0, #0
+ 104:	e3400000 	movt	r0, #0
+ 108:	e28dd00c 	add	sp, sp, #12
+ 10c:	e8bd43f0 	pop	{r4, r5, r6, r7, r8, r9, lr}
+ 110:	eafffffe 	b	0 <puts>
+ 114:	e5d60008 	ldrb	r0, [r6, #8]
+ 118:	e3e03039 	mvn	r3, #57	; 0x39
+ 11c:	e5cd3005 	strb	r3, [sp, #5]
+ 120:	e3a02012 	mov	r2, #18
+ 124:	e5cd2004 	strb	r2, [sp, #4]
+ 128:	e5cd3006 	strb	r3, [sp, #6]
+ 12c:	ebfffffe 	bl	0 <h3_i2c_set_slave_address>
+ 130:	e596000c 	ldr	r0, [r6, #12]
+ 134:	ebfffffe 	bl	0 <h3_i2c_set_baudrate>
+ 138:	e3a01003 	mov	r1, #3
+ 13c:	e28d0004 	add	r0, sp, #4
+ 140:	ebfffffe 	bl	0 <h3_i2c_write>
+ 144:	eaffffed 	b	100 <FlashCodeInstall::Close()+0x100>
+ 148:	e6ef3070 	uxtb	r3, r0
+ 14c:	eaffffe1 	b	d8 <FlashCodeInstall::Close()+0xd8>
+ 150:	00000001 	.word	0x00000001
+
+Disassembly of section .text._ZN16FlashCodeInstall14BuffersCompareEj:
+
+00000000 <FlashCodeInstall::BuffersCompare(unsigned int)>:
+   0:	e590300c 	ldr	r3, [r0, #12]
+   4:	e3510003 	cmp	r1, #3
+   8:	e5902010 	ldr	r2, [r0, #16]
+   c:	8a000002 	bhi	1c <FlashCodeInstall::BuffersCompare(unsigned int)+0x1c>
+  10:	ea000008 	b	38 <FlashCodeInstall::BuffersCompare(unsigned int)+0x38>
+  14:	e3510003 	cmp	r1, #3
+  18:	9a000006 	bls	38 <FlashCodeInstall::BuffersCompare(unsigned int)+0x38>
+  1c:	e493c004 	ldr	ip, [r3], #4
+  20:	e2411004 	sub	r1, r1, #4
+  24:	e4920004 	ldr	r0, [r2], #4
+  28:	e15c0000 	cmp	ip, r0
+  2c:	0afffff8 	beq	14 <FlashCodeInstall::BuffersCompare(unsigned int)+0x14>
+  30:	e3a00000 	mov	r0, #0
+  34:	e12fff1e 	bx	lr
+  38:	e0831001 	add	r1, r3, r1
+  3c:	ea000003 	b	50 <FlashCodeInstall::BuffersCompare(unsigned int)+0x50>
+  40:	e4d3c001 	ldrb	ip, [r3], #1
+  44:	e4d20001 	ldrb	r0, [r2], #1
+  48:	e15c0000 	cmp	ip, r0
+  4c:	1afffff7 	bne	30 <FlashCodeInstall::BuffersCompare(unsigned int)+0x30>
+  50:	e1530001 	cmp	r3, r1
+  54:	1afffff9 	bne	40 <FlashCodeInstall::BuffersCompare(unsigned int)+0x40>
+  58:	e3a00001 	mov	r0, #1
+  5c:	e12fff1e 	bx	lr
+
+Disassembly of section .text._ZN16FlashCodeInstall4DiffEj:
+
+00000000 <FlashCodeInstall::Diff(unsigned int)>:
+   0:	e3a02000 	mov	r2, #0
+   4:	e92d4070 	push	{r4, r5, r6, lr}
+   8:	e1a05000 	mov	r5, r0
+   c:	e5900014 	ldr	r0, [r0, #20]
+  10:	e24dd010 	sub	sp, sp, #16
+  14:	e1a06001 	mov	r6, r1
+  18:	e1a01002 	mov	r1, r2
+  1c:	ebfffffe 	bl	0 <fseek>
+  20:	e2504000 	subs	r4, r0, #0
+  24:	0a000002 	beq	34 <FlashCodeInstall::Diff(unsigned int)+0x34>
+  28:	e3a00000 	mov	r0, #0
+  2c:	e28dd010 	add	sp, sp, #16
+  30:	e8bd8070 	pop	{r4, r5, r6, pc}
+  34:	e5953014 	ldr	r3, [r5, #20]
+  38:	e3a02b01 	mov	r2, #1024	; 0x400
+  3c:	e595000c 	ldr	r0, [r5, #12]
+  40:	e3a01001 	mov	r1, #1
+  44:	ebfffffe 	bl	0 <fread>
+  48:	e3500b01 	cmp	r0, #1024	; 0x400
+  4c:	1afffff5 	bne	28 <FlashCodeInstall::Diff(unsigned int)+0x28>
+  50:	e5953010 	ldr	r3, [r5, #16]
+  54:	e28d100c 	add	r1, sp, #12
+  58:	e58d1000 	str	r1, [sp]
+  5c:	e1a02000 	mov	r2, r0
+  60:	e1a01006 	mov	r1, r6
+  64:	e1a00005 	mov	r0, r5
+  68:	ebfffffe 	bl	0 <FlashRom::Read(unsigned int, unsigned int, unsigned char*, flashrom::result&)>
+  6c:	e59d300c 	ldr	r3, [sp, #12]
+  70:	e3530001 	cmp	r3, #1
+  74:	0affffeb 	beq	28 <FlashCodeInstall::Diff(unsigned int)+0x28>
+  78:	e595c00c 	ldr	ip, [r5, #12]
+  7c:	e5951010 	ldr	r1, [r5, #16]
+  80:	e28ceb01 	add	lr, ip, #1024	; 0x400
+  84:	e1a0300c 	mov	r3, ip
+  88:	e4930004 	ldr	r0, [r3], #4
+  8c:	e4912004 	ldr	r2, [r1], #4
+  90:	e1500002 	cmp	r0, r2
+  94:	e2632b01 	rsb	r2, r3, #1024	; 0x400
+  98:	e08c2002 	add	r2, ip, r2
+  9c:	1a000008 	bne	c4 <FlashCodeInstall::Diff(unsigned int)+0xc4>
+  a0:	e153000e 	cmp	r3, lr
+  a4:	1afffff7 	bne	88 <FlashCodeInstall::Diff(unsigned int)+0x88>
+  a8:	e0832002 	add	r2, r3, r2
+  ac:	e1520003 	cmp	r2, r3
+  b0:	0affffdc 	beq	28 <FlashCodeInstall::Diff(unsigned int)+0x28>
+  b4:	e4d3c001 	ldrb	ip, [r3], #1
+  b8:	e4d10001 	ldrb	r0, [r1], #1
+  bc:	e15c0000 	cmp	ip, r0
+  c0:	0afffff9 	beq	ac <FlashCodeInstall::Diff(unsigned int)+0xac>
+  c4:	e3a00001 	mov	r0, #1
+  c8:	eaffffd7 	b	2c <FlashCodeInstall::Diff(unsigned int)+0x2c>
+
+Disassembly of section .text._ZN16FlashCodeInstall5WriteEj:
+
+00000000 <FlashCodeInstall::Write(unsigned int)>:
+   0:	e92d43f0 	push	{r4, r5, r6, r7, r8, r9, lr}
+   4:	e3a02000 	mov	r2, #0
+   8:	e1a04000 	mov	r4, r0
+   c:	e1a06001 	mov	r6, r1
+  10:	e5900014 	ldr	r0, [r0, #20]
+  14:	e24dd014 	sub	sp, sp, #20
+  18:	e1a01002 	mov	r1, r2
+  1c:	ebfffffe 	bl	0 <fseek>
+  20:	e5943008 	ldr	r3, [r4, #8]
+  24:	e1560003 	cmp	r6, r3
+  28:	2a00003e 	bcs	128 <FlashCodeInstall::Write(unsigned int)+0x128>
+  2c:	e5945004 	ldr	r5, [r4, #4]
+  30:	e3a09000 	mov	r9, #0
+  34:	e28d700c 	add	r7, sp, #12
+  38:	e3e08000 	mvn	r8, #0
+  3c:	ea00001c 	b	b4 <FlashCodeInstall::Write(unsigned int)+0xb4>
+  40:	e594300c 	ldr	r3, [r4, #12]
+  44:	e1a01006 	mov	r1, r6
+  48:	e58d7000 	str	r7, [sp]
+  4c:	e1a00004 	mov	r0, r4
+  50:	ebfffffe 	bl	0 <FlashRom::Write(unsigned int, unsigned int, unsigned char const*, flashrom::result&)>
+  54:	e59d300c 	ldr	r3, [sp, #12]
+  58:	e3530001 	cmp	r3, #1
+  5c:	0a000033 	beq	130 <FlashCodeInstall::Write(unsigned int)+0x130>
+  60:	e5943010 	ldr	r3, [r4, #16]
+  64:	e1a02005 	mov	r2, r5
+  68:	e58d7000 	str	r7, [sp]
+  6c:	e1a01006 	mov	r1, r6
+  70:	e1a00004 	mov	r0, r4
+  74:	ebfffffe 	bl	0 <FlashRom::Read(unsigned int, unsigned int, unsigned char*, flashrom::result&)>
+  78:	e59d300c 	ldr	r3, [sp, #12]
+  7c:	e3530001 	cmp	r3, #1
+  80:	0a00002f 	beq	144 <FlashCodeInstall::Write(unsigned int)+0x144>
+  84:	e1a01005 	mov	r1, r5
+  88:	e1a00004 	mov	r0, r4
+  8c:	ebfffffe 	bl	0 <FlashCodeInstall::Write(unsigned int)>
+  90:	e3500000 	cmp	r0, #0
+  94:	0a00002f 	beq	158 <FlashCodeInstall::Write(unsigned int)+0x158>
+  98:	e5943004 	ldr	r3, [r4, #4]
+  9c:	e1530005 	cmp	r3, r5
+  a0:	1a000031 	bne	16c <FlashCodeInstall::Write(unsigned int)+0x16c>
+  a4:	e5943008 	ldr	r3, [r4, #8]
+  a8:	e0866005 	add	r6, r6, r5
+  ac:	e1530006 	cmp	r3, r6
+  b0:	9a00001c 	bls	128 <FlashCodeInstall::Write(unsigned int)+0x128>
+  b4:	e5943014 	ldr	r3, [r4, #20]
+  b8:	e1a02005 	mov	r2, r5
+  bc:	e594000c 	ldr	r0, [r4, #12]
+  c0:	e3a01001 	mov	r1, #1
+  c4:	ebfffffe 	bl	0 <fread>
+  c8:	e5942004 	ldr	r2, [r4, #4]
+  cc:	e1a05000 	mov	r5, r0
+  d0:	e0899005 	add	r9, r9, r5
+  d4:	e1a03007 	mov	r3, r7
+  d8:	e1a01006 	mov	r1, r6
+  dc:	e1a00004 	mov	r0, r4
+  e0:	ebfffffe 	bl	0 <FlashRom::Erase(unsigned int, unsigned int, flashrom::result&)>
+  e4:	e59d300c 	ldr	r3, [sp, #12]
+  e8:	e3530001 	cmp	r3, #1
+  ec:	0a00000a 	beq	11c <FlashCodeInstall::Write(unsigned int)+0x11c>
+  f0:	e5942004 	ldr	r2, [r4, #4]
+  f4:	e1520005 	cmp	r2, r5
+  f8:	9affffd0 	bls	40 <FlashCodeInstall::Write(unsigned int)+0x40>
+  fc:	e1a03005 	mov	r3, r5
+ 100:	e594200c 	ldr	r2, [r4, #12]
+ 104:	e7c28003 	strb	r8, [r2, r3]
+ 108:	e2833001 	add	r3, r3, #1
+ 10c:	e5942004 	ldr	r2, [r4, #4]
+ 110:	e1520003 	cmp	r2, r3
+ 114:	8afffff9 	bhi	100 <FlashCodeInstall::Write(unsigned int)+0x100>
+ 118:	eaffffc8 	b	40 <FlashCodeInstall::Write(unsigned int)+0x40>
+ 11c:	e3000000 	movw	r0, #0
+ 120:	e3400000 	movt	r0, #0
+ 124:	ebfffffe 	bl	0 <puts>
+ 128:	e28dd014 	add	sp, sp, #20
+ 12c:	e8bd83f0 	pop	{r4, r5, r6, r7, r8, r9, pc}
+ 130:	e3000000 	movw	r0, #0
+ 134:	e3400000 	movt	r0, #0
+ 138:	ebfffffe 	bl	0 <puts>
+ 13c:	e28dd014 	add	sp, sp, #20
+ 140:	e8bd83f0 	pop	{r4, r5, r6, r7, r8, r9, pc}
+ 144:	e3000000 	movw	r0, #0
+ 148:	e3400000 	movt	r0, #0
+ 14c:	ebfffffe 	bl	0 <puts>
+ 150:	e28dd014 	add	sp, sp, #20
+ 154:	e8bd83f0 	pop	{r4, r5, r6, r7, r8, r9, pc}
+ 158:	e3000000 	movw	r0, #0
+ 15c:	e3400000 	movt	r0, #0
+ 160:	ebfffffe 	bl	0 <puts>
+ 164:	e28dd014 	add	sp, sp, #20
+ 168:	e8bd83f0 	pop	{r4, r5, r6, r7, r8, r9, pc}
+ 16c:	e5940014 	ldr	r0, [r4, #20]
+ 170:	ebfffffe 	bl	0 <ferror>
+ 174:	e3500000 	cmp	r0, #0
+ 178:	1affffea 	bne	128 <FlashCodeInstall::Write(unsigned int)+0x128>
+ 17c:	e3004000 	movw	r4, #0
+ 180:	e3404000 	movt	r4, #0
+ 184:	e5940000 	ldr	r0, [r4]
+ 188:	e5903018 	ldr	r3, [r0, #24]
+ 18c:	e3530000 	cmp	r3, #0
+ 190:	0a000005 	beq	1ac <FlashCodeInstall::Write(unsigned int)+0x1ac>
+ 194:	e5932000 	ldr	r2, [r3]
+ 198:	e1a00003 	mov	r0, r3
+ 19c:	e3a01003 	mov	r1, #3
+ 1a0:	e5922010 	ldr	r2, [r2, #16]
+ 1a4:	e12fff32 	blx	r2
+ 1a8:	e5940000 	ldr	r0, [r4]
+ 1ac:	e3002000 	movw	r2, #0
+ 1b0:	e1a03009 	mov	r3, r9
+ 1b4:	e3402000 	movt	r2, #0
+ 1b8:	e3a01003 	mov	r1, #3
+ 1bc:	ebfffffe 	bl	0 <FlashCodeInstall::Write(unsigned int)>
+ 1c0:	e3000000 	movw	r0, #0
+ 1c4:	e1a01009 	mov	r1, r9
+ 1c8:	e3400000 	movt	r0, #0
+ 1cc:	e28dd014 	add	sp, sp, #20
+ 1d0:	e8bd43f0 	pop	{r4, r5, r6, r7, r8, r9, lr}
+ 1d4:	eafffffe 	b	0 <printf>
+
+Disassembly of section .text._ZN16FlashCodeInstall7ProcessEPKcj.part.0:
+
+00000000 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]>:
+   0:	e92d4ff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, lr}
+   4:	e3007000 	movw	r7, #0
+   8:	e3407000 	movt	r7, #0
+   c:	e24dd014 	sub	sp, sp, #20
+  10:	e1a06000 	mov	r6, r0
+  14:	e1a08001 	mov	r8, r1
+  18:	e5979000 	ldr	r9, [r7]
+  1c:	e5994018 	ldr	r4, [r9, #24]
+  20:	e3540000 	cmp	r4, #0
+  24:	0a000031 	beq	f0 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0xf0>
+  28:	e5d42005 	ldrb	r2, [r4, #5]
+  2c:	e3a01000 	mov	r1, #0
+  30:	e5943000 	ldr	r3, [r4]
+  34:	e1a00004 	mov	r0, r4
+  38:	e5d45004 	ldrb	r5, [r4, #4]
+  3c:	e242a001 	sub	sl, r2, #1
+  40:	e58d2004 	str	r2, [sp, #4]
+  44:	e6efa07a 	uxtb	sl, sl
+  48:	e5933020 	ldr	r3, [r3, #32]
+  4c:	e1a0200a 	mov	r2, sl
+  50:	e12fff33 	blx	r3
+  54:	e3550001 	cmp	r5, #1
+  58:	12455001 	subne	r5, r5, #1
+  5c:	13a0b000 	movne	fp, #0
+  60:	0a000007 	beq	84 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x84>
+  64:	e5942000 	ldr	r2, [r4]
+  68:	e3a01020 	mov	r1, #32
+  6c:	e1a00004 	mov	r0, r4
+  70:	e28bb001 	add	fp, fp, #1
+  74:	e5922014 	ldr	r2, [r2, #20]
+  78:	e12fff32 	blx	r2
+  7c:	e155000b 	cmp	r5, fp
+  80:	1afffff7 	bne	64 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x64>
+  84:	e5943000 	ldr	r3, [r4]
+  88:	e1a0200a 	mov	r2, sl
+  8c:	e3a01000 	mov	r1, #0
+  90:	e1a00004 	mov	r0, r4
+  94:	e5933020 	ldr	r3, [r3, #32]
+  98:	e12fff33 	blx	r3
+  9c:	e5d43004 	ldrb	r3, [r4, #4]
+  a0:	e3530000 	cmp	r3, #0
+  a4:	03a03001 	moveq	r3, #1
+  a8:	0a000009 	beq	d4 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0xd4>
+  ac:	e59f2328 	ldr	r2, [pc, #808]	; 3dc <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x3dc>
+  b0:	e2830001 	add	r0, r3, #1
+  b4:	e3a03001 	mov	r3, #1
+  b8:	e2833001 	add	r3, r3, #1
+  bc:	e1500003 	cmp	r0, r3
+  c0:	0a0000a2 	beq	350 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x350>
+  c4:	e5f21001 	ldrb	r1, [r2, #1]!
+  c8:	e3510000 	cmp	r1, #0
+  cc:	1afffff9 	bne	b8 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0xb8>
+  d0:	e6ef3073 	uxtb	r3, r3
+  d4:	e5942000 	ldr	r2, [r4]
+  d8:	e1a00004 	mov	r0, r4
+  dc:	e59d1004 	ldr	r1, [sp, #4]
+  e0:	e592501c 	ldr	r5, [r2, #28]
+  e4:	e3002000 	movw	r2, #0
+  e8:	e3402000 	movt	r2, #0
+  ec:	e12fff35 	blx	r5
+  f0:	e5d93011 	ldrb	r3, [r9, #17]
+  f4:	e3530000 	cmp	r3, #0
+  f8:	1a000086 	bne	318 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x318>
+  fc:	e3000000 	movw	r0, #0
+ 100:	e3400000 	movt	r0, #0
+ 104:	ebfffffe 	bl	0 <puts>
+ 108:	e1a01008 	mov	r1, r8
+ 10c:	e1a00006 	mov	r0, r6
+ 110:	ebfffffe 	bl	0 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]>
+ 114:	e5977000 	ldr	r7, [r7]
+ 118:	e2504000 	subs	r4, r0, #0
+ 11c:	0a000040 	beq	224 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x224>
+ 120:	e5974018 	ldr	r4, [r7, #24]
+ 124:	e3540000 	cmp	r4, #0
+ 128:	0a000030 	beq	1f0 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x1f0>
+ 12c:	e5d49005 	ldrb	r9, [r4, #5]
+ 130:	e3a01000 	mov	r1, #0
+ 134:	e5943000 	ldr	r3, [r4]
+ 138:	e1a00004 	mov	r0, r4
+ 13c:	e5d4a004 	ldrb	sl, [r4, #4]
+ 140:	e249b001 	sub	fp, r9, #1
+ 144:	e5933020 	ldr	r3, [r3, #32]
+ 148:	e6efb07b 	uxtb	fp, fp
+ 14c:	e1a0200b 	mov	r2, fp
+ 150:	e12fff33 	blx	r3
+ 154:	e35a0001 	cmp	sl, #1
+ 158:	124aa001 	subne	sl, sl, #1
+ 15c:	13a05000 	movne	r5, #0
+ 160:	0a000007 	beq	184 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x184>
+ 164:	e5943000 	ldr	r3, [r4]
+ 168:	e3a01020 	mov	r1, #32
+ 16c:	e1a00004 	mov	r0, r4
+ 170:	e2855001 	add	r5, r5, #1
+ 174:	e5933014 	ldr	r3, [r3, #20]
+ 178:	e12fff33 	blx	r3
+ 17c:	e155000a 	cmp	r5, sl
+ 180:	1afffff7 	bne	164 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x164>
+ 184:	e5943000 	ldr	r3, [r4]
+ 188:	e1a00004 	mov	r0, r4
+ 18c:	e1a0200b 	mov	r2, fp
+ 190:	e3a01000 	mov	r1, #0
+ 194:	e5933020 	ldr	r3, [r3, #32]
+ 198:	e12fff33 	blx	r3
+ 19c:	e5d40004 	ldrb	r0, [r4, #4]
+ 1a0:	e3500000 	cmp	r0, #0
+ 1a4:	03a03001 	moveq	r3, #1
+ 1a8:	0a000009 	beq	1d4 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x1d4>
+ 1ac:	e59f222c 	ldr	r2, [pc, #556]	; 3e0 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x3e0>
+ 1b0:	e2800001 	add	r0, r0, #1
+ 1b4:	e3a03001 	mov	r3, #1
+ 1b8:	e2833001 	add	r3, r3, #1
+ 1bc:	e1530000 	cmp	r3, r0
+ 1c0:	0a000002 	beq	1d0 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x1d0>
+ 1c4:	e5f21001 	ldrb	r1, [r2, #1]!
+ 1c8:	e3510000 	cmp	r1, #0
+ 1cc:	1afffff9 	bne	1b8 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x1b8>
+ 1d0:	e6ef3073 	uxtb	r3, r3
+ 1d4:	e5942000 	ldr	r2, [r4]
+ 1d8:	e1a01009 	mov	r1, r9
+ 1dc:	e1a00004 	mov	r0, r4
+ 1e0:	e592501c 	ldr	r5, [r2, #28]
+ 1e4:	e3002000 	movw	r2, #0
+ 1e8:	e3402000 	movt	r2, #0
+ 1ec:	e12fff35 	blx	r5
+ 1f0:	e5d73011 	ldrb	r3, [r7, #17]
+ 1f4:	e3530000 	cmp	r3, #0
+ 1f8:	1a000056 	bne	358 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x358>
+ 1fc:	e3000000 	movw	r0, #0
+ 200:	e3400000 	movt	r0, #0
+ 204:	ebfffffe 	bl	0 <puts>
+ 208:	e1a00006 	mov	r0, r6
+ 20c:	e1a01008 	mov	r1, r8
+ 210:	ebfffffe 	bl	0 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]>
+ 214:	e1a00006 	mov	r0, r6
+ 218:	e28dd014 	add	sp, sp, #20
+ 21c:	e8bd4ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, lr}
+ 220:	eafffffe 	b	0 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]>
+ 224:	e5975018 	ldr	r5, [r7, #24]
+ 228:	e3550000 	cmp	r5, #0
+ 22c:	0a00002f 	beq	2f0 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x2f0>
+ 230:	e5d58005 	ldrb	r8, [r5, #5]
+ 234:	e1a01004 	mov	r1, r4
+ 238:	e5953000 	ldr	r3, [r5]
+ 23c:	e1a00005 	mov	r0, r5
+ 240:	e5d59004 	ldrb	r9, [r5, #4]
+ 244:	e248a001 	sub	sl, r8, #1
+ 248:	e5933020 	ldr	r3, [r3, #32]
+ 24c:	e6efa07a 	uxtb	sl, sl
+ 250:	e1a0200a 	mov	r2, sl
+ 254:	e12fff33 	blx	r3
+ 258:	e3590001 	cmp	r9, #1
+ 25c:	12499001 	subne	r9, r9, #1
+ 260:	0a000007 	beq	284 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x284>
+ 264:	e5953000 	ldr	r3, [r5]
+ 268:	e3a01020 	mov	r1, #32
+ 26c:	e1a00005 	mov	r0, r5
+ 270:	e2844001 	add	r4, r4, #1
+ 274:	e5933014 	ldr	r3, [r3, #20]
+ 278:	e12fff33 	blx	r3
+ 27c:	e1590004 	cmp	r9, r4
+ 280:	1afffff7 	bne	264 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x264>
+ 284:	e5953000 	ldr	r3, [r5]
+ 288:	e1a0200a 	mov	r2, sl
+ 28c:	e3a01000 	mov	r1, #0
+ 290:	e1a00005 	mov	r0, r5
+ 294:	e5933020 	ldr	r3, [r3, #32]
+ 298:	e12fff33 	blx	r3
+ 29c:	e5d53004 	ldrb	r3, [r5, #4]
+ 2a0:	e3530000 	cmp	r3, #0
+ 2a4:	03a03001 	moveq	r3, #1
+ 2a8:	0a000009 	beq	2d4 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x2d4>
+ 2ac:	e59f2130 	ldr	r2, [pc, #304]	; 3e4 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x3e4>
+ 2b0:	e2830001 	add	r0, r3, #1
+ 2b4:	e3a03001 	mov	r3, #1
+ 2b8:	e2833001 	add	r3, r3, #1
+ 2bc:	e1500003 	cmp	r0, r3
+ 2c0:	0a000043 	beq	3d4 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x3d4>
+ 2c4:	e5f21001 	ldrb	r1, [r2, #1]!
+ 2c8:	e3510000 	cmp	r1, #0
+ 2cc:	1afffff9 	bne	2b8 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x2b8>
+ 2d0:	e6ef3073 	uxtb	r3, r3
+ 2d4:	e5952000 	ldr	r2, [r5]
+ 2d8:	e1a01008 	mov	r1, r8
+ 2dc:	e1a00005 	mov	r0, r5
+ 2e0:	e592401c 	ldr	r4, [r2, #28]
+ 2e4:	e3002000 	movw	r2, #0
+ 2e8:	e3402000 	movt	r2, #0
+ 2ec:	e12fff34 	blx	r4
+ 2f0:	e5d73011 	ldrb	r3, [r7, #17]
+ 2f4:	e3530000 	cmp	r3, #0
+ 2f8:	1a000024 	bne	390 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x390>
+ 2fc:	e3000000 	movw	r0, #0
+ 300:	e3400000 	movt	r0, #0
+ 304:	ebfffffe 	bl	0 <puts>
+ 308:	e1a00006 	mov	r0, r6
+ 30c:	e28dd014 	add	sp, sp, #20
+ 310:	e8bd4ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, lr}
+ 314:	eafffffe 	b	0 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]>
+ 318:	e3a03012 	mov	r3, #18
+ 31c:	e5cd300c 	strb	r3, [sp, #12]
+ 320:	e3e0303f 	mvn	r3, #63	; 0x3f
+ 324:	e5cd300d 	strb	r3, [sp, #13]
+ 328:	e3e03039 	mvn	r3, #57	; 0x39
+ 32c:	e5cd300e 	strb	r3, [sp, #14]
+ 330:	e5d90008 	ldrb	r0, [r9, #8]
+ 334:	ebfffffe 	bl	0 <h3_i2c_set_slave_address>
+ 338:	e599000c 	ldr	r0, [r9, #12]
+ 33c:	ebfffffe 	bl	0 <h3_i2c_set_baudrate>
+ 340:	e3a01003 	mov	r1, #3
+ 344:	e28d000c 	add	r0, sp, #12
+ 348:	ebfffffe 	bl	0 <h3_i2c_write>
+ 34c:	eaffff6a 	b	fc <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0xfc>
+ 350:	e6ef3070 	uxtb	r3, r0
+ 354:	eaffff5e 	b	d4 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0xd4>
+ 358:	e3e0305b 	mvn	r3, #91	; 0x5b
+ 35c:	e3a02012 	mov	r2, #18
+ 360:	e5cd300d 	strb	r3, [sp, #13]
+ 364:	e3e03039 	mvn	r3, #57	; 0x39
+ 368:	e5cd200c 	strb	r2, [sp, #12]
+ 36c:	e5cd300e 	strb	r3, [sp, #14]
+ 370:	e5d70008 	ldrb	r0, [r7, #8]
+ 374:	ebfffffe 	bl	0 <h3_i2c_set_slave_address>
+ 378:	e597000c 	ldr	r0, [r7, #12]
+ 37c:	ebfffffe 	bl	0 <h3_i2c_set_baudrate>
+ 380:	e3a01003 	mov	r1, #3
+ 384:	e28d000c 	add	r0, sp, #12
+ 388:	ebfffffe 	bl	0 <h3_i2c_write>
+ 38c:	eaffff9a 	b	1fc <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x1fc>
+ 390:	e3a03012 	mov	r3, #18
+ 394:	e3e0204f 	mvn	r2, #79	; 0x4f
+ 398:	e5cd300c 	strb	r3, [sp, #12]
+ 39c:	e3e03039 	mvn	r3, #57	; 0x39
+ 3a0:	e5cd200d 	strb	r2, [sp, #13]
+ 3a4:	e5cd300e 	strb	r3, [sp, #14]
+ 3a8:	e5d70008 	ldrb	r0, [r7, #8]
+ 3ac:	ebfffffe 	bl	0 <h3_i2c_set_slave_address>
+ 3b0:	e597000c 	ldr	r0, [r7, #12]
+ 3b4:	ebfffffe 	bl	0 <h3_i2c_set_baudrate>
+ 3b8:	e3a01003 	mov	r1, #3
+ 3bc:	e28d000c 	add	r0, sp, #12
+ 3c0:	ebfffffe 	bl	0 <h3_i2c_write>
+ 3c4:	e3000000 	movw	r0, #0
+ 3c8:	e3400000 	movt	r0, #0
+ 3cc:	ebfffffe 	bl	0 <puts>
+ 3d0:	eaffffcc 	b	308 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x308>
+ 3d4:	e6ef3070 	uxtb	r3, r0
+ 3d8:	eaffffbd 	b	2d4 <FlashCodeInstall::Process(char const*, unsigned int) [clone .part.0]+0x2d4>
+ 3dc:	00000001 	.word	0x00000001
+ 3e0:	00000001 	.word	0x00000001
+ 3e4:	00000001 	.word	0x00000001
+
+Disassembly of section .text._ZN16FlashCodeInstall7ProcessEPKcj:
+
+00000000 <FlashCodeInstall::Process(char const*, unsigned int)>:
+   0:	e92d4070 	push	{r4, r5, r6, lr}
+   4:	e1a04000 	mov	r4, r0
+   8:	e1a05002 	mov	r5, r2
+   c:	ebfffffe 	bl	0 <FlashCodeInstall::Process(char const*, unsigned int)>
+  10:	e3500000 	cmp	r0, #0
+  14:	08bd8070 	popeq	{r4, r5, r6, pc}
+  18:	e1a01005 	mov	r1, r5
+  1c:	e1a00004 	mov	r0, r4
+  20:	e8bd4070 	pop	{r4, r5, r6, lr}
+  24:	eafffffe 	b	0 <FlashCodeInstall::Process(char const*, unsigned int)>
+
+Disassembly of section .text._ZN16FlashCodeInstallC2Ev:
+
+00000000 <FlashCodeInstall::FlashCodeInstall()>:
+   0:	e92d47f0 	push	{r4, r5, r6, r7, r8, r9, sl, lr}
+   4:	e3006000 	movw	r6, #0
+   8:	e3406000 	movt	r6, #0
+   c:	e24dd008 	sub	sp, sp, #8
+  10:	e1a04000 	mov	r4, r0
+  14:	ebfffffe 	bl	0 <FlashRom::FlashRom()>
+  18:	e5967000 	ldr	r7, [r6]
+  1c:	e3a03000 	mov	r3, #0
+  20:	e5843014 	str	r3, [r4, #20]
+  24:	e3002000 	movw	r2, #0
+  28:	e5970018 	ldr	r0, [r7, #24]
+  2c:	e3402000 	movt	r2, #0
+  30:	e1500003 	cmp	r0, r3
+  34:	e5843004 	str	r3, [r4, #4]
+  38:	e5843008 	str	r3, [r4, #8]
+  3c:	e584300c 	str	r3, [r4, #12]
+  40:	e5843010 	str	r3, [r4, #16]
+  44:	e5c43018 	strb	r3, [r4, #24]
+  48:	e5824000 	str	r4, [r2]
+  4c:	0a000042 	beq	15c <FlashCodeInstall::FlashCodeInstall()+0x15c>
+  50:	e5903000 	ldr	r3, [r0]
+  54:	e593300c 	ldr	r3, [r3, #12]
+  58:	e12fff33 	blx	r3
+  5c:	e5d45000 	ldrb	r5, [r4]
+  60:	e3550000 	cmp	r5, #0
+  64:	1a00003f 	bne	168 <FlashCodeInstall::FlashCodeInstall()+0x168>
+  68:	e5967000 	ldr	r7, [r6]
+  6c:	e5976018 	ldr	r6, [r7, #24]
+  70:	e3560000 	cmp	r6, #0
+  74:	0a00002f 	beq	138 <FlashCodeInstall::FlashCodeInstall()+0x138>
+  78:	e5d68005 	ldrb	r8, [r6, #5]
+  7c:	e1a01005 	mov	r1, r5
+  80:	e5963000 	ldr	r3, [r6]
+  84:	e1a00006 	mov	r0, r6
+  88:	e5d69004 	ldrb	r9, [r6, #4]
+  8c:	e248a001 	sub	sl, r8, #1
+  90:	e5933020 	ldr	r3, [r3, #32]
+  94:	e6efa07a 	uxtb	sl, sl
+  98:	e1a0200a 	mov	r2, sl
+  9c:	e12fff33 	blx	r3
+  a0:	e3590001 	cmp	r9, #1
+  a4:	12499001 	subne	r9, r9, #1
+  a8:	0a000007 	beq	cc <FlashCodeInstall::FlashCodeInstall()+0xcc>
+  ac:	e5963000 	ldr	r3, [r6]
+  b0:	e3a01020 	mov	r1, #32
+  b4:	e1a00006 	mov	r0, r6
+  b8:	e2855001 	add	r5, r5, #1
+  bc:	e5933014 	ldr	r3, [r3, #20]
+  c0:	e12fff33 	blx	r3
+  c4:	e1590005 	cmp	r9, r5
+  c8:	1afffff7 	bne	ac <FlashCodeInstall::FlashCodeInstall()+0xac>
+  cc:	e5963000 	ldr	r3, [r6]
+  d0:	e1a0200a 	mov	r2, sl
+  d4:	e3a01000 	mov	r1, #0
+  d8:	e1a00006 	mov	r0, r6
+  dc:	e5933020 	ldr	r3, [r3, #32]
+  e0:	e12fff33 	blx	r3
+  e4:	e5d63004 	ldrb	r3, [r6, #4]
+  e8:	e3530000 	cmp	r3, #0
+  ec:	03a03001 	moveq	r3, #1
+  f0:	0a000009 	beq	11c <FlashCodeInstall::FlashCodeInstall()+0x11c>
+  f4:	e59f21fc 	ldr	r2, [pc, #508]	; 2f8 <FlashCodeInstall::FlashCodeInstall()+0x2f8>
+  f8:	e2830001 	add	r0, r3, #1
+  fc:	e3a03001 	mov	r3, #1
+ 100:	e2833001 	add	r3, r3, #1
+ 104:	e1500003 	cmp	r0, r3
+ 108:	0a00006c 	beq	2c0 <FlashCodeInstall::FlashCodeInstall()+0x2c0>
+ 10c:	e5f21001 	ldrb	r1, [r2, #1]!
+ 110:	e3510000 	cmp	r1, #0
+ 114:	1afffff9 	bne	100 <FlashCodeInstall::FlashCodeInstall()+0x100>
+ 118:	e6ef3073 	uxtb	r3, r3
+ 11c:	e5962000 	ldr	r2, [r6]
+ 120:	e1a01008 	mov	r1, r8
+ 124:	e1a00006 	mov	r0, r6
+ 128:	e592501c 	ldr	r5, [r2, #28]
+ 12c:	e3002000 	movw	r2, #0
+ 130:	e3402000 	movt	r2, #0
+ 134:	e12fff35 	blx	r5
+ 138:	e5d73011 	ldrb	r3, [r7, #17]
+ 13c:	e3530000 	cmp	r3, #0
+ 140:	1a000050 	bne	288 <FlashCodeInstall::FlashCodeInstall()+0x288>
+ 144:	ebfffffe 	bl	0 <h3_get_boot_device>
+ 148:	e3500002 	cmp	r0, #2
+ 14c:	0a000029 	beq	1f8 <FlashCodeInstall::FlashCodeInstall()+0x1f8>
+ 150:	e1a00004 	mov	r0, r4
+ 154:	e28dd008 	add	sp, sp, #8
+ 158:	e8bd87f0 	pop	{r4, r5, r6, r7, r8, r9, sl, pc}
+ 15c:	e5d43000 	ldrb	r3, [r4]
+ 160:	e3530000 	cmp	r3, #0
+ 164:	0afffff3 	beq	138 <FlashCodeInstall::FlashCodeInstall()+0x138>
+ 168:	e1a00004 	mov	r0, r4
+ 16c:	ebfffffe 	bl	0 <FlashRom::GetSize() const>
+ 170:	e5965000 	ldr	r5, [r6]
+ 174:	e1a03000 	mov	r3, r0
+ 178:	e5843008 	str	r3, [r4, #8]
+ 17c:	e1a00004 	mov	r0, r4
+ 180:	ebfffffe 	bl	0 <FlashRom::GetName() const>
+ 184:	e1a02000 	mov	r2, r0
+ 188:	e5950018 	ldr	r0, [r5, #24]
+ 18c:	e3500000 	cmp	r0, #0
+ 190:	0affffeb 	beq	144 <FlashCodeInstall::FlashCodeInstall()+0x144>
+ 194:	e5d23000 	ldrb	r3, [r2]
+ 198:	e5d0e004 	ldrb	lr, [r0, #4]
+ 19c:	e3530000 	cmp	r3, #0
+ 1a0:	0a00000d 	beq	1dc <FlashCodeInstall::FlashCodeInstall()+0x1dc>
+ 1a4:	e35e0000 	cmp	lr, #0
+ 1a8:	03a03001 	moveq	r3, #1
+ 1ac:	0a00000a 	beq	1dc <FlashCodeInstall::FlashCodeInstall()+0x1dc>
+ 1b0:	e082e00e 	add	lr, r2, lr
+ 1b4:	e1a01002 	mov	r1, r2
+ 1b8:	e3a03001 	mov	r3, #1
+ 1bc:	ea000002 	b	1cc <FlashCodeInstall::FlashCodeInstall()+0x1cc>
+ 1c0:	e151000e 	cmp	r1, lr
+ 1c4:	e2833001 	add	r3, r3, #1
+ 1c8:	0a000002 	beq	1d8 <FlashCodeInstall::FlashCodeInstall()+0x1d8>
+ 1cc:	e5f1c001 	ldrb	ip, [r1, #1]!
+ 1d0:	e35c0000 	cmp	ip, #0
+ 1d4:	1afffff9 	bne	1c0 <FlashCodeInstall::FlashCodeInstall()+0x1c0>
+ 1d8:	e6ef3073 	uxtb	r3, r3
+ 1dc:	e5901000 	ldr	r1, [r0]
+ 1e0:	e591501c 	ldr	r5, [r1, #28]
+ 1e4:	e3a01001 	mov	r1, #1
+ 1e8:	e12fff35 	blx	r5
+ 1ec:	ebfffffe 	bl	0 <h3_get_boot_device>
+ 1f0:	e3500002 	cmp	r0, #2
+ 1f4:	1affffd5 	bne	150 <FlashCodeInstall::FlashCodeInstall()+0x150>
+ 1f8:	e3a05000 	mov	r5, #0
+ 1fc:	e28d0004 	add	r0, sp, #4
+ 200:	e58d5004 	str	r5, [sp, #4]
+ 204:	ebfffffe 	bl	0 <SpiFlashInstallParams::Load()>
+ 208:	e1500005 	cmp	r0, r5
+ 20c:	0affffcf 	beq	150 <FlashCodeInstall::FlashCodeInstall()+0x150>
+ 210:	e28d0004 	add	r0, sp, #4
+ 214:	ebfffffe 	bl	0 <SpiFlashInstallParams::Dump()>
+ 218:	e5943008 	ldr	r3, [r4, #8]
+ 21c:	e3530602 	cmp	r3, #2097152	; 0x200000
+ 220:	3affffca 	bcc	150 <FlashCodeInstall::FlashCodeInstall()+0x150>
+ 224:	e3a03001 	mov	r3, #1
+ 228:	e1a00004 	mov	r0, r4
+ 22c:	e5c43018 	strb	r3, [r4, #24]
+ 230:	ebfffffe 	bl	0 <FlashRom::GetSectorSize() const>
+ 234:	e5840004 	str	r0, [r4, #4]
+ 238:	ebfffffe 	bl	0 <operator new[](unsigned int)>
+ 23c:	e584000c 	str	r0, [r4, #12]
+ 240:	e5940004 	ldr	r0, [r4, #4]
+ 244:	ebfffffe 	bl	0 <operator new[](unsigned int)>
+ 248:	e59d3004 	ldr	r3, [sp, #4]
+ 24c:	e5840010 	str	r0, [r4, #16]
+ 250:	e3130001 	tst	r3, #1
+ 254:	1a00001b 	bne	2c8 <FlashCodeInstall::FlashCodeInstall()+0x2c8>
+ 258:	e3130002 	tst	r3, #2
+ 25c:	0affffbb 	beq	150 <FlashCodeInstall::FlashCodeInstall()+0x150>
+ 260:	e3001000 	movw	r1, #0
+ 264:	e1a00004 	mov	r0, r4
+ 268:	e3401000 	movt	r1, #0
+ 26c:	ebfffffe 	bl	0 <FlashCodeInstall::FlashCodeInstall()>
+ 270:	e3500000 	cmp	r0, #0
+ 274:	0affffb5 	beq	150 <FlashCodeInstall::FlashCodeInstall()+0x150>
+ 278:	e3a01706 	mov	r1, #1572864	; 0x180000
+ 27c:	e1a00004 	mov	r0, r4
+ 280:	ebfffffe 	bl	0 <FlashCodeInstall::FlashCodeInstall()>
+ 284:	eaffffb1 	b	150 <FlashCodeInstall::FlashCodeInstall()+0x150>
+ 288:	e3a03012 	mov	r3, #18
+ 28c:	e3e02040 	mvn	r2, #64	; 0x40
+ 290:	e5cd3004 	strb	r3, [sp, #4]
+ 294:	e3e03039 	mvn	r3, #57	; 0x39
+ 298:	e5cd2005 	strb	r2, [sp, #5]
+ 29c:	e5cd3006 	strb	r3, [sp, #6]
+ 2a0:	e5d70008 	ldrb	r0, [r7, #8]
+ 2a4:	ebfffffe 	bl	0 <h3_i2c_set_slave_address>
+ 2a8:	e597000c 	ldr	r0, [r7, #12]
+ 2ac:	ebfffffe 	bl	0 <h3_i2c_set_baudrate>
+ 2b0:	e3a01003 	mov	r1, #3
+ 2b4:	e28d0004 	add	r0, sp, #4
+ 2b8:	ebfffffe 	bl	0 <h3_i2c_write>
+ 2bc:	eaffffa0 	b	144 <FlashCodeInstall::FlashCodeInstall()+0x144>
+ 2c0:	e6ef3070 	uxtb	r3, r0
+ 2c4:	eaffff94 	b	11c <FlashCodeInstall::FlashCodeInstall()+0x11c>
+ 2c8:	e3001000 	movw	r1, #0
+ 2cc:	e1a00004 	mov	r0, r4
+ 2d0:	e3401000 	movt	r1, #0
+ 2d4:	ebfffffe 	bl	0 <FlashCodeInstall::FlashCodeInstall()>
+ 2d8:	e1500005 	cmp	r0, r5
+ 2dc:	1a000001 	bne	2e8 <FlashCodeInstall::FlashCodeInstall()+0x2e8>
+ 2e0:	e59d3004 	ldr	r3, [sp, #4]
+ 2e4:	eaffffdb 	b	258 <FlashCodeInstall::FlashCodeInstall()+0x258>
+ 2e8:	e1a01005 	mov	r1, r5
+ 2ec:	e1a00004 	mov	r0, r4
+ 2f0:	ebfffffe 	bl	0 <FlashCodeInstall::FlashCodeInstall()>
+ 2f4:	eafffff9 	b	2e0 <FlashCodeInstall::FlashCodeInstall()+0x2e0>
+ 2f8:	00000001 	.word	0x00000001
+
+ubootheader.o:     file format elf32-littlearm
+
+
+Disassembly of section .text._ZN11UBootHeaderC2EPh:
+
+00000000 <UBootHeader::UBootHeader(unsigned char*)>:
+   0:	e5913000 	ldr	r3, [r1]
+   4:	e3002527 	movw	r2, #1319	; 0x527
+   8:	e3452619 	movt	r2, #22041	; 0x5619
+   c:	e591c010 	ldr	ip, [r1, #16]
+  10:	e92d4030 	push	{r4, r5, lr}
+  14:	e281503f 	add	r5, r1, #63	; 0x3f
+  18:	e1530002 	cmp	r3, r2
+  1c:	035c0040 	cmpeq	ip, #64	; 0x40
+  20:	e591e014 	ldr	lr, [r1, #20]
+  24:	03a03001 	moveq	r3, #1
+  28:	e5d1c01c 	ldrb	ip, [r1, #28]
+  2c:	13a03000 	movne	r3, #0
+  30:	e5d1201d 	ldrb	r2, [r1, #29]
+  34:	e35e0040 	cmp	lr, #64	; 0x40
+  38:	13a03000 	movne	r3, #0
+  3c:	02033001 	andeq	r3, r3, #1
+  40:	e5801000 	str	r1, [r0]
+  44:	e35c0011 	cmp	ip, #17
+  48:	13a04000 	movne	r4, #0
+  4c:	02034001 	andeq	r4, r3, #1
+  50:	e300c000 	movw	ip, #0
+  54:	e5d1301e 	ldrb	r3, [r1, #30]
+  58:	e3520002 	cmp	r2, #2
+  5c:	13a04000 	movne	r4, #0
+  60:	02044001 	andeq	r4, r4, #1
+  64:	e3a02068 	mov	r2, #104	; 0x68
+  68:	e340c000 	movt	ip, #0
+  6c:	e3530001 	cmp	r3, #1
+  70:	13a04000 	movne	r4, #0
+  74:	02044001 	andeq	r4, r4, #1
+  78:	e281301f 	add	r3, r1, #31
+  7c:	ea000000 	b	84 <UBootHeader::UBootHeader(unsigned char*)+0x84>
+  80:	e5fc2001 	ldrb	r2, [ip, #1]!
+  84:	e5f3e001 	ldrb	lr, [r3, #1]!
+  88:	e15e0002 	cmp	lr, r2
+  8c:	1a00000a 	bne	bc <UBootHeader::UBootHeader(unsigned char*)+0xbc>
+  90:	e3520000 	cmp	r2, #0
+  94:	0a000001 	beq	a0 <UBootHeader::UBootHeader(unsigned char*)+0xa0>
+  98:	e1530005 	cmp	r3, r5
+  9c:	1afffff7 	bne	80 <UBootHeader::UBootHeader(unsigned char*)+0x80>
+  a0:	e5d1301f 	ldrb	r3, [r1, #31]
+  a4:	e5c04004 	strb	r4, [r0, #4]
+  a8:	e2433001 	sub	r3, r3, #1
+  ac:	e16f3f13 	clz	r3, r3
+  b0:	e1a032a3 	lsr	r3, r3, #5
+  b4:	e5c03005 	strb	r3, [r0, #5]
+  b8:	e8bd8030 	pop	{r4, r5, pc}
+  bc:	e3a04000 	mov	r4, #0
+  c0:	eafffff6 	b	a0 <UBootHeader::UBootHeader(unsigned char*)+0xa0>
+
+Disassembly of section .text._ZN11UBootHeader4DumpEv:
+
+00000000 <UBootHeader::Dump()>:
+   0:	e12fff1e 	bx	lr
+
+flashcodeinstallparamsconst.o:     file format elf32-littlearm
+
+
+flashcodeinstallparams.o:     file format elf32-littlearm
+
+
+Disassembly of section .text._ZN21SpiFlashInstallParams4LoadEv:
+
+00000000 <SpiFlashInstallParams::Load()>:
+   0:	e3a03000 	mov	r3, #0
+   4:	e1a02000 	mov	r2, r0
+   8:	e92d4013 	push	{r0, r1, r4, lr}
+   c:	e5803000 	str	r3, [r0]
+  10:	e1a0000d 	mov	r0, sp
+  14:	e59f1024 	ldr	r1, [pc, #36]	; 40 <SpiFlashInstallParams::Load()+0x40>
+  18:	ebfffffe 	bl	0 <ReadConfigFile::ReadConfigFile(void (*)(void*, char const*), void*)>
+  1c:	e59f1020 	ldr	r1, [pc, #32]	; 44 <SpiFlashInstallParams::Load()+0x44>
+  20:	e1a0000d 	mov	r0, sp
+  24:	ebfffffe 	bl	0 <ReadConfigFile::Read(char const*)>
+  28:	e1a04000 	mov	r4, r0
+  2c:	e1a0000d 	mov	r0, sp
+  30:	ebfffffe 	bl	0 <ReadConfigFile::~ReadConfigFile()>
+  34:	e1a00004 	mov	r0, r4
+  38:	e28dd008 	add	sp, sp, #8
+  3c:	e8bd8010 	pop	{r4, pc}
+	...
+
+Disassembly of section .text._ZN21SpiFlashInstallParams16callbackFunctionEPKc:
+
+00000000 <SpiFlashInstallParams::callbackFunction(char const*)>:
+   0:	e92d4037 	push	{r0, r1, r2, r4, r5, lr}
+   4:	e1a05001 	mov	r5, r1
+   8:	e59f1064 	ldr	r1, [pc, #100]	; 74 <SpiFlashInstallParams::callbackFunction(char const*)+0x74>
+   c:	e1a04000 	mov	r4, r0
+  10:	e28d2007 	add	r2, sp, #7
+  14:	e1a00005 	mov	r0, r5
+  18:	ebfffffe 	bl	0 <Sscan::Uint8(char const*, char const*, unsigned char&)>
+  1c:	e3500000 	cmp	r0, #0
+  20:	1a000005 	bne	3c <SpiFlashInstallParams::callbackFunction(char const*)+0x3c>
+  24:	e5dd2007 	ldrb	r2, [sp, #7]
+  28:	e5943000 	ldr	r3, [r4]
+  2c:	e3520000 	cmp	r2, #0
+  30:	03c33001 	biceq	r3, r3, #1
+  34:	13833001 	orrne	r3, r3, #1
+  38:	ea00000a 	b	68 <SpiFlashInstallParams::callbackFunction(char const*)+0x68>
+  3c:	e59f1034 	ldr	r1, [pc, #52]	; 78 <SpiFlashInstallParams::callbackFunction(char const*)+0x78>
+  40:	e28d2007 	add	r2, sp, #7
+  44:	e1a00005 	mov	r0, r5
+  48:	ebfffffe 	bl	0 <Sscan::Uint8(char const*, char const*, unsigned char&)>
+  4c:	e3500000 	cmp	r0, #0
+  50:	1a000005 	bne	6c <SpiFlashInstallParams::callbackFunction(char const*)+0x6c>
+  54:	e5dd2007 	ldrb	r2, [sp, #7]
+  58:	e5943000 	ldr	r3, [r4]
+  5c:	e3520000 	cmp	r2, #0
+  60:	03c33002 	biceq	r3, r3, #2
+  64:	13833002 	orrne	r3, r3, #2
+  68:	e5843000 	str	r3, [r4]
+  6c:	e28dd00c 	add	sp, sp, #12
+  70:	e8bd8030 	pop	{r4, r5, pc}
+	...
+
+Disassembly of section .text._ZN21SpiFlashInstallParams22staticCallbackFunctionEPvPKc:
+
+00000000 <SpiFlashInstallParams::staticCallbackFunction(void*, char const*)>:
+   0:	eafffffe 	b	0 <SpiFlashInstallParams::staticCallbackFunction(void*, char const*)>
+
+flashcodeinstallparamsdump.o:     file format elf32-littlearm
+
+
+Disassembly of section .text._ZN21SpiFlashInstallParams4DumpEv:
+
+00000000 <SpiFlashInstallParams::Dump()>:
+   0:	e12fff1e 	bx	lr

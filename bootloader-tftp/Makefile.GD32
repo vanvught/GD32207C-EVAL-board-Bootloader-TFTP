@@ -3,12 +3,14 @@ DEFINES+=DISABLE_BIN
 DEFINES+=DISABLE_RTC
 DEFINES+=DISABLE_FS
 DEFINES+=DISABLE_PRINTF_FLOAT
+
 DEFINES+=UDP_MAX_PORTS_ALLOWED=2
+
 DEFINES+=NDEBUG
 
 SRCDIR=firmware lib
 
-LIBS=display spiflashstore remoteconfig spiflashinstall spiflash
+LIBS=configstore remoteconfig flashcodeinstall display flashcode
 
 include ../firmware-template-gd32/Rules.mk
 

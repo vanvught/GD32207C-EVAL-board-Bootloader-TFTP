@@ -30,37 +30,36 @@
 #include "display.h"
 #include "display7segment.h"
 
-namespace networkdisplay {
+namespace network {
 static constexpr auto LINE_IP = 2U;
-}  // namespace networkdisplay
 
-void NetworkDisplay::ShowEmacStart() {
-	Display::Get()->ClearLine(networkdisplay::LINE_IP);
+void display_emac_start() {
+	Display::Get()->ClearLine(LINE_IP);
 	Display::Get()->PutString("Ethernet start");
 }
 
-void NetworkDisplay::ShowIp() {
-	Display::Get()->ClearLine(networkdisplay::LINE_IP);
-	Display::Get()->Printf(networkdisplay::LINE_IP, "" IPSTR "/%d %c", IP2STR(Network::Get()->GetIp()), Network::Get()->GetNetmaskCIDR(), Network::Get()->GetAddressingMode());
+void display_ip() {
+	Display::Get()->ClearLine(LINE_IP);
+	Display::Get()->Printf(LINE_IP, "" IPSTR "/%d %c", IP2STR(Network::Get()->GetIp()), Network::Get()->GetNetmaskCIDR(), Network::Get()->GetAddressingMode());
 }
 
-void NetworkDisplay::ShowNetMask() {
-	ShowIp();
+void display_netmask() {
+	display_ip();
 }
 
-void NetworkDisplay::ShowGatewayIp() {
+void display_gateway() {
 }
 
-void NetworkDisplay::ShowHostName() {
+void display_hostname() {
 }
 
-void NetworkDisplay::ShowShutdown() {
-	Display::Get()->ClearLine(networkdisplay::LINE_IP);
+void display_emac_shutdown() {
+	Display::Get()->ClearLine(LINE_IP);
 	Display::Get()->PutString("Ethernet shutdown");
 }
 
-void NetworkDisplay::ShowDhcpStatus(network::dhcp::ClientStatus nStatus) {
-	Display::Get()->ClearLine(networkdisplay::LINE_IP);
+void display_dhcp_status(network::dhcp::ClientStatus nStatus) {
+	Display::Get()->ClearLine(LINE_IP);
 
 	switch (nStatus) {
 	case network::dhcp::ClientStatus::IDLE:
@@ -85,3 +84,4 @@ void NetworkDisplay::ShowDhcpStatus(network::dhcp::ClientStatus nStatus) {
 		break;
 	}
 }
+}  // namespace network

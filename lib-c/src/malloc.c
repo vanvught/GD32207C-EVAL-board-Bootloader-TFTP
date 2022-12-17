@@ -65,7 +65,7 @@ struct block_bucket {
 	struct block_header *free_list;
 };
 
-#include "../lib-spiflashinstall/include/spiflashinstall.h"
+#include "../lib-flashcodeinstall/include/flashcodeinstall.h"
 
 static struct block_bucket s_block_bucket[] __attribute__((aligned(4))) = {{0x20, 0}, {0x40, 0}, {0x60, 0}, {0x80,0}, {0x100,0}, {0x140,0}, {0x180,0}, {0x200,0}, {0x300,0}, {0x400,0}, {FIRMWARE_MAX_SIZE,0}, {0,0}};
 

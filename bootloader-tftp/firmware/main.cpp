@@ -40,8 +40,8 @@
 #include "firmwareversion.h"
 #include "software_version.h"
 
-#include "spiflashinstall.h"
-#include "spiflashstore.h"
+#include "flashcodeinstall.h"
+#include "configstore.h"
 
 #include "gd32.h"
 
@@ -102,8 +102,8 @@ int main(void) {
 
 	fw.Print("Bootloader TFTP Server");
 
-	SpiFlashInstall flashInstall;
-	SpiFlashStore flashStore;
+	FlashCodeInstall flashCodeInstall;
+	ConfigStore configStore;
 
 	StoreNetwork storeNetwork;
 	nw.SetNetworkStore(&storeNetwork);

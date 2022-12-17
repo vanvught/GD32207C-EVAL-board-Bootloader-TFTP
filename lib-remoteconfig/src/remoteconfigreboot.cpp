@@ -32,7 +32,7 @@
 #include "network.h"
 #include "display.h"
 
-#include "spiflashstore.h"
+#include "configstore.h"
 
 #include "debug.h"
 
@@ -48,7 +48,7 @@ void RemoteConfig::HandleReboot() {
 
 	Display::Get()->SetSleep(false);
 
-	while (SpiFlashStore::Get()->Flash())
+	while (ConfigStore::Get()->Flash())
 		;
 
 	Network::Get()->Shutdown();
@@ -59,5 +59,7 @@ void RemoteConfig::HandleReboot() {
 	Display::Get()->TextStatus("Rebooting ...", Display7SegmentMessage::INFO_REBOOTING);
 
 	Hardware::Get()->Reboot();
+	__builtin_unreachable() ;
+
 	DEBUG_EXIT
 }
