@@ -42,6 +42,7 @@ Zerobss:
   cmp r2, r3
   bcc FillZerobss
   bl  SystemInit
+  bl stack_debug_init
   bl main
   bx lr
 .size Reset_Handler, .-Reset_Handler

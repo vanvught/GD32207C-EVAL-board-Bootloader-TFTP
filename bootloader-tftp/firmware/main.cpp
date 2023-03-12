@@ -2,7 +2,7 @@
  * @file main.cpp
  *
  */
-/* Copyright (C) 2022 by Arjan van Vught mailto:info@gd32-dmx.nl
+/* Copyright (C) 2022-2023 by Arjan van Vught mailto:info@gd32-dmx.nl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,6 @@
 #include "networkconst.h"
 #include "storenetwork.h"
 #include "display.h"
-#include "ledblink.h"
 
 #include "remoteconfig.h"
 #include "remoteconfigparams.h"
@@ -97,7 +96,6 @@ int main(void) {
 	Hardware hw;
 	Network nw;
 	Display display(4);
-	LedBlink lb;
 	FirmwareVersion fw(SOFTWARE_VERSION, __DATE__, __TIME__);
 
 	fw.Print("Bootloader TFTP Server");
@@ -110,7 +108,7 @@ int main(void) {
 	nw.Init(&storeNetwork);
 	nw.Print();
 
-	lb.SetMode(ledblink::Mode::OFF_ON);
+	hw.SetMode(hardware::ledblink::Mode::OFF_ON);
 
 	RemoteConfig remoteConfig(remoteconfig::Node::BOOTLOADER_TFTP, remoteconfig::Output::CONFIG);
 
@@ -123,16 +121,15 @@ int main(void) {
 
 	remoteConfig.SetEnableReboot(true);
 
-	lb.SetMode(ledblink::Mode::FAST);
-
 	display.Printf(3, "Bootloader TFTP Srvr");
 
+	hw.SetMode(hardware::ledblink::Mode::FAST);
 	hw.WatchdogInit();
 
 	while (1) {
 		hw.WatchdogFeed();
 		nw.Run();
 		remoteConfig.Run();
-		lb.Run();
+		hw.Run();
 	}
 }

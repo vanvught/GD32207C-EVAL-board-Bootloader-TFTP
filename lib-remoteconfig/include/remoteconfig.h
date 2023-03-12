@@ -2,7 +2,7 @@
  * @file remoteconfig.h
  *
  */
-/* Copyright (C) 2019-2021 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2019-2023 by Arjan van Vught mailto:info@orangepi-dmx.nl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@
 # define NODE_ARTNET
 #endif
 
-#if defined (NODE_E131_MULTI)
+#if defined (NODE_E131_MULTI) && !defined (NODE_ARTNET_MULTI)
 # define NODE_E131
 #endif
 
@@ -44,14 +44,14 @@
 # define OUTPUT_DMX_SEND
 #endif
 
-#include "configstore.h"
-
-#if !defined(DISABLE_TFTP)
-# include "tftp/tftpfileserver.h"
+#if defined (NODE_NODE)
+# include "node.h"
 #endif
 
-#if defined(ENABLE_HTTPD)
-# include "httpd/httpd.h"
+#include "configstore.h"
+
+#if defined(ENABLE_TFTP_SERVER)
+# include "tftp/tftpfileserver.h"
 #endif
 
 #include "network.h"
@@ -71,7 +71,10 @@ enum class Node {
 	SHOWFILE,
 	MIDI,
 	DDP,
+	PP,
+	NODE,
 	BOOTLOADER_TFTP,
+	RDMRESPONDER,
 	LAST
 };
 enum class Output {
@@ -88,13 +91,6 @@ enum class Output {
 	SERIAL,
 	RGBPANEL,
 	LAST
-};
-
-enum class HandleMode {
-	TXT
-#if !defined(DISABLE_BIN)
-	, BIN
-#endif
 };
 
 enum {
@@ -129,7 +125,8 @@ enum class TxtFile {
 	SERIAL,
 	GPS,
 	RGBPANEL,
-	DDPDISP,
+	LTCETC,
+	NODE,
 	LAST
 };
 }  // namespace remoteconfig
@@ -146,6 +143,8 @@ public:
 	uint8_t GetOutputs() const {
 		return s_RemoteConfigListBin.nActiveOutputs;
 	}
+
+	void SetDisplayName(const char *pDisplayName);
 
 	const char *GetDisplayName() const {
 		return s_RemoteConfigListBin.aDisplayName;
@@ -177,8 +176,6 @@ public:
 		return m_bEnableUptime;
 	}
 
-	void SetDisplayName(const char *pDisplayName);
-
 	void SetEnableFactory(bool bEnableFactory) {
 		m_bEnableFactory = bEnableFactory;
 	}
@@ -194,9 +191,7 @@ public:
 		HandleReboot();
 	}
 
-#if !defined(DISABLE_TFTP)
 	void TftpExit();
-#endif
 
 	int32_t GetIndex(const void *p, uint32_t& nLength);
 
@@ -244,6 +239,7 @@ private:
 	void HandleGetLdisplayTxt(uint32_t& nSize);
 	void HandleGetTCNetTxt(uint32_t& nSize);
 	void HandleGetGpsTxt(uint32_t& nSize);
+	void HandleGetLtcEtcTxt(uint32_t& nSize);
 #endif
 
 #if defined (NODE_OSC_CLIENT)
@@ -254,15 +250,32 @@ private:
 	void HandleGetShowTxt(uint32_t& nSize);
 #endif
 
-#if defined (NODE_DDP_DISPLAY)
-	void HandleGetDdpDisplayTxt(uint32_t& nSize);
+#if defined (NODE_NODE)
+	void HandleGetNodeTxt(const node::Personality personality, uint32_t& nSize);
+	void HandleGetNodeNodeTxt(uint32_t& nSize) {
+		HandleGetNodeTxt(node::Personality::NODE, nSize);
+	}
+	void HandleGetNodeArtNetTxt(uint32_t& nSize) {
+		HandleGetNodeTxt(node::Personality::ARTNET, nSize);
+	}
+	void HandleGetNodeE131Txt(uint32_t& nSize) {
+		HandleGetNodeTxt(node::Personality::E131, nSize);
+	}
+#endif
+
+#if defined (RDM_RESPONDER)
+	void HandleGetRdmDeviceTxt(uint32_t& nSize);
+	void HandleGetRdmSensorsTxt(uint32_t& nSize);
+# if defined (ENABLE_RDM_SUBDEVICES)
+	void HandleGetRdmSubdevTxt(uint32_t& nSize);
+# endif
 #endif
 
 #if defined (OUTPUT_DMX_SEND)
 	void HandleGetParamsTxt(uint32_t& nSize);
 #endif
 
-#if defined (OUTPUT_DMX_PIXEL) || (OUTPUT_DMX_TLC59711)
+#if defined (OUTPUT_DMX_PIXEL) || defined (OUTPUT_DMX_TLC59711)
 	void HandleGetDevicesTxt(uint32_t& nSize);
 #endif
 
@@ -307,13 +320,6 @@ private:
 	void HandleGetRgbPanelTxt(uint32_t& nSize);
 #endif
 
-#if !defined(DISABLE_BIN)
-	void HandleStoreSet() {
-		m_tHandleMode = remoteconfig::HandleMode::BIN;
-		HandleSet(nullptr, 0);
-	}
-#endif
-
 	void HandleSetRconfig();
 	void HandleSetNetworkTxt();
 
@@ -338,6 +344,7 @@ private:
 	void HandleSetLdisplayTxt();
 	void HandleSetTCNetTxt();
 	void HandleSetGpsTxt();
+	void HandleSetLtcEtcTxt();
 #endif
 
 #if defined (NODE_OSC_CLIENT)
@@ -348,15 +355,32 @@ private:
 	void HandleSetShowTxt();
 #endif
 
-#if defined (NODE_DDP_DISPLAY)
-	void HandleSetDdpDisplayTxt();
+#if defined(NODE_NODE)
+	void HandleSetNodeTxt(const node::Personality personality);
+	void HandleSetNodeNodeTxt() {
+		HandleSetNodeTxt(node::Personality::NODE);
+	}
+	void HandleSetNodeArtNetTxt() {
+		HandleSetNodeTxt(node::Personality::ARTNET);
+	}
+	void HandleSetNodeE131Txt() {
+		HandleSetNodeTxt(node::Personality::E131);
+	}
+#endif
+
+#if defined (RDM_RESPONDER)
+	void HandleSetRdmDeviceTxt();
+	void HandleSetRdmSensorsTxt();
+# if defined (ENABLE_RDM_SUBDEVICES)
+	void HandleSetRdmSubdevTxt();
+# endif
 #endif
 
 #if defined (OUTPUT_DMX_SEND)
 	void HandleSetParamsTxt();
 #endif
 
-#if defined (OUTPUT_DMX_PIXEL) || (OUTPUT_DMX_TLC59711)
+#if defined (OUTPUT_DMX_PIXEL) || defined (OUTPUT_DMX_TLC59711)
 	void HandleSetDevicesTxt();
 #endif
 
@@ -403,11 +427,11 @@ private:
 
 	void HandleDisplaySet();
 	void HandleDisplayGet();
-#if !defined(DISABLE_BIN)
-	void HandleStoreGet();
-#endif
 	void HandleTftpSet();
 	void HandleTftpGet();
+
+	void PlatformHandleTftpSet();
+	void PlatformHandleTftpGet();
 
 private:
 	remoteconfig::Node m_tNode;
@@ -440,7 +464,7 @@ private:
 		uint8_t nOutput;
 		uint8_t nActiveOutputs;
 		char aDisplayName[remoteconfig::DISPLAY_NAME_LENGTH];
-	}__attribute__((packed));
+	};
 
 	static ListBin s_RemoteConfigListBin;
 
@@ -454,23 +478,12 @@ private:
 
 	int32_t m_nHandle { -1 };
 	uint32_t m_nIPAddressFrom { 0 };
-	uint16_t m_nBytesReceived { 0 };
+	uint32_t m_nBytesReceived { 0 };
 
-	remoteconfig::HandleMode m_tHandleMode { remoteconfig::HandleMode::TXT };
-
-#if !defined(DISABLE_TFTP)
+#if defined(ENABLE_TFTP_SERVER)
 	TFTPFileServer *m_pTFTPFileServer { nullptr };
-	uint8_t *m_pTFTPBuffer { nullptr };
+#endif
 	bool m_bEnableTFTP { false };
-#endif
-
-#if !defined(DISABLE_BIN)
-	static uint8_t s_StoreBuffer[remoteconfig::udp::BUFFER_SIZE];
-#endif
-
-#if defined(ENABLE_HTTPD)
-	HttpDaemon m_HttpDaemon;
-#endif
 
 	static char *s_pUdpBuffer;
 

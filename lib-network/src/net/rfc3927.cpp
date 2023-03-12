@@ -1,8 +1,8 @@
 /**
- * @file rfc3927.c
+ * @file rfc3927.cpp
  *
  */
-/* Copyright (C) 2020-2021 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2020-2023 by Arjan van Vught mailto:info@orangepi-dmx.nl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,73 +23,62 @@
  * THE SOFTWARE.
  */
 
-#include <stdint.h>
-#include <string.h>
-#include <assert.h>
+#include <cstdint>
+#include <cstring>
 
 #include "net.h"
+#include "net_private.h"
 #include "net_packets.h"
 #include "net_debug.h"
 
-#include "c/millis.h"
+#include "hardware.h"
 
-extern uint32_t arp_cache_lookup(uint32_t, uint8_t *);
+#include "../../config/net_config.h"
 
 /*
- * https://tools.ietf.org/html/rfc3927
+ * https://www.rfc-editor.org/rfc/rfc3927.html
  * Dynamic Configuration of IPv4 Link-Local Addresses
  */
 
-
-typedef union pcast32 {
-	uint32_t u32;
-	uint8_t u8[4];
-} _pcast32;
-
-static const _pcast32 s_ip_begin __attribute__ ((aligned (4))) = { .u8 = { 169, 254,   0,   1 } };
-static const _pcast32 s_ip_end   __attribute__ ((aligned (4))) = { .u8 = { 169, 254, 254, 255 } };
-
-static uint8_t s_mac_address[6] __attribute__ ((aligned (4)));
+static const uint32_t s_ip_begin = 0x0100FEA9;	// 169.254.0.1
+static const uint32_t s_ip_end = 0xFFFEFEA9;	// 169.254.254.255
 static uint8_t s_mac_address_arp_reply[6] __attribute__ ((aligned (4)));
 
-void __attribute__((cold)) rfc3927_init(const uint8_t *mac_address) {
-	memcpy(s_mac_address, mac_address, ETH_ADDR_LEN);
-}
+extern struct ip_info g_ip_info;
+extern uint8_t g_mac_address[ETH_ADDR_LEN];
 
-bool rfc3927(struct ip_info *p_ip_info) {
-	const uint32_t mask = (uint32_t) s_mac_address[3] + ((uint32_t) s_mac_address[4] << 8);
+bool rfc3927() {
+	const auto mask = g_mac_address[3] + (g_mac_address[4] << 8);
+	auto ip = s_ip_begin | static_cast<uint32_t>(mask << 16);
 
-	uint32_t ip = s_ip_begin.u32 | (mask << 16);
+	DEBUG_PRINTF("ip=" IPSTR, IP2STR(ip));
 
-	DEBUG_PRINTF("ip=%p", ip);
-
-	uint16_t count = 0;
-
-	const uint32_t millis_now = millis();
+	auto nCount = 0;
+	const auto nMillis = Hardware::Get()->Millis();
 
 	do  {
 		DEBUG_PRINTF(IPSTR, IP2STR(ip));
 
 		if (0 == arp_cache_lookup(ip, s_mac_address_arp_reply)) {
-			p_ip_info->ip.addr = ip;
-			p_ip_info->gw.addr = ip;
-			p_ip_info->netmask.addr = 0x0000FFFF;
+			g_ip_info.ip.addr = ip;
+			g_ip_info.gw.addr = ip;
+			g_ip_info.netmask.addr = 0x0000FFFF;
 
 			return true;
 		}
 
 		ip = __builtin_bswap32(__builtin_bswap32(ip) + 1);
 
-		if (ip == s_ip_end.u32) {
-			ip = s_ip_begin.u32;
+		if (ip == s_ip_end) {
+			ip = s_ip_begin;
 		}
 
-		count++;
-	} while ((count < 0xFF) && ((millis() - millis_now) < 500));
+		nCount++;
+	} while ((nCount < 0xFF) && ((Hardware::Get()->Millis() - nMillis) < 500));
 
-	p_ip_info->ip.addr = 0;
-	p_ip_info->gw.addr = 0;
-	p_ip_info->netmask.addr = 0;
+	g_ip_info.ip.addr = 0;
+	g_ip_info.gw.addr = 0;
+	g_ip_info.netmask.addr = 0;
 
 	return false;
 }

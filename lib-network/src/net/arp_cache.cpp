@@ -1,8 +1,8 @@
 /**
- * @file arp_cache.c
+ * @file arp_cache.cpp
  *
  */
-/* Copyright (C) 2018-2022 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2018-2023 by Arjan van Vught mailto:info@orangepi-dmx.nl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,20 +23,16 @@
  * THE SOFTWARE.
  */
 
-#include <stdint.h>
-#include <string.h>
-#include <assert.h>
+#include <cstdint>
+#include <cstring>
+#include <cassert>
 
+#include "net_private.h"
 #include "net_packets.h"
 #include "net_platform.h"
 #include "net_debug.h"
 
-#ifndef ALIGNED
-# define ALIGNED __attribute__ ((aligned (4)))
-#endif
-
-extern void arp_send_request(uint32_t ip);
-extern void net_handle(void);
+#include "../../config/net_config.h"
 
 #define MAX_RECORDS	32
 
@@ -58,12 +54,10 @@ static uint16_t s_entry_current SECTION_NETWORK ALIGNED;
   static volatile uint32_t s_ticker ;
 #endif
 
-void __attribute__((cold)) arp_cache_init(void) {
-	uint16_t i;
-
+void __attribute__((cold)) arp_cache_init() {
 	s_entry_current = 0;
 
-	for (i = 0; i < MAX_RECORDS; i++) {
+	for (auto i = 0; i < MAX_RECORDS; i++) {
 		s_arp_records[i].ip = 0;
 		memset(s_arp_records[i].mac_address, 0, ETH_ADDR_LEN);
 	}
@@ -73,39 +67,36 @@ void __attribute__((cold)) arp_cache_init(void) {
 #endif
 }
 
-void arp_cache_update(uint8_t *mac_address, uint32_t ip) {
-	DEBUG2_ENTRY
-	uint16_t i;
+void arp_cache_update(const uint8_t *pMacAddress, uint32_t nIp) {
+	DEBUG_ENTRY
 
 	if (s_entry_current == MAX_RECORDS) {
-		assert(0);
+		console_error("arp_cache_update\n");
 		return;
 	}
 
-	for (i = 0; i < s_entry_current; i++) {
-		if (s_arp_records[i].ip == ip) {
+	for (auto i = 0; i < s_entry_current; i++) {
+		if (s_arp_records[i].ip == nIp) {
 			return;
 		}
 	}
 
-	memcpy(s_arp_records[s_entry_current].mac_address, mac_address, ETH_ADDR_LEN);
-	s_arp_records[s_entry_current].ip = ip;
+	memcpy(s_arp_records[s_entry_current].mac_address, pMacAddress, ETH_ADDR_LEN);
+	s_arp_records[s_entry_current].ip = nIp;
 
 	s_entry_current++;
 
-	DEBUG2_EXIT
+	DEBUG_EXIT
 }
 
-uint32_t arp_cache_lookup(uint32_t ip, uint8_t *mac_address) {
-	DEBUG2_ENTRY
-	DEBUG_PRINTF(IPSTR " " MACSTR, IP2STR(ip), MAC2STR(mac_address));
+uint32_t arp_cache_lookup(uint32_t nIp, uint8_t *pMacAddress) {
+	DEBUG_ENTRY
+	DEBUG_PRINTF(IPSTR " " MACSTR, IP2STR(nIp), MAC2STR(pMacAddress));
 
-	uint16_t i;
-
-	for (i = 0; i < MAX_RECORDS; i++) {
-		if (s_arp_records[i].ip == ip) {
-			memcpy(mac_address, s_arp_records[i].mac_address, ETH_ADDR_LEN);
-			return ip;
+	for (auto i = 0; i < MAX_RECORDS; i++) {
+		if (s_arp_records[i].ip == nIp) {
+			memcpy(pMacAddress, s_arp_records[i].mac_address, ETH_ADDR_LEN);
+			return nIp;
 		}
 
 		if (s_arp_records[i].ip == 0) {
@@ -113,12 +104,12 @@ uint32_t arp_cache_lookup(uint32_t ip, uint8_t *mac_address) {
 		}
 	}
 
-	uint16_t current_entry = s_entry_current;
+	const auto current_entry = s_entry_current;
 	int32_t timeout;
-	int8_t retries = 3;
+	auto retries = 3;
 
 	while (retries--) {
-		arp_send_request(ip);
+		arp_send_request(nIp);
 
 		timeout = 0x1FFFF;
 
@@ -127,25 +118,23 @@ uint32_t arp_cache_lookup(uint32_t ip, uint8_t *mac_address) {
 		}
 
 		if (current_entry != s_entry_current) {
-			memcpy(mac_address, s_arp_records[current_entry].mac_address, ETH_ADDR_LEN);
+			memcpy(pMacAddress, s_arp_records[current_entry].mac_address, ETH_ADDR_LEN);
 			DEBUG_PRINTF("timeout=%x", timeout);
-			return ip;
+			return nIp;
 		}
 
 		DEBUG_PRINTF("i=%d, timeout=%d, current_entry=%d, s_entry_current=%d", i, timeout, current_entry, s_entry_current);
 	}
 
-	DEBUG2_EXIT
+	DEBUG_EXIT
 	return 0;
 }
 
-void arp_cache_dump(void) {
+void arp_cache_dump() {
 #ifndef NDEBUG
-	uint16_t i;
-
 	printf("ARP Cache size=%d\n", s_entry_current);
 
-	for (i = 0; i < s_entry_current; i++) {
+	for (auto i = 0; i < s_entry_current; i++) {
 		printf("%02d " IPSTR " " MACSTR "\n", i, IP2STR(s_arp_records[i].ip),MAC2STR(s_arp_records[i].mac_address));
 	}
 #endif
