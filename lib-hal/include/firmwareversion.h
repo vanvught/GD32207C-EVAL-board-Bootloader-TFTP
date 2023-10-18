@@ -28,6 +28,11 @@
 
 #include <cstdio>
 
+#if !defined(STR_HELPER)
+# define STR_HELPER(x) #x
+# define STR(x) STR_HELPER(x)
+#endif
+
 namespace firmwareversion {
 namespace length {
 static constexpr auto SOFTWARE_VERSION = 3;
@@ -49,7 +54,7 @@ public:
 		puts(s_Print);
 
 		if (pTitle != nullptr) {
-			printf("\x1b[32m%s\x1b[37m\n", pTitle);
+			printf("\x1b[32m%s\x1b[0m\n", pTitle);
 		}
 	}
 

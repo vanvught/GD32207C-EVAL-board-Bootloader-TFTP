@@ -94,18 +94,14 @@ int main(void) {
     }
 
 	Hardware hw;
-	Network nw;
 	Display display(4);
+	ConfigStore configStore;
+	StoreNetwork storeNetwork;
+	Network nw(&storeNetwork);
 	FirmwareVersion fw(SOFTWARE_VERSION, __DATE__, __TIME__);
+	FlashCodeInstall flashCodeInstall;
 
 	fw.Print("Bootloader TFTP Server");
-
-	FlashCodeInstall flashCodeInstall;
-	ConfigStore configStore;
-
-	StoreNetwork storeNetwork;
-	nw.SetNetworkStore(&storeNetwork);
-	nw.Init(&storeNetwork);
 	nw.Print();
 
 	hw.SetMode(hardware::ledblink::Mode::OFF_ON);

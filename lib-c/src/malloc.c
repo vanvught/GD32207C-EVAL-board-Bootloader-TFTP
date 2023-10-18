@@ -8,7 +8,7 @@
  * Copyright (C) 2014-2016  R. Stange <rsta2@o2online.de>
  * https://github.com/rsta2/circle/blob/master/lib/alloc.cpp
  */
-/* Copyright (C) 2021-2022 by Arjan van Vught mailto:info@gd32-dmx.nl
+/* Copyright (C) 2021-2023 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -65,9 +65,7 @@ struct block_bucket {
 	struct block_header *free_list;
 };
 
-#include "../lib-flashcodeinstall/include/flashcodeinstall.h"
-
-static struct block_bucket s_block_bucket[] __attribute__((aligned(4))) = {{0x20, 0}, {0x40, 0}, {0x60, 0}, {0x80,0}, {0x100,0}, {0x140,0}, {0x180,0}, {0x200,0}, {0x300,0}, {0x400,0}, {FIRMWARE_MAX_SIZE,0}, {0,0}};
+static struct block_bucket s_block_bucket[] __attribute__((aligned(4))) = {{0x10, 0}, {0x20, 0}, {0x40, 0}, {0x60, 0}, {0x80,0}, {0x100,0}, {0x140,0}, {0x180,0}, {0x200,0}, {0x300,0}, {0x400,0}, {0x500,0}, {0,0}};
 
 size_t get_allocated(void *p) {
 	if (p == 0) {
@@ -205,7 +203,7 @@ void *calloc(size_t n, size_t size) {
 		*dst8++ = (uint8_t) 0;
 	}
 
-	assert(((void *)dst8 - (void *)p) == (n * size));
+	assert((size_t)((void *)dst8 - (void *)p) == (n * size));
 
 	return (void *) p;
 }
@@ -252,7 +250,7 @@ void *realloc(void *ptr, size_t size) {
 			*dst8++ = *src8++;
 		}
 
-		assert(((void *)dst8 - (void *)newblk) == size);
+		assert((size_t)((void *)dst8 - (void *)newblk) == size);
 
 		free(ptr);
 	}

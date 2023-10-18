@@ -41,8 +41,10 @@ Zerobss:
   ldr r3, = _ebss
   cmp r2, r3
   bcc FillZerobss
-  bl  SystemInit
+ #if defined (DEBUG_STACK)
   bl stack_debug_init
+ #endif
+  bl  SystemInit
   bl main
   bx lr
 .size Reset_Handler, .-Reset_Handler
