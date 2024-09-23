@@ -2,7 +2,7 @@
  * @file networkparams.h
  *
  */
-/* Copyright (C) 2017-2021 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2017-2023 by Arjan van Vught mailto:info@orangepi-dmx.nl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,12 +29,12 @@
 #include <cstdint>
 
 #include "network.h"
+#include "configstore.h"
 
 namespace networkparams {
 namespace defaults {
 static constexpr auto IS_DHCP_USED = true;
 static constexpr auto DHCP_RETRY_TIME = 0;
-static constexpr auto NTP_UTC_OFFSET = 0.0f;
 }  // namespace defaults
 
 struct Params {
@@ -55,7 +55,7 @@ struct Params {
 }__attribute__((packed));
 
 #if !defined (ESP8266)
- static_assert(sizeof(struct Params) <= 96, "struct Params is too large");
+ static_assert(sizeof(struct Params) <= network::STORE, "struct Params is too large");
 #endif
 
 struct Mask {
@@ -80,23 +80,26 @@ struct Mask {
 
 class NetworkParamsStore {
 public:
-	virtual ~NetworkParamsStore() {}
+	static void Update(const struct networkparams::Params *pParams) {
+		ConfigStore::Get()->Update(configstore::Store::NETWORK, pParams, sizeof(struct networkparams::Params));
+	}
 
-	virtual void Update(const struct networkparams::Params *pNetworkParams)=0;
-	virtual void Copy(struct networkparams::Params *pNetworkParams)=0;
+	static void Copy(struct networkparams::Params *pParams) {
+		ConfigStore::Get()->Copy(configstore::Store::NETWORK, pParams, sizeof(struct networkparams::Params));
+	}
 };
 
 class NetworkParams {
 public:
-	NetworkParams(NetworkParamsStore *pNetworkParamsStore = nullptr);
+	NetworkParams();
 
-	bool Load();
+	void Load();
 	void Load(const char *pBuffer, uint32_t nLength);
 
-	void Builder(const struct networkparams::Params *ptNetworkParams, char *pBuffer, uint32_t nLength, uint32_t& nSize);
-	void Save(char *pBuffer, uint32_t nLength, uint32_t& nSize);
-
-	void Dump();
+	void Builder(const networkparams::Params *pParams, char *pBuffer, uint32_t nLength, uint32_t& nSize);
+	void Save(char *pBuffer, uint32_t nLength, uint32_t& nSize) {
+		Builder(nullptr, pBuffer, nLength, nSize);
+	}
 
 	bool isDhcpUsed() const {
 		return m_Params.bIsDhcpUsed;
@@ -154,13 +157,13 @@ public:
     static void staticCallbackFunction(void *p, const char *s);
 
 private:
+	void Dump();
     void callbackFunction(const char *s);
     bool isMaskSet(uint32_t nMask) const {
     	return (m_Params.nSetList & nMask) == nMask;
     }
 
 private:
-	NetworkParamsStore *m_pNetworkParamsStore;
 	networkparams::Params m_Params;
 };
 

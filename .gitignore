@@ -51,3 +51,6 @@
 *.bin
 *.list
 *.map
+
+FreeRTOS.mk
+Artnet.mk

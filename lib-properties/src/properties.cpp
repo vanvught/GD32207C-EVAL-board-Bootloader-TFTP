@@ -2,7 +2,7 @@
  * @file properties.cpp
  *
  */
-/* Copyright (C) 2021 by Arjan van Vught mailto:info@orangepi-dmx.nl
+/* Copyright (C) 2021-2024 by Arjan van Vught mailto:info@orangepi-dmx.nl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,18 +25,23 @@
 
 #include <cstdint>
 #include <cassert>
+#include <ctype.h>
 
 #include "debug.h"
 
 namespace properties {
-int convert_json_file(char *pBuffer, uint16_t nLength, const bool bSkipFileName = false) {
+int convert_json_file(char *pBuffer, uint32_t nLength, const bool bSkipFileName) {
+	DEBUG_ENTRY
 	assert(pBuffer != nullptr);
 	assert(nLength > 1);
 
-	auto *pSrc = pBuffer;
+	debug_dump(pBuffer, static_cast<uint16_t>(nLength));
+
+	const auto *pSrc = pBuffer;
 	auto *pDst = pBuffer;
 
 	if (pSrc[0] != '{') {
+		DEBUG_EXIT
 		return -1;
 	}
 
@@ -98,7 +103,11 @@ int convert_json_file(char *pBuffer, uint16_t nLength, const bool bSkipFileName 
 			}
 		}
 
-		while ((*pSrc < '0') && (i++ < nLength)) {
+		while ((*pSrc == ' ') && (i++ < nLength)) {
+			pSrc++;
+		}
+
+		if (*pSrc == '"') {
 			pSrc++;
 		}
 
@@ -115,18 +124,19 @@ int convert_json_file(char *pBuffer, uint16_t nLength, const bool bSkipFileName 
 		}
 
 		if ((*pSrc == '"') || (*pSrc == ',') || (*pSrc == '}')) {
-			if (!bSkipFileName) {
-				*pDst++ = '\n';
-			} else {
-				*pDst++ = '\0';
-			}
+			*pDst++ = '\n';
 			nNewLength++;
 		}
 
 		pSrc++;
 	}
 
+	if (bSkipFileName) {
+		nNewLength--;
+	}
+
+	debug_dump(pBuffer, static_cast<uint16_t>(nNewLength));
+	DEBUG_EXIT
 	return static_cast<int>(nNewLength);
 }
 }  // namespace properties
-

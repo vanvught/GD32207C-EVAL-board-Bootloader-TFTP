@@ -1,4 +1,10 @@
-DEFINES=DISABLE_FS NDEBUG
+DEFINES =DISABLE_FS 
+DEFINES+=NDEBUG
+
 EXTRA_INCLUDES=../lib-network/include
+
+ifneq (, $(shell test -d '../lib-network/src/noemac' && echo -n yes))
+	DEFINES+=NO_EMAC
+endif
 
 include ../firmware-template-gd32/lib/Rules.mk

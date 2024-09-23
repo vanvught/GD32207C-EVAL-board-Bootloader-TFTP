@@ -1,1 +1,0 @@
-../../scripts/do-tftp.sh
