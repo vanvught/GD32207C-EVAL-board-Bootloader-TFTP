@@ -1,10 +1,21 @@
-EXTRA_INCLUDES =../lib-flash/include ../lib-flashcode/include
-EXTRA_INCLUDES+=../lib-flashcodeinstall/include ../lib-configstore/include
-EXTRA_INCLUDES+=../lib-device/include
-EXTRA_INCLUDES+=../lib-displayudf/include ../lib-display/include
-EXTRA_INCLUDES+=../lib-properties/include ../lib-hal/include ../lib-network/include
-EXTRA_INCLUDES+=../lib-dmxmonitor/include ../lib-dmxreceiver/include ../lib-dmxsend/include ../lib-dmxserial/include ../lib-dmx/include
-EXTRA_INCLUDES+=../lib-rdm/include ../lib-rdmresponder/include
-EXTRA_INCLUDES+=../lib-artnet/include ../lib-artnet4/include ../lib-rdmdiscovery/include
-EXTRA_INCLUDES+=../lib-e131/include ../lib-ws28xxdmx/include ../lib-ws28xx/include ../lib-tlc59711dmx/include ../lib-tlc59711/include ../lib-ltc/include ../lib-tcnet/include ../lib-midi/include ../lib-oscserver/include ../lib-oscclient/include ../lib-widget/include ../lib-l6470dmx/include ../lib-l6470/include ../lib-rdmsensor/include ../lib-rdmsubdevice/include ../lib-showfile/include ../lib-gps/include ../lib-rgbpanel/include ../lib-ddp/include ../lib-lightset/include
-EXTRA_INCLUDES+=../lib-node/include
+$(info $$MAKE_FLAGS [${MAKE_FLAGS}])
+
+EXTRA_INCLUDES+=../lib-network/include ../lib-display/include 
+EXTRA_SRCDIR+=src/json
+
+ifneq ($(MAKE_FLAGS),)
+	ifneq (,$(findstring ENABLE_HTTPD,$(MAKE_FLAGS)))
+		EXTRA_SRCDIR+=src/httpd src/http
+	endif
+	ifneq (,$(findstring ENABLE_TFTP_SERVER,$(MAKE_FLAGS)))
+		EXTRA_INCLUDES+=../lib-flashcode/include ../lib-flashcodeinstall/include
+	endif	
+else
+	EXTRA_SRCDIR+=src/httpd src/httpd/http
+	EXTRA_INCLUDES+=../lib-flashcode/include ../lib-flashcodeinstall/include
+	DEFINES+=ENABLE_CONTENT
+	DEFINES+=ARTNET_VERSION=4
+	DEFINES+=RDM_CONTROLLER ENABLE_NET_PHYSTATUS CONFIG_USB_HOST_MSC ENABLE_PHY_SWITCH
+	DEFINES+=NODE_SHOWFILE CONFIG_SHOWFILE_FORMAT_OLA CONFIG_SHOWFILE_PROTOCOL_E131
+	DEFINES+=DEBUG_HTTPD
+endif

@@ -2,7 +2,7 @@
  * @file flashcodeinstall.cpp
  *
  */
-/* Copyright (C) 2021-2022 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2021-2025 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,76 +24,79 @@
  */
 
 #if defined(__clang__)
-# pragma GCC diagnostic ignored "-Wunused-private-field"
+#pragma GCC diagnostic ignored "-Wunused-private-field"
 #endif
 
 #include <cassert>
 
 #include "flashcodeinstall.h"
-
 #include "display.h"
+#include "firmware/debug/debug_debug.h"
 
-#include "debug.h"
+FlashCodeInstall::FlashCodeInstall()
+{
+    DEBUG_ENTRY();
 
-FlashCodeInstall *FlashCodeInstall::s_pThis = nullptr;
+    assert(s_this == 0);
+    s_this = this;
 
-FlashCodeInstall::FlashCodeInstall() {
-	DEBUG_ENTRY
+    Display::Get()->Cls();
 
-	assert(s_pThis == 0);
-	s_pThis = this;
+    flash_size_ = FlashCode::GetSize();
 
-	Display::Get()->Cls();
+    printf("FlashCodeInstall: %s, sector size %d, %d bytes [%d kB]\n", FlashCode::GetName(), FlashCode::GetSectorSize(), flash_size_, flash_size_ / 1024U);
+    Display::Get()->Write(1, FlashCode::GetName());
 
-	m_nFlashSize = FlashCode::GetSize();
-
-	printf("%s, sector size %d, %d bytes [%d kB]\n", FlashCode::GetName(), FlashCode::GetSectorSize(), m_nFlashSize, m_nFlashSize / 1024U);
-	Display::Get()->Write(1, FlashCode::GetName());
-
-	DEBUG_EXIT
+    DEBUG_EXIT();
 }
 
-FlashCodeInstall::~FlashCodeInstall() {
-	DEBUG_ENTRY
-	DEBUG_EXIT
+FlashCodeInstall::~FlashCodeInstall()
+{
+    DEBUG_ENTRY();
+    DEBUG_EXIT();
 }
 
-void FlashCodeInstall::Process(__attribute__((unused)) const char *pFileName, __attribute__((unused)) uint32_t nOffset) {
-	DEBUG_ENTRY
-	assert(0);
-	DEBUG_EXIT
+void FlashCodeInstall::Process([[maybe_unused]] const char* file_name, [[maybe_unused]] uint32_t offset)
+{
+    DEBUG_ENTRY();
+    assert(0);
+    DEBUG_EXIT();
 }
 
-bool FlashCodeInstall::Open(__attribute__((unused)) const char *pFileName) {
-	DEBUG_ENTRY
-	assert(0);
-	DEBUG_EXIT
-	return false;
+bool FlashCodeInstall::Open([[maybe_unused]] const char* file_name)
+{
+    DEBUG_ENTRY();
+    assert(0);
+    DEBUG_EXIT();
+    return false;
 }
 
-void FlashCodeInstall::Close() {
-	DEBUG_ENTRY
-	assert(0);
-	DEBUG_EXIT
+void FlashCodeInstall::Close()
+{
+    DEBUG_ENTRY();
+    assert(0);
+    DEBUG_EXIT();
 }
 
-bool FlashCodeInstall::BuffersCompare(__attribute__((unused)) uint32_t nSize) {
-	DEBUG_ENTRY
-	assert(0);
-	DEBUG_EXIT
-	return false;
+bool FlashCodeInstall::BuffersCompare([[maybe_unused]] uint32_t size)
+{
+    DEBUG_ENTRY();
+    assert(0);
+    DEBUG_EXIT();
+    return false;
 }
 
-bool FlashCodeInstall::Diff(__attribute__((unused)) uint32_t nOffset) {
-	DEBUG_ENTRY
-	assert(0);
-	DEBUG_EXIT
-	return false;
+bool FlashCodeInstall::Diff([[maybe_unused]] uint32_t offset)
+{
+    DEBUG_ENTRY();
+    assert(0);
+    DEBUG_EXIT();
+    return false;
 }
 
-void FlashCodeInstall::Write(__attribute__((unused)) uint32_t nOffset) {
-	DEBUG_ENTRY
-	assert(0);
-	DEBUG_EXIT
+void FlashCodeInstall::Write([[maybe_unused]] uint32_t offset)
+{
+    DEBUG_ENTRY();
+    assert(0);
+    DEBUG_EXIT();
 }
-

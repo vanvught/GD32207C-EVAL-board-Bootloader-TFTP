@@ -147,8 +147,8 @@
  */
  
 #ifdef __cplusplus
-namespace hal {
-namespace panelled {
+
+namespace hal::panelled {
 static constexpr uint32_t ACTIVITY = 0;
 static constexpr uint32_t ARTNET = 0;
 static constexpr uint32_t DDP = 0;
@@ -163,8 +163,8 @@ static constexpr uint32_t TCNET = 0;
 // DMX
 static constexpr uint32_t PORT_A_RX = 0;
 static constexpr uint32_t PORT_A_TX = 0;
-}  // namespace panelled
-}  // namespace hal
+} // namespace hal::panelled
+
 #endif
 
 /**
@@ -225,7 +225,21 @@ static constexpr uint32_t PORT_A_TX = 0;
  * LCD
  */
 
-#define DISPLAYTIMEOUT_GPIO		GD32_PORT_TO_GPIO(GD32_GPIO_PORTC, 13)	// KEY2
+#define DISPLAYTIMEOUT_GPIO					GD32_PORT_TO_GPIO(GD32_GPIO_PORTC, 13)	// KEY2
+
+#define DISPLAYTIMEOUT_GPIO_CLK				RCU_GPIOC
+#define DISPLAYTIMEOUT_GPIO_PORT			GPIOC
+#define DISPLAYTIMEOUT_GPIO_PIN 			GPIO_PIN_13
+#define DISPLAYTIMEOUT_EXTI_LINE			EXTI_13
+#define DISPLAYTIMEOUT_EXTI_IRQn			EXTI10_15_IRQn
+#define DISPLAYTIMEOUT_IRQ_HANDLE			EXTI10_15_IRQHandler
+
+#define DISPLAYTIMEOUT_EXTI_CLK				RCU_AF
+#define DISPLAYTIMEOUT_EXTI_PORT_SOURCE		GPIO_PORT_SOURCE_GPIOB
+#define DISPLAYTIMEOUT_EXTI_PIN_SOURCE		GPIO_PIN_SOURCE_13
+#define DISPLAYTIMEOUT_EXTI_SOURCE_CONFIG	gpio_exti_source_select
+#define DISPLAYTIMEOUT_GPIO_CONFIG			gpio_init(DISPLAYTIMEOUT_GPIO_PORT, GPIO_MODE_IPU, GPIO_OSPEED_50MHZ, DISPLAYTIMEOUT_GPIO_PIN);
+
 
 /**
  * Pixel DMX

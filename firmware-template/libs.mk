@@ -1,5 +1,5 @@
 $(info $$DEFINES [${DEFINES}])
 
-LIBS+=network properties hal
+LIBS+=network hal
 
 $(info $$LIBS [${LIBS}])
