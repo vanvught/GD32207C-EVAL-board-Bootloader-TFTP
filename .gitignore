@@ -54,3 +54,4 @@
 
 FreeRTOS.mk
 Artnet.mk
+/common/scripts/gd32/venv
