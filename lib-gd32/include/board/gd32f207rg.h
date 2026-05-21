@@ -202,29 +202,25 @@
 #define PWM_TIMERx_IRQn 		TIMER2_IRQn
 #define PWM_TIMERx_IRQHandler	TIMER2_IRQHandler
 
-/**
- * Panel LEDs
- */
-
+// Panel LEDs
 #ifdef __cplusplus
-namespace hal {
-namespace panelled {
-static constexpr uint32_t ACTIVITY = 0;
-static constexpr uint32_t ARTNET = 0;
-static constexpr uint32_t DDP = 0;
-static constexpr uint32_t SACN = 0;
-static constexpr uint32_t LTC_IN = 0;
-static constexpr uint32_t LTC_OUT = 0;
-static constexpr uint32_t MIDI_IN = 0;
-static constexpr uint32_t MIDI_OUT = 0;
-static constexpr uint32_t OSC_IN = 0;
-static constexpr uint32_t OSC_OUT = 0;
-static constexpr uint32_t TCNET = 0;
+#include <cstdint>
+namespace hal::panelled {
+inline constexpr uint32_t kActivity = 0;
+inline constexpr uint32_t kArtnet = 0;
+inline constexpr uint32_t kDdp = 0;
+inline constexpr uint32_t kSacn = 0;
+inline constexpr uint32_t kLtcIn = 0;
+inline constexpr uint32_t kLtcOut = 0;
+inline constexpr uint32_t kMidiIn = 0;
+inline constexpr uint32_t kMidiOut = 0;
+inline constexpr uint32_t kOscIn = 0;
+inline constexpr uint32_t kOscOut = 0;
+inline constexpr uint32_t kTcnet = 0;
 // DMX
-static constexpr uint32_t PORT_A_RX = 0;
-static constexpr uint32_t PORT_A_TX = 0;
-}  // namespace panelled
-}  // namespace hal
+static constexpr uint32_t kPortARx = 0;
+static constexpr uint32_t kPortATx = 0;
+} // namespace hal::panelled
 #endif
 
 /**
@@ -277,21 +273,21 @@ static constexpr uint32_t PORT_A_TX = 0;
  * LCD
  */
 
-#define DISPLAYTIMEOUT_GPIO					GD32_PORT_TO_GPIO(GD32_GPIO_PORTB, 14)	// KEY2
+#define DISPLAYTIMEOUT_GPIO					      GD32_PORT_TO_GPIO(GD32_GPIO_PORTB, 14)	// KEY2
 
 #define DISPLAYTIMEOUT_CONFIG_IRQ
-#define DISPLAYTIMEOUT_GPIO_CLK				RCU_GPIOB
-#define DISPLAYTIMEOUT_GPIO_PORT			GPIOB
-#define DISPLAYTIMEOUT_GPIO_PIN 			GPIO_PIN_14
-#define DISPLAYTIMEOUT_EXTI_LINE			EXTI_14
-#define DISPLAYTIMEOUT_EXTI_IRQn			EXTI10_15_IRQn
-#define DISPLAYTIMEOUT_IRQ_HANDLE			EXTI10_15_IRQHandler
+#define DISPLAYTIMEOUT_GPIO_CLK           RCU_GPIOB
+#define DISPLAYTIMEOUT_GPIO_PORT          GPIOB
+#define DISPLAYTIMEOUT_GPIO_PIN           GPIO_PIN_14
+#define DISPLAYTIMEOUT_EXTI_LINE          EXTI_14
+#define DISPLAYTIMEOUT_EXTI_IRQn          EXTI10_15_IRQn
+#define DISPLAYTIMEOUT_IRQ_HANDLE			    EXTI10_15_IRQHandler
 
-#define DISPLAYTIMEOUT_EXTI_CLK				RCU_AF
-#define DISPLAYTIMEOUT_EXTI_PORT_SOURCE		GPIO_PORT_SOURCE_GPIOB
-#define DISPLAYTIMEOUT_EXTI_PIN_SOURCE		GPIO_PIN_SOURCE_14
-#define DISPLAYTIMEOUT_EXTI_SOURCE_CONFIG	gpio_exti_source_select
-#define DISPLAYTIMEOUT_GPIO_CONFIG			gpio_init(DISPLAYTIMEOUT_GPIO_PORT, GPIO_MODE_IPU, GPIO_OSPEED_50MHZ, DISPLAYTIMEOUT_GPIO_PIN);
+#define DISPLAYTIMEOUT_EXTI_CLK           RCU_AF
+#define DISPLAYTIMEOUT_EXTI_PORT_SOURCE   GPIO_PORT_SOURCE_GPIOB
+#define DISPLAYTIMEOUT_EXTI_PIN_SOURCE    GPIO_PIN_SOURCE_14
+#define DISPLAYTIMEOUT_EXTI_SOURCE_CONFIG gpio_exti_source_select
+#define DISPLAYTIMEOUT_GPIO_CONFIG        gpio_init(DISPLAYTIMEOUT_GPIO_PORT, GPIO_MODE_IPU, GPIO_OSPEED_50MHZ, DISPLAYTIMEOUT_GPIO_PIN);
 
 
 /**

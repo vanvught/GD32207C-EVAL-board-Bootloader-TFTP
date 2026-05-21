@@ -1,8 +1,8 @@
 /**
- * @file hal_millis.h
+ * @file uptime.cpp
  *
  */
-/* Copyright (C) 2025 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2026 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,32 +22,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+ 
+ #include <cstdint>
 
-#ifndef GD32_HAL_MILLIS_H_
-#define GD32_HAL_MILLIS_H_
+ #include "gd32.h"
 
-#include <cstdint>
+ extern struct HwTimersSeconds gv_seconds;
 
-#if defined(CONFIG_HAL_USE_SYSTICK)
-extern volatile uint32_t gv_nSysTickMillis;
-#elif defined(USE_FREE_RTOS)
-#include "FreeRTOS.h"
-#include "task.h"
-#endif
-
-namespace hal
-{
-inline uint32_t Millis()
-{
-#if defined(CONFIG_HAL_USE_SYSTICK)
-    return gv_nSysTickMillis;
-#elif defined(USE_FREE_RTOS)
-    return xTaskGetTickCount();
-#else
-    uint32_t Timer6GetElapsedMilliseconds();
-    return Timer6GetElapsedMilliseconds();
-#endif
-}
-} // namespace hal
-
-#endif // GD32_HAL_MILLIS_H_
+ namespace timing {
+ uint32_t UpTime() {
+     return gv_seconds.uptime;
+ }
+ } // namespace timing

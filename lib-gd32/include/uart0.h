@@ -1,8 +1,8 @@
 /**
- * @file hal_watchdog.h
+ * @file uart0.h
  *
  */
-/* Copyright (C) 2025 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2026 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,17 +23,15 @@
  * THE SOFTWARE.
  */
 
-#ifndef HAL_WATCHDOG_H_
-#define HAL_WATCHDOG_H_
+#ifndef UART0_H_
+#define UART0_H_
 
-#if defined(__linux__) || defined(__APPLE__)
-#include "linux/hal_watchdog.h"
-#elif defined(H3)
-#include "h3/hal_watchdog.h"
-#elif defined(GD32)
-#include "gd32/hal_watchdog.h"
-#else
-#include "rpi/hal_watchdog.h"
-#endif
+namespace uart0 {
+void Init();
+void PutChar(int c);
+void Puts(const char* s);
+int Printf(const char* fmt, ...);
+int GetChar();
+} // namespace uart0
 
-#endif  // HAL_WATCHDOG_H_
+#endif // UART0_H_

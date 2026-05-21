@@ -2,7 +2,7 @@
  * @file main.cpp
  *
  */
-/* Copyright (C) 2022-2024 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2022-2026 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@
 #include <cstdint>
 
 #include "hal.h"
-#include "gd32/hal_watchdog.h"
+#include "watchdog.h"
 #include "network.h"
 #include "display.h"
 #include "hal_statusled.h"
@@ -38,13 +38,11 @@
 #include "configstore.h"
 #include "gd32.h"
 
-namespace hal
-{
+namespace hal {
 void RebootHandler() {}
 } // namespace hal
 
-int main()
-{
+int main() {
     rcu_periph_clock_enable(KEY_BOOTLOADER_TFTP_RCU_GPIOx);
 #if defined(GD32F4XX) || defined(GD32H7XX)
     rcu_periph_clock_enable(RCU_PMU);
@@ -57,10 +55,8 @@ int main()
 #else
     rcu_periph_clock_enable(RCU_AF);
     rcu_periph_clock_enable(KEY_BOOTLOADER_TFTP_RCU_GPIOx);
-    if constexpr (KEY_BOOTLOADER_TFTP_GPIOx == GPIOA)
-    {
-        if constexpr ((KEY_BOOTLOADER_TFTP_GPIO_PINx == GPIO_PIN_13) || (KEY_BOOTLOADER_TFTP_GPIO_PINx == GPIO_PIN_14))
-        {
+    if constexpr (KEY_BOOTLOADER_TFTP_GPIOx == GPIOA) {
+        if constexpr ((KEY_BOOTLOADER_TFTP_GPIO_PINx == GPIO_PIN_13) || (KEY_BOOTLOADER_TFTP_GPIO_PINx == GPIO_PIN_14)) {
             gpio_pin_remap_config(GPIO_SWJ_DISABLE_REMAP, ENABLE);
         }
     }
@@ -70,8 +66,7 @@ int main()
     const auto kIsNotRemote = (bkp_data_read(BKP_DATA_1) != 0xA5A5);
     const auto kIsNotKey = (gpio_input_bit_get(KEY_BOOTLOADER_TFTP_GPIOx, KEY_BOOTLOADER_TFTP_GPIO_PINx));
 
-    if (kIsNotRemote && kIsNotKey)
-    {
+    if (kIsNotRemote && kIsNotKey) {
         // https://developer.arm.com/documentation/ka001423/1-0
         // 1. Disable interrupt response.
         __disable_irq();
@@ -115,12 +110,11 @@ int main()
 
     display.Printf(3, "Bootloader TFTP Srvr");
 
-    hal::statusled::SetMode(hal::statusled::Mode::FAST);
-    hal::WatchdogInit();
+    hal::statusled::SetMode(hal::statusled::Mode::kFast);
+    watchdog::Init();
 
-    while (1)
-    {
-        hal::WatchdogFeed();
+    while (1) {
+        watchdog::Feed();
         network::Run();
         hal::Run();
     }

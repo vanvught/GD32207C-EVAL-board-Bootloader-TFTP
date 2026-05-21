@@ -1,8 +1,8 @@
 /**
- * @file hal_rtc.h
+ * @file timing.h
  *
  */
-/* Copyright (C) 2025 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2026 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,26 +23,40 @@
  * THE SOFTWARE.
  */
 
-#ifndef HAL_RTC_H_
-#define HAL_RTC_H_
+#ifndef TIMING_H_
+#define TIMING_H_
 
-#if !defined(DISABLE_RTC)
-#include <cassert>
-#include "hwclock.h"
+#include <cstdint>
+
+#if defined(CONFIG_HAL_USE_SYSTICK)
+extern volatile uint32_t gv_nSysTickMillis;
+#elif defined(USE_FREE_RTOS)
+#include "FreeRTOS.h"
+#include "task.h"
+#else
+uint32_t Timer6GetElapsedMilliseconds();
 #endif
 
-namespace hal::rtc
-{
-inline bool Set([[maybe_unused]] const struct tm* rtc_time)
-{
-#if !defined(DISABLE_RTC)
-    assert(HwClock::Get() != nullptr);
-    HwClock::Get()->Set(rtc_time);
-    return true;
+uint32_t Gd32Micros();
+
+namespace timing {
+[[nodiscard]] inline uint32_t Micros() {
+    return Gd32Micros();
+}
+
+[[nodiscard]] inline uint32_t Millis() {
+#if defined(CONFIG_HAL_USE_SYSTICK)
+    return gv_nSysTickMillis;
+#elif defined(USE_FREE_RTOS)
+    return xTaskGetTickCount();
 #else
-    return false;
+    return Timer6GetElapsedMilliseconds();
 #endif
 }
-} // namespace hal::rtc
 
-#endif // _HAL_RTC_H_
+void DelayUs(uint32_t us, uint32_t offset = 0);
+
+[[nodiscard]] uint32_t UpTime();
+} // namespace timing
+
+#endif // TIMING_H_
