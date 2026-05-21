@@ -1,8 +1,8 @@
 /**
- * @file json_helpers.h
+ * @file utils_string.h
  *
  */
-/* Copyright (C) 2025 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2026 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,28 +23,22 @@
  * THE SOFTWARE.
  */
 
-#ifndef JSON_JSON_HELPERS_H_
-#define JSON_JSON_HELPERS_H_
+#ifndef COMMON_UTILS_UTILS_STRING_H_
+#define COMMON_UTILS_UTILS_STRING_H_
 
 #include <cstdint>
-#include <cassert>
 
-#include "json/json_jsondoc.h"
-
-namespace json::helpers
+namespace common
 {
-// Template wrapper for consistent JSON serialization pattern.
-template <typename Callback> 
-uint32_t Serialize(char* buffer, uint32_t length, Callback&& callback)
+constexpr uint32_t ConstStrLen(const char* s)
 {
-    assert(buffer != nullptr);
-    assert(length != 0);
-
-    JsonDoc doc(buffer, length);
-    callback(doc);
-    doc.End();
-    return doc.Size();
+    uint32_t len = 0;
+    while (s[len] != '\0')
+    {
+        ++len;
+    }
+    return len;
 }
-} // namespace json::helpers
+} // namespace common
 
-#endif  // JSON_JSON_HELPERS_H_
+#endif // COMMON_UTILS_UTILS_STRING_H_
