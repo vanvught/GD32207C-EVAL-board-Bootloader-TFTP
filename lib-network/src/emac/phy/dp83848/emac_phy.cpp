@@ -1,8 +1,8 @@
 /**
- * @file json_status_phy.cpp
+ * @file emac_phy.cpp
  *
  */
-/* Copyright (C) 2025 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2023-2025 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,25 +23,43 @@
  * THE SOFTWARE.
  */
 
-#include <cstdio>
+#include <cstdint>
 
-#include "emac/phy.h"
+#include "emac/emac_phy.h"
+#include "firmware/debug/debug_debug.h"
 
-namespace json::status::net
-{
-uint32_t Phy(char* out_buffer, uint32_t out_buffer_size)
-{
-    ::net::phy::Status phy_status;
-    ::net::phy::CustomizedStatus(phy_status);
+#if !defined(BIT)
+#define BIT(x) static_cast<uint16_t>(1U << (x))
+#endif
 
-    const auto kLength = static_cast<uint32_t>(snprintf(out_buffer, out_buffer_size,
-        "{\"link\":\"%s\",\"speed\":\"%s\",\"duplex\":\"%s\",\"autonegotiation\":\"%s\"}",
-        ::net::phy::ToString(phy_status.link),
-        ::net::phy::ToString(phy_status.speed),
-        ::net::phy::ToString(phy_status.duplex),
-        ::net::phy::ToStringAutonegotiation(phy_status.autonegotiation))
-      );
+#if !defined(PHY_ADDRESS)
+#define PHY_ADDRESS 1
+#endif
 
-    return kLength;
+namespace emac::phy {
+void CustomizedLed() {
+    DEBUG_ENTRY();
+
+    DEBUG_EXIT();
 }
-} // namespace json::status::net
+
+void CustomizedTiming() {
+    DEBUG_ENTRY();
+
+    DEBUG_EXIT();
+}
+
+/**
+ * PHY Status Register (PHYSTS), address 10h
+ * @param phyStatus
+ */
+void CustomizedStatus(phy::Status& phy_status) {
+    uint16_t value;
+    phy::Read(PHY_ADDRESS, 0x10, value);
+
+    phy_status.link = ((value & BIT(0)) == BIT(0)) ? phy::Link::kStateUp : phy::Link::kStateDown;
+    phy_status.duplex = ((value & BIT(2)) == BIT(2)) ? phy::Duplex::kDuplexFull : phy::Duplex::kDuplexHalf;
+    phy_status.speed = ((value & BIT(1)) == BIT(1)) ? phy::Speed::kSpeed10 : phy::Speed::kSpeed100;
+    phy_status.autonegotiation = ((value & BIT(4)) == BIT(4));
+}
+} // namespace emac::phy

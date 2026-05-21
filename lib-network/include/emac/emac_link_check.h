@@ -1,5 +1,5 @@
 /**
- * @file net_link_check.h
+ * @file emac_link_check.h
  *
  */
 /* Copyright (C) 2022-2026 by Arjan van Vught mailto:info@gd32-dmx.org
@@ -26,12 +26,11 @@
 #ifndef EMAC_NET_LINK_CHECK_H_
 #define EMAC_NET_LINK_CHECK_H_
 
-#include "phy.h"
+#include "emac_phy.h"
 
-namespace net::link
-{
-net::phy::Link StatusRead();
-void HandleChange(net::phy::Link state);
+namespace emac::link {
+emac::phy::Link StatusRead();
+void HandleChange(emac::phy::Link state);
 // Platform defined implementations
 // #if defined(ENET_LINK_CHECK_USE_INT) || defined(ENET_LINK_CHECK_USE_PIN_POLL)
 void GpioInit();
@@ -45,6 +44,6 @@ void InterruptInit();
 void PinPollInit();
 void PinPoll();
 // #endif
-} // namespace net::link
+} // namespace emac::link
 
 #endif // EMAC_NET_LINK_CHECK_H_
