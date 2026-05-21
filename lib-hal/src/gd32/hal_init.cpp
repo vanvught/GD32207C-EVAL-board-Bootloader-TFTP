@@ -23,6 +23,8 @@
  * THE SOFTWARE.
  */
 
+#include <cstddef>
+
 #if !defined(_TIME_STAMP_DAY_)
 #define _TIME_STAMP_DAY_ 0
 #endif
@@ -33,7 +35,6 @@
 #define _TIME_STAMP_YEAR_ (2026 - 1900)
 #endif
 
-#include <cstddef>
 #if defined(DEBUG_HAL)
 #undef NDEBUG
 #endif
@@ -97,7 +98,7 @@ void Timer7Config();
 
 #if !defined(DISABLE_RTC)
 #include "hwclock.h"
-static HwClock hwClock;
+static HwClock hw_clock;
 #endif
 
 extern unsigned char _sdmx;      // NOLINT
@@ -122,6 +123,7 @@ void Init() {
 
 #if defined(CONFIG_CLIB_USE_UART0)
     uart0::Init();
+#elif defined(CONFIG_CLIB_USE_NULL)
 #else
     console::Init();
 #endif
