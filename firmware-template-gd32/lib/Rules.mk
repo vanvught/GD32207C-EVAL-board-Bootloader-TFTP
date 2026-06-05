@@ -11,6 +11,7 @@ AR	= $(PREFIX)ar
 
 BOARD?=BOARD_GD32F207C_EVAL
 ENET_PHY?=DP83848
+MCU=GD32F207VC
 
 $(info $$BOARD [${BOARD}])
 $(info $$ENET_PHY [${ENET_PHY}])
@@ -18,14 +19,13 @@ $(info $$ENET_PHY [${ENET_PHY}])
 SRCDIR=src src/gd32 $(EXTRA_SRCDIR)
 
 DEFINES:=$(addprefix -D,$(DEFINES))
-DEFINES+=-D_TIME_STAMP_YEAR_=$(shell date  +"%Y") -D_TIME_STAMP_MONTH_=$(shell date  +"%-m") -D_TIME_STAMP_DAY_=$(shell date  +"%-d")
 
-include ../firmware-template-gd32/Board.mk
-include ../firmware-template-gd32/Mcu.mk
-include ../firmware-template-gd32/Includes.mk
-include ../firmware-template-gd32/Validate.mk
+include ../common/make/gd32/Board.mk
+include ../common/make/gd32/Mcu.mk
+include ../common/make/gd32/Includes.mk
+include ../common/make/gd32/Validate.mk
 
-INCLUDES+=-I../lib-configstore/include -I../lib-display/include -I../lib-flashcode/include -I../lib-hal/include -I../lib-network/include
+INCLUDES+=-I../lib-configstore/include -I../lib-hal/include -I../lib-flash/include -I../lib-flashcode/include
 
 COPS=-DGD32 -D$(FAMILY_UCA) -D$(LINE_UC) -D$(MCU) -D$(BOARD) -DPHY_TYPE=$(ENET_PHY)
 COPS+=$(strip $(DEFINES)) $(MAKE_FLAGS) $(INCLUDES)

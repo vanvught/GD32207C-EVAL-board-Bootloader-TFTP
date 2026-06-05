@@ -36,6 +36,7 @@
 #include "software_version.h"
 #include "flashcodeinstall.h"
 #include "configstore.h"
+#include "firmware.h"
 #include "gd32.h"
 
 namespace hal {
