@@ -29,6 +29,7 @@
 #include "timing.h"
 #include "spi/config.h"
 #include "spi.h"
+#include "hal_gpio.h"
 #include "firmware/debug/debug_debug.h"
 
 class SpiLcd {
@@ -83,14 +84,14 @@ class SpiLcd {
     void WriteCommand(uint8_t data) {
         ClearCS();
         ClearDC();
-        spi::Writenb(reinterpret_cast<char*>(&data), 1));
+        spi::Writenb(reinterpret_cast<char*>(&data), 1);
         SetCS();
     }
 
     void WriteData(const uint8_t* data, uint32_t length) {
         ClearCS();
         SetDC();
-        spi::Writenb(reinterpret_cast<const char*>(data), length));
+        spi::Writenb(reinterpret_cast<const char*>(data), length);
         SetCS();
     }
 
@@ -103,7 +104,7 @@ class SpiLcd {
     void WriteDataByte(uint8_t data) {
         ClearCS();
         SetDC();
-        spi::Writenb(reinterpret_cast<char*>(&data), 1));
+        spi::Writenb(reinterpret_cast<char*>(&data), 1);
         SetCS();
     }
 
