@@ -25,7 +25,7 @@ include ../common/make/gd32/Mcu.mk
 include ../common/make/gd32/Includes.mk
 include ../common/make/gd32/Validate.mk
 
-INCLUDES+=-I../lib-configstore/include -I../lib-hal/include -I../lib-flash/include -I../lib-flashcode/include
+INCLUDES+=-I../lib-configstore/include -I../lib-board/include -I../lib-flash/include -I../lib-flashcode/include
 
 COPS=-DGD32 -D$(FAMILY_UCA) -D$(LINE_UC) -D$(MCU) -D$(BOARD) -DPHY_TYPE=$(ENET_PHY)
 COPS+=$(strip $(DEFINES)) $(MAKE_FLAGS) $(INCLUDES)

@@ -26,22 +26,22 @@
 #include <cstdio>
 #include <cstdint>
 
-#include "hal.h"
+#include "board.h"
 #include "watchdog.h"
 #include "network.h"
 #include "display.h"
-#include "hal_statusled.h"
+#include "board_statusled.h"
 #include "remoteconfig.h"
-#include "firmwareversion.h"
+#include "firmware/firmwareversion.h"
 #include "software_version.h"
 #include "flashcodeinstall.h"
 #include "configstore.h"
 #include "firmware.h"
 #include "gd32.h"
 
-namespace hal {
+namespace board {
 void RebootHandler() {}
-} // namespace hal
+} // namespace board
 
 int main() {
     rcu_periph_clock_enable(KEY_BOOTLOADER_TFTP_RCU_GPIOx);
@@ -97,7 +97,7 @@ int main() {
         asm volatile("bx %0;" : : "r"(*reset_p));
     }
 
-    hal::Init();
+    board::Init();
     Display display(4);
     ConfigStore config_store;
     network::Init();
@@ -111,12 +111,12 @@ int main() {
 
     display.Printf(3, "Bootloader TFTP Srvr");
 
-    hal::statusled::SetMode(hal::statusled::Mode::kFast);
+    board::statusled::SetMode(board::statusled::Mode::kFast);
     watchdog::Init();
 
     while (1) {
         watchdog::Feed();
         network::Run();
-        hal::Run();
+        board::Run();
     }
 }
