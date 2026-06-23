@@ -72,14 +72,18 @@ int main() {
         // 1. Disable interrupt response.
         __disable_irq();
         // 2. Disable all enabled interrupts in NVIC.
-        memset((uint32_t*)NVIC->ICER, 0xFF, sizeof(NVIC->ICER));
+                for (auto& reg : NVIC->ICER) {
+            reg = 0xFFFFFFFF;
+        }
         /* 3. Disable all enabled peripherals which might generate interrupt requests.
          *  Clear all pending interrupt flags in those peripherals.
          *  This part is device-dependent, and you can write it by referring to device datasheet.
          */
 
         /* Clear all pending interrupt requests in NVIC. */
-        memset((uint32_t*)NVIC->ICPR, 0xFF, sizeof(NVIC->ICPR));
+                for (auto& reg : NVIC->ICPR) {
+            reg = 0xFFFFFFFF;
+        }
         // 4. Disable SysTick and clear its exception pending bit.
         SysTick->CTRL = 0;
         SCB->ICSR |= SCB_ICSR_PENDSTCLR_Msk;
@@ -87,13 +91,13 @@ int main() {
         SCB->VTOR = FLASH_BASE + OFFSET_UIMAGE;
         // 6. Use the MSP as the current SP.
         // Set the MSP with the value from the vector table used by the application.
-        __set_MSP(((unsigned int*)(SCB->VTOR))[0]);
+        __set_MSP((reinterpret_cast<unsigned int*>((SCB->VTOR))[0]));
         // In thread mode, enable privileged access and use the MSP as the current SP.
         __set_CONTROL(0);
         // 7. Enable interrupts.
         __enable_irq();
         // 8. Call the reset handler
-        const uint32_t* reset_p = (uint32_t*)(FLASH_BASE + OFFSET_UIMAGE + 4);
+        const uint32_t* reset_p = reinterpret_cast<uint32_t*>(FLASH_BASE + OFFSET_UIMAGE + 4);
         asm volatile("bx %0;" : : "r"(*reset_p));
     }
 
