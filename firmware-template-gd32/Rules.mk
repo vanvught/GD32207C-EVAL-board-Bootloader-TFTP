@@ -75,7 +75,7 @@ $(BUILD)$1/%.o: $1/%.cpp
 	$(CPP) $(COPS) $(CPPOPS) -c $$< -o $$@
 
 $(BUILD)$1/%.o: $1/%.c
-	$(CC) $(COPS) -c $$< -o $$@
+	$(CC) -MD -MP $(COPS) -c $$< -o $$@
 
 $(BUILD)$1/%.o: $1/%.S
 	$(CC) $(COPS) -D__ASSEMBLY__ -c $$< -o $$@
