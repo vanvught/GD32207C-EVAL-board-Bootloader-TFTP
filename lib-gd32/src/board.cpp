@@ -29,6 +29,7 @@ namespace board {
 static constexpr float kCoreTemperatureMin = -40.0;
 static constexpr float kCoreTemperatureMax = +85.0;
 static constexpr const char kWebsite[] = "https://gd32-dmx.org";
+static constexpr char kSysName[] = "Embedded";
 
 const char* Website() {
     return kWebsite;
@@ -57,7 +58,7 @@ const char* CpuName(uint8_t& length) {
 }
 
 const char* SysName(uint8_t& length) {
-    length = 8;
-    return "Embedded";
+    length = sizeof(kSysName) - 1U;
+    return kSysName;
 }
 } // namespace board
