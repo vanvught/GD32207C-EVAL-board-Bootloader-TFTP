@@ -17,14 +17,17 @@ LIST=$(FAMILY).list
 MAP=$(FAMILY).map
 SIZE=$(FAMILY).size
 BUILD=build_gd32/
-
 FIRMWARE_DIR=./../firmware-template-gd32/
 
-DEFINES:=$(addprefix -D,$(DEFINES))
+PROJECT=$(notdir $(patsubst %/,%,$(CURDIR)))
+$(info $$PROJECT [${PROJECT}])
+
+DEFINES:=$(addprefix -D,$(DEFINES)) -DCONFIG_NETWORK_MEMORY_BLOCKS=1
 
 include ../common/make/gd32/Board.mk
 include ../common/make/gd32/Mcu.mk
 include ../common/make/gd32/Includes.mk
+include ../common/make/Timestamp.mk
 include ../common/make/gd32/Validate.mk
 
 LIBS+=network superloop board gd32 clib
@@ -50,11 +53,9 @@ COPS+=-Os -nostartfiles -ffreestanding -nostdlib
 COPS+=-fstack-usage
 COPS+=-ffunction-sections -fdata-sections
 COPS+=-Wall -Werror -Wpedantic -Wextra -Wunused -Wsign-conversion -Wconversion -Wduplicated-cond -Wlogical-op
+COPS+=--specs=nosys.specs
 
-CPPOPS=-std=c++20
-CPPOPS+=-Wnon-virtual-dtor -Woverloaded-virtual -Wnull-dereference -fno-rtti -fno-exceptions -fno-unwind-tables
-CPPOPS+=-Wuseless-cast -Wold-style-cast
-CPPOPS+=-fno-threadsafe-statics
+include ../common/make/CppOps.mk
 
 LDOPS=--gc-sections --print-gc-sections --print-memory-usage
 
@@ -63,12 +64,12 @@ PLATFORM_LIBGCC+= -L $(shell dirname `$(CC) $(COPS) -print-libgcc-file-name`)
 $(info $$PLATFORM_LIBGCC [${PLATFORM_LIBGCC}])
 
 C_OBJECTS=$(foreach sdir,$(SRCDIR),$(patsubst $(sdir)/%.c,$(BUILD)$(sdir)/%.o,$(wildcard $(sdir)/*.c)))
-C_OBJECTS+=$(foreach sdir,$(SRCDIR),$(patsubst $(sdir)/%.cpp,$(BUILD)$(sdir)/%.o,$(wildcard $(sdir)/*.cpp)))
+CPP_OBJECTS+=$(foreach sdir,$(SRCDIR),$(patsubst $(sdir)/%.cpp,$(BUILD)$(sdir)/%.o,$(wildcard $(sdir)/*.cpp)))
 ASM_OBJECTS=$(foreach sdir,$(SRCDIR),$(patsubst $(sdir)/%.S,$(BUILD)$(sdir)/%.o,$(wildcard $(sdir)/*.S)))
 
 BUILD_DIRS:=$(addprefix $(BUILD),$(SRCDIR))
 
-OBJECTS:=$(ASM_OBJECTS) $(C_OBJECTS)
+OBJECTS:=$(strip $(ASM_OBJECTS) $(C_OBJECTS) $(CPP_OBJECTS))
 
 define compile-objects
 $(BUILD)$1/%.o: $1/%.cpp
@@ -105,14 +106,11 @@ clean: $(LIBDEP)
 lisdep: $(LIBDEP)
 
 $(LIBDEP):
-	$(MAKE) -f Makefile.GD32 $(MAKECMDGOALS) 'FAMILY=${FAMILY}' 'BOARD=${BOARD}' 'ENET_PHY=${ENET_PHY}' 'MAKE_FLAGS=$(DEFINES)' -C $@
+	$(MAKE) -f Makefile.GD32 $(MAKECMDGOALS) 'PROJECT=${PROJECT}' 'FAMILY=${FAMILY}' 'MCU=${MCU}' 'BOARD=${BOARD}' 'ENET_PHY=${ENET_PHY}' 'MAKE_FLAGS=$(DEFINES)' -C $@
 
 #
 # Build bin
 #
-
-$(BUILD_DIRS) :
-	mkdir -p $(BUILD_DIRS)
 
 $(BUILD)startup_$(LINE).o : $(FIRMWARE_DIR)/startup_$(LINE).S
 	$(AS) $(COPS) -D__ASSEMBLY__ -c $(FIRMWARE_DIR)/startup_$(LINE).S -o $(BUILD)startup_$(LINE).o
@@ -124,7 +122,7 @@ $(BUILD)stack_debug_init.o : $(FIRMWARE_DIR)/stack_debug_init.cpp
 	$(CPP) $(COPS) $(CPPOPS) -c $(FIRMWARE_DIR)/stack_debug_init.cpp -o $(BUILD)stack_debug_init.o
 
 $(BUILD)main.elf: Makefile.GD32 $(LINKER) $(BUILD)startup_$(LINE).o $(BUILD)hardfault_handler.o $(BUILD)stack_debug_init.o $(OBJECTS) $(LIBDEP)
-	$(LD) $(BUILD)startup_$(LINE).o $(BUILD)hardfault_handler.o $(OBJECTS) $(BUILD)stack_debug_init.o -Map $(MAP) -T $(LINKER) $(LDOPS) -o $(BUILD)main.elf $(LIBGD32) $(LDLIBS) $(PLATFORM_LIBGCC) -lgcc
+	$(LD) $(BUILD)startup_$(LINE).o $(BUILD)hardfault_handler.o $(BUILD)stack_debug_init.o $(OBJECTS) -Map $(MAP) -T $(LINKER) $(LDOPS) -o $(BUILD)main.elf $(LIBGD32) $(LDLIBS) $(PLATFORM_LIBGCC) -lgcc
 	$(PREFIX)objdump -D $(BUILD)main.elf | $(PREFIX)c++filt > $(LIST)
 	$(PREFIX)size -A -x $(BUILD)main.elf
 
