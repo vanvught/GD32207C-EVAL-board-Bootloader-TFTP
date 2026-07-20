@@ -33,8 +33,7 @@
 #include "display.h"
 #include "firmware/debug/debug_debug.h"
 
-FlashCodeInstall::FlashCodeInstall()
-{
+FlashCodeInstall::FlashCodeInstall() {
     DEBUG_ENTRY();
 
     assert(s_this == 0);
@@ -44,58 +43,51 @@ FlashCodeInstall::FlashCodeInstall()
 
     flash_size_ = FlashCode::GetSize();
 
-    printf("FlashCodeInstall: %s, sector size %d, %d bytes [%d kB]\n", FlashCode::GetName(), FlashCode::GetSectorSize(), flash_size_, flash_size_ / 1024U);
+    printf("FlashCodeInstall: %s, sector size %u, %u bytes [%u kB]\n", FlashCode::GetName(), static_cast<unsigned>(FlashCode::GetSectorSize()), static_cast<unsigned>(flash_size_), static_cast<unsigned>(flash_size_ / 1024U));
     Display::Get()->Write(1, FlashCode::GetName());
 
     DEBUG_EXIT();
 }
 
-FlashCodeInstall::~FlashCodeInstall()
-{
+FlashCodeInstall::~FlashCodeInstall() {
     DEBUG_ENTRY();
     DEBUG_EXIT();
 }
 
-void FlashCodeInstall::Process([[maybe_unused]] const char* file_name, [[maybe_unused]] uint32_t offset)
-{
+void FlashCodeInstall::Process([[maybe_unused]] const char* file_name, [[maybe_unused]] uint32_t offset) {
     DEBUG_ENTRY();
     assert(0);
     DEBUG_EXIT();
 }
 
-bool FlashCodeInstall::Open([[maybe_unused]] const char* file_name)
-{
+bool FlashCodeInstall::Open([[maybe_unused]] const char* file_name) {
     DEBUG_ENTRY();
     assert(0);
     DEBUG_EXIT();
     return false;
 }
 
-void FlashCodeInstall::Close()
-{
+void FlashCodeInstall::Close() {
     DEBUG_ENTRY();
     assert(0);
     DEBUG_EXIT();
 }
 
-bool FlashCodeInstall::BuffersCompare([[maybe_unused]] uint32_t size)
-{
-    DEBUG_ENTRY();
-    assert(0);
-    DEBUG_EXIT();
-    return false;
-}
-
-bool FlashCodeInstall::Diff([[maybe_unused]] uint32_t offset)
-{
+bool FlashCodeInstall::BuffersCompare([[maybe_unused]] uint32_t size) {
     DEBUG_ENTRY();
     assert(0);
     DEBUG_EXIT();
     return false;
 }
 
-void FlashCodeInstall::Write([[maybe_unused]] uint32_t offset)
-{
+bool FlashCodeInstall::Diff([[maybe_unused]] uint32_t offset) {
+    DEBUG_ENTRY();
+    assert(0);
+    DEBUG_EXIT();
+    return false;
+}
+
+void FlashCodeInstall::Write([[maybe_unused]] uint32_t offset) {
     DEBUG_ENTRY();
     assert(0);
     DEBUG_EXIT();
