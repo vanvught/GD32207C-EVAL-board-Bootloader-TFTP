@@ -1,9 +1,8 @@
 /**
- * @file debug_printbits.h
+ * @file configstore_debug.h
  *
  */
-/* Copyright (C) 2025-2026 by Arjan van Vught mailto:info@gd32-dmx.org
-*
+/*
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
 * in the Software without restriction, including without limitation the rights
@@ -23,32 +22,21 @@
 * THE SOFTWARE.
 */
 
-#ifndef COMMON_DEBUG_DEBUG_PRINTBITS_H_
-#define COMMON_DEBUG_DEBUG_PRINTBITS_H_
+#ifndef CONFIGSTORE_DEBUG_H_
+#define CONFIGSTORE_DEBUG_H_
 
-#include <cstdint>
-#include <cstdio>
+#include "firmware/debug/debug_debug.h"
 
-#include "firmware/debug/debug_config.h"
+#if defined(DEBUG_CONFIGSTORE)
+#define CONFIGSTORE_DEBUG_ENTRY() DEBUG_ENTRY()
+#define CONFIGSTORE_DEBUG_EXIT() DEBUG_EXIT()
+#define CONFIGSTORE_DEBUG_PRINTF(...) DEBUG_PRINTF(__VA_ARGS__)
+#define CONFIGSTORE_DEBUG_PUTS(...) DEBUG_PUTS(__VA_ARGS__)
+#else
+#define CONFIGSTORE_DEBUG_ENTRY() do { } while (false)
+#define CONFIGSTORE_DEBUG_EXIT() do { } while (false)
+#define CONFIGSTORE_DEBUG_PRINTF(...) do { } while (false)
+#define CONFIGSTORE_DEBUG_PUTS(...) do { } while (false)
+#endif
 
-namespace debug {
-inline void PrintBits([[maybe_unused]] uint32_t value) {
-    if constexpr (!config::kTraceEnabled) {
-        return;
-    }
-
-    printf("%.8x ", static_cast<unsigned>(value));
-
-    for (int bit_number = 31; bit_number >= 0; --bit_number) {
-        const auto kMask = uint32_t{1} << bit_number;
-
-        if ((value & kMask) != 0U) {
-            printf("%d ", bit_number);
-        }
-    }
-
-    putchar('\n');
-}
-} // namespace debug
-
-#endif // COMMON_DEBUG_DEBUG_PRINTBITS_H_
+#endif // ONFIGSTORE_DEBUG_H_

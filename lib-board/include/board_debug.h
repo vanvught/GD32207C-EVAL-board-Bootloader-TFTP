@@ -1,8 +1,8 @@
 /**
- * @file cctype
+ * @file board_debug.h
  *
  */
-/* Copyright (C) 2021-2026 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2026 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,32 +23,29 @@
  * THE SOFTWARE.
  */
 
-#ifndef CCTYPE_
-#define CCTYPE_
+#ifndef BOARD_DEBUG_H_
+#define BOARD_DEBUG_H_
 
-#include <ctype.h>
+#include "firmware/debug/debug_debug.h"
 
-// Get rid of those macros defined in <ctype.h> in lieu of real functions.
-#undef isalpha
-#undef isdigit
-#undef islower
-#undef isprint
-#undef isspace
-#undef isupper
-#undef isxdigit
-#undef tolower
-#undef tolower
+#ifdef DEBUG_BOARD
+#define BOARD_DEBUG_ENTRY() DEBUG_ENTRY()
+#define BOARD_DEBUG_EXIT() DEBUG_EXIT()
+#define BOARD_DEBUG_PRINTF(...) DEBUG_PRINTF(__VA_ARGS__)
+#define BOARD_DEBUG_PUTS(...) DEBUG_PUTS(__VA_ARGS__)
+#else
+#define BOARD_DEBUG_ENTRY() \
+    do {                    \
+    } while (false)
+#define BOARD_DEBUG_EXIT() \
+    do {                   \
+    } while (false)
+#define BOARD_DEBUG_PRINTF(...) \
+    do {                        \
+    } while (false)
+#define BOARD_DEBUG_PUTS(...) \
+    do {                      \
+    } while (false)
+#endif
 
-namespace std {
-using ::isalpha;
-using ::isdigit;
-using ::islower;
-using ::isprint;
-using ::isspace;
-using ::isupper;
-using ::isxdigit;
-using ::tolower;
-using ::toupper;
-} // namespace std
-
-#endif /* CCTYPE_ */
+#endif // BOARD_DEBUG_H_
