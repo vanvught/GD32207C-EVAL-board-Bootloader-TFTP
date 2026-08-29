@@ -1,5 +1,5 @@
 /**
- * @file gd32xxxx.h
+ * @file gd32_gpio_macros.h
  *
  */
 /* Copyright (C) 2026 by Arjan van Vught mailto:info@gd32-dmx.org
@@ -23,22 +23,43 @@
  * THE SOFTWARE.
  */
 
-#ifndef GD32FXXX_H_
-#define GD32FXXX_H_
+#ifndef GD32_GPIO_MACROS_H_
+#define GD32_GPIO_MACROS_H_
 
-#if defined(GD32F10X_HD) || defined(GD32F10X_CL)
-#include "gd32f10x.h" // IWYU pragma: keep
-#elif defined(GD32F20X_CL)
-#include "gd32f20x.h" // IWYU pragma: keep
-#elif defined(GD32F30X_HD) || defined(GD32F30X_XD)
-#include "gd32f30x.h" // IWYU pragma: keep
-#elif defined(GD32F407) || defined(GD32F450) || defined(GD32F470)
-#include "gd32f4xx.h" // IWYU pragma: keep
-#elif defined(GD32H757) || defined(GD32H759)
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#include "gd32h7xx.h" // IWYU pragma: keep
-#else
-#error MCU is not supported
-#endif // defined(GD32F10X_HD) || defined(GD32F10X_CL)
+using GD32_Port_TypeDef = enum T_GD32_Port { 
+  GD32_GPIO_PORTA = 0, 
+  GD32_GPIO_PORTB, 
+  GD32_GPIO_PORTC, 
+  GD32_GPIO_PORTD, 
+  GD32_GPIO_PORTE, 
+  GD32_GPIO_PORTF, 
+  GD32_GPIO_PORTG, 
+  GD32_GPIO_PORTH, 
+  GD32_GPIO_PORTI, 
+  GD32_GPIO_PORTJ, 
+  GD32_GPIO_PORTK 
+};
 
-#endif // GD32FXXX_H_
+#ifdef __cplusplus
+#include <cstdint>
+namespace gd32 {
+constexpr uint32_t kGPioPins = 16;
+constexpr uint32_t PortToGpio(uint32_t port, uint32_t pin) {
+    return (port * kGPioPins) + pin;
+}
+
+constexpr uint8_t GpioToPort(uint32_t gpio) {
+    return static_cast<uint8_t>(gpio / kGPioPins);
+}
+
+constexpr uint8_t GpioToNumber(uint32_t gpio) {
+    return static_cast<uint8_t>(gpio % kGPioPins);
+}
+} // namespace gd32
+
+#define GD32_PORT_TO_GPIO(p, n) gd32::PortToGpio((p), (n))
+#define GD32_GPIO_TO_PORT(g) gd32::GpioToPort((g))
+#define GD32_GPIO_TO_NUMBER(g) gd32::GpioToNumber((g))
+#endif // __cplusplus
+
+#endif // GD32_GPIO_MACROS_H_
