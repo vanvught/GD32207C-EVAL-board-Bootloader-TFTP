@@ -31,17 +31,18 @@
 #include "display.h" // IWYU pragma: keep
 #include "watchdog.h"
 
-bool FlashCodeInstall::WriteFirmware(const uint8_t* buffer, uint32_t size) {
+bool FlashCodeInstall::WriteFirmware(std::span<const uint8_t> firmware) {
     FLASHCODE_INSTALL_DEBUG_ENTRY();
 
-    assert(buffer != nullptr);
-    assert(size != 0);
+    assert(!firmware.empty());
 
-	
+    const auto kSize = static_cast<uint32_t>(firmware.size());
+
     FLASHCODE_INSTALL_DEBUG_PRINTF("(%p + %x)=%p, flash_size_=%u", reinterpret_cast<void*>(OFFSET_UIMAGE), static_cast<unsigned>(size), reinterpret_cast<void*>(OFFSET_UIMAGE + size), static_cast<unsigned>(flash_size_));
 
-    if ((OFFSET_UIMAGE + size) > flash_size_) {
-        printf("Error: (OFFSET_UIMAGE + size) %u > flash_size_ %u\n", static_cast<unsigned>(OFFSET_UIMAGE + size), static_cast<unsigned>(flash_size_));
+    if ((OFFSET_UIMAGE + kSize) > flash_size_) {
+        printf("Error: (OFFSET_UIMAGE + size) %u > flash_size_ %u\n", static_cast<unsigned>(OFFSET_UIMAGE + kSize), static_cast<unsigned>(flash_size_));
+
         FLASHCODE_INSTALL_DEBUG_EXIT();
         return false;
     }
@@ -55,7 +56,7 @@ bool FlashCodeInstall::WriteFirmware(const uint8_t* buffer, uint32_t size) {
     puts("Write firmware");
 
     const auto kSectorSize = FlashCode::GetSectorSize();
-    const auto kEraseSize = (size + kSectorSize - 1) & ~(kSectorSize - 1);
+    const auto kEraseSize = (kSize + kSectorSize - 1) & ~(kSectorSize - 1);
 
     FLASHCODE_INSTALL_DEBUG_PRINTF("size=%x, kSectorSize=%x, kEraseSize=%x", static_cast<unsigned>(size), static_cast<unsigned>(kSectorSize), static_cast<unsigned>(kEraseSize));
 
@@ -73,7 +74,7 @@ bool FlashCodeInstall::WriteFirmware(const uint8_t* buffer, uint32_t size) {
 
     Display::Get()->TextStatus("Writing", ansi::Colours::Colour::kGreen);
 
-    while (!FlashCode::Write(OFFSET_UIMAGE, size, buffer, result)) {
+    while (!FlashCode::Write(OFFSET_UIMAGE, firmware, result)) {
     }
 
     if (flashcode::Result::kError == result) {
@@ -126,20 +127,23 @@ bool FlashCodeInstall::Erase(uint32_t firmware_size) {
     return false;
 }
 
-bool FlashCodeInstall::WriteChunk(const uint8_t* chunck, uint32_t chunk_size, uint32_t& written) {
-    flashcode::Result result;
-    while (!FlashCode::Write(OFFSET_UIMAGE + write_count_, chunk_size, chunck, result)) {
-        watchdog::Feed();
-    }
+bool FlashCodeInstall::WriteChunk(std::span<const uint8_t> chunk, uint32_t& written) {
+    const auto kChunkSize = static_cast<uint32_t>(chunk.size());
 
-    write_count_ += chunk_size;
-    written = write_count_;
-
-    if (write_count_ > erase_size_) {
+    if ((write_count_ + kChunkSize) > firmware_size_) {
         return false;
     }
 
-    return (flashcode::Result::kOk == result);
+    flashcode::Result result;
+
+    while (!FlashCode::Write(OFFSET_UIMAGE + write_count_, chunk, result)) {
+        watchdog::Feed();
+    }
+
+    write_count_ += kChunkSize;
+    written = write_count_;
+
+    return flashcode::Result::kOk == result;
 }
 
 bool FlashCodeInstall::WriteChunkComplete(uint32_t& write_count) {

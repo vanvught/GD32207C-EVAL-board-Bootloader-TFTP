@@ -28,6 +28,7 @@
 
 #include <cstdint>
 #include <cstdio>
+#include <span>
 
 #include "flashcode.h"
 
@@ -58,11 +59,11 @@ class FlashCodeInstall : FlashCode {
     FlashCodeInstall();
     ~FlashCodeInstall();
 
-    bool WriteFirmware(const uint8_t* buffer, uint32_t size);
+    bool WriteFirmware(std::span<const uint8_t> firmware);
 
     bool Erase(uint32_t size);
 
-    bool WriteChunk(const uint8_t* chunck, uint32_t chunk_size, uint32_t& written);
+    bool WriteChunk(std::span<const uint8_t> chunk, uint32_t& written);
     bool WriteChunkComplete(uint32_t& write_count);
 
     static FlashCodeInstall* Get() { return s_this; }
