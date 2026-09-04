@@ -1,8 +1,8 @@
 /**
- * @file emac_link.cpp
+ * @file gd32_fmc.h
  *
  */
-/* Copyright (C) 2023-2026 by Arjan van Vught mailto:info@gd32-dmx.org
+/* Copyright (C) 2026 by Arjan van Vught mailto:info@gd32-dmx.org
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,40 +23,30 @@
  * THE SOFTWARE.
  */
 
-#include "emac/emac_link_check.h"
-#include "emac/emac_phy.h"
-#include "emac/mmi.h"
-#include "emac/emac_debug.h"
+#ifndef GD32_FMC_H_
+#define GD32_FMC_H_
 
-#define PHY_REG_MICR 0x11U
-#define PHY_REG_MISR 0x12U
-#define PHY_INT_AND_OUTPUT_ENABLE 0x03U
-#define PHY_LINK_INT_ENABLE 0x20U
+#include <cstdint>
+#include <span>
 
-#if !defined(PHY_ADDRESS)
-#define PHY_ADDRESS 1
+#ifdef GD32F4XX
+#define FMC_SIZE (*reinterpret_cast<uint16_t*>(0x1FFF7A22U))
 #endif
 
-namespace emac::link {
-#if defined(ENET_LINK_CHECK_USE_INT) || defined(ENET_LINK_CHECK_USE_PIN_POLL)
-void PinEnable() {
-    uint16_t phy_value = PHY_INT_AND_OUTPUT_ENABLE;
-    phy::Write(PHY_ADDRESS, PHY_REG_MICR, phy_value);
-
-    phy::Read(PHY_ADDRESS, PHY_REG_MICR, phy_value);
-
-    if (PHY_INT_AND_OUTPUT_ENABLE != phy_value) {
-        DEBUG_PUTS("PHY_INT_AND_OUTPUT_ENABLE != phy_value");
-    }
-
-    phy_value = PHY_LINK_INT_ENABLE;
-    phy::Write(PHY_ADDRESS, PHY_REG_MISR, phy_value);
-}
-
-void PinRecovery() {
-    uint16_t phy_value;
-    phy::Read(PHY_ADDRESS, PHY_REG_MISR, phy_value);
-    phy::Read(PHY_ADDRESS, mmi::REG_BMSR, phy_value);
-}
+#ifdef GD32H7XX
+#define FMC_SIZE (((REG32(0x1FF0F7E0) >> 16) & 0xFFFF) * 1024U)
 #endif
-} // namespace emac::link
+
+namespace gd32::fmc {
+enum class Result { kOk = 0, kError = 1 };
+
+// Blocking API's
+bool Read(uint32_t offset, std::span<uint8_t> buffer);
+bool Erase(uint32_t offset, uint32_t length);
+bool Write(uint32_t offset, std::span<const uint8_t> buffer);
+// State-machine API's
+bool Erase(uint32_t offset, uint32_t length, Result& result);
+bool Write(uint32_t offset, std::span<const uint8_t> buffer, Result& result);
+} // namespace gd32::fmc
+
+#endif // GD32_FMC_H_

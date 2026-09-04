@@ -24,7 +24,9 @@ FIRMWARE_DIR=./../firmware-template-gd32/
 PROJECT=$(notdir $(patsubst %/,%,$(CURDIR)))
 $(info $$PROJECT [${PROJECT}])
 
-DEFINES:=$(addprefix -D,$(DEFINES)) -DCONFIG_NETWORK_MEMORY_BLOCKS=1
+DEFINES:=$(addprefix -D,$(DEFINES)) 
+DEFINES+=-DCONFIG_NETWORK_MEMORY_BLOCKS=1
+DEFINES+=-DPHY_TYPE=$(ENET_PHY)
 
 include ../common/make/gd32/Board.mk
 include ../common/make/gd32/Mcu.mk
@@ -48,7 +50,7 @@ LDLIBS:=$(addprefix -l,$(LIBS))
 # The variables for the dependency check
 LIBDEP=$(addprefix ../lib-,$(LIBS))
 
-COPS=-DGD32 -D$(FAMILY_UCA) -D$(LINE_UC) -D$(MCU) -D$(BOARD) -DPHY_TYPE=$(ENET_PHY)
+COPS=-DGD32 -D$(FAMILY_UCA) -D$(LINE_UC) -D$(MCU) -D$(BOARD)
 COPS+=$(strip $(DEFINES) $(MAKE_FLAGS) $(INCLUDES) $(LIBINCDIRS))
 COPS+=$(strip $(ARMOPS) $(CMSISOPS))
 COPS+=-Os -nostartfiles -ffreestanding -nostdlib
